@@ -28,7 +28,7 @@ function Inspector() {
               <div className="search-box flex gap-3">
                 <input
                   type="text"
-                  className="bg-transparent text-black border h-[50px] lg:w-[300px] md:w-[300px] w-[258px] rounded ps-3"
+                  className="bg-transparent text-black border h-[50px] lg:w-[300px] md:w-[300px] w-[230px] rounded ps-3"
                   placeholder="Search"
                 />
                 <button className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">

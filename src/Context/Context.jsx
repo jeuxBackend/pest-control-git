@@ -13,6 +13,15 @@ export const MyContextProvider = ({ children }) => {
     return saveddocumentID ? JSON.parse(saveddocumentID) : null;
   });
 
+  const [images, setImages] = useState(() => {
+    const storedImages = localStorage.getItem("images");
+    return storedImages ? JSON.parse(storedImages) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("images", JSON.stringify(images));
+  }, [images]);
+
   useEffect(() => {
     if (documentID !== null) {
       localStorage.setItem("documentId", JSON.stringify(documentID));
@@ -29,18 +38,31 @@ export const MyContextProvider = ({ children }) => {
     }
   }, [pageHeading]);
 
-  const [openLogout, setOpenLogout] = useState(false)
-  const [openAddInspector, setOpenAddInspector] = useState(false)
-  const [openEditInspector, setOpenEditInspector] = useState(false)
-  const [openDeleteInspector, setOpenDeleteInspector] = useState(false)
-
-
-
-
-
+  const [openLogout, setOpenLogout] = useState(false);
+  const [openAddInspector, setOpenAddInspector] = useState(false);
+  const [openEditInspector, setOpenEditInspector] = useState(false);
+  const [openDeleteInspector, setOpenDeleteInspector] = useState(false);
+  const [openOfferModal, setOpenOfferModal] = useState(false);
 
   return (
-    <MyContext.Provider value={{ pageHeading, setPageHeading, openLogout, setOpenLogout, openAddInspector, setOpenAddInspector, openEditInspector, setOpenEditInspector, openDeleteInspector, setOpenDeleteInspector }}>
+    <MyContext.Provider
+      value={{
+        images,
+        setImages,
+        pageHeading,
+        setPageHeading,
+        openLogout,
+        setOpenLogout,
+        openAddInspector,
+        setOpenAddInspector,
+        openEditInspector,
+        setOpenEditInspector,
+        openDeleteInspector,
+        setOpenDeleteInspector,
+        openOfferModal,
+        setOpenOfferModal,
+      }}
+    >
       {children}
     </MyContext.Provider>
   );

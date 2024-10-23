@@ -2,7 +2,18 @@ import React, { useEffect, useState } from "react";
 import Bg from "./assets/bg.png";
 
 function Dashboard() {
+  const [currentDate, setCurrentDate] = useState("");
  
+  useEffect(() => {
+    const date = new Date();
+    const options = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    setCurrentDate(date.toLocaleDateString(undefined, options));
+  }, []);
 
   return (
     <div className="w-full max-h-full min-h-screen bg-[#fafafa]">
@@ -11,9 +22,8 @@ function Dashboard() {
           Welcome, Cameron W.                   
         </p>
         <div className="date_description flex flex-wrap gap-2 items-center mt-2">
-          <p className="mb-0 font-semibold text-black text-lg">
-            Sunday 23, June 2024.
-          </p>
+        <p className="mb-0 font-semibold text-black text-lg">{currentDate}.</p>
+
           <p className="mb-0 text-[#535355]">
             Here is a quick snnapshot of the overall business
           </p>

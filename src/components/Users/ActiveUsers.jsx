@@ -21,10 +21,10 @@ const ActiveUsers = () => {
           <div className="active-block-brns xl:w-[40%] lg:w-[100%] mt-2">
             <ul className="flex flex-wrap gap-3">
               <li>
-                <a className="flex justify-center py-2 border border-[#003a5f] bg-[#003a5f] shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded text-[#ffff] bg-transparent cursor-pointer">
+                <a className="flex justify-center py-2 border border-[#003a5f] bg-[#003a5f] shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded text-[#ffff] cursor-pointer">
                   <div className="flex gap-x-2 items-center">
                     <img
-                      className="w-[25px]"
+                      className="w-[20px]"
                       src={ActiveColorWhite}
                       alt="active Icon"
                     />
@@ -51,7 +51,7 @@ const ActiveUsers = () => {
               <div className="search-box flex gap-3">
                 <input
                   type="text"
-                  className="bg-transparent text-black border h-[50px] lg:w-[300px] md:w-[300px] w-[258px] rounded ps-3"
+                  className="bg-transparent text-black border h-[50px] lg:w-[300px] md:w-[300px] w-[230px] rounded ps-3"
                   placeholder="Search"
                 />
                 <button className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">

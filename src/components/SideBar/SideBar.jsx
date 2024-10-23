@@ -67,7 +67,7 @@ function SideBar() {
           </Dropdown>
           <Navbar.Toggle
             onClick={toggleSidebar}
-            className="ms-2 lg:hidden md:block text-white"
+            className="ms-2 lg:hidden md:block text-black"
           />
         </div>
       </Navbar>
@@ -151,6 +151,61 @@ function SideBar() {
                   <span className="ms-3">Inspector</span>
                 </Link>
               </li>
+              <li className="flex items-center gap-1">
+                {isActive === "/ChatComp" && (
+                  <span className="inline rounded-r h-full text-5xl w-1 me-3 bg-[#c90000]">
+                    &nbsp;
+                  </span>
+                )}
+                <Link
+                  onClick={() => handleLinkClick("Chat")}
+                  to={"/ChatComp"}
+                  className={`flex items-center ${
+                    isActive === "/ChatComp" ? "bg-[#c90000]" : ""
+                  } py-3 ps-5 text-white rounded group w-[215px]`}
+                >
+                  <img src={Dashboard} alt="" className="w-[20px]" />
+                  <span className="ms-3">Chat</span>
+                </Link>
+              </li>
+              <li className="flex items-center gap-1">
+                {isActive === "/Orders" && (
+                  <span className="inline rounded-r h-full text-5xl w-1 me-3 bg-[#c90000]">
+                    &nbsp;
+                  </span>
+                )}
+                {isActive === "/Orders-History" && (
+                  <span className="inline rounded-r h-full text-5xl w-1 me-3 bg-[#c90000]">
+                    &nbsp;
+                  </span>
+                )}
+                {isActive === "/Orders-Detail" && (
+                  <span className="inline rounded-r h-full text-5xl w-1 me-3 bg-[#c90000]">
+                    &nbsp;
+                  </span>
+                )}
+                {isActive === "/Gallery" && (
+                  <span className="inline rounded-r h-full text-5xl w-1 me-3 bg-[#c90000]">
+                    &nbsp;
+                  </span>
+                )}
+                <Link
+                  onClick={() => handleLinkClick("Active Orders")}
+                  to={"/Orders"}
+                  className={`flex items-center ${
+                    isActive === "/Orders" ||
+                    isActive === "/Orders-History" ||
+                    isActive == "/Orders-Detail" ||
+                    isActive == "/Gallery"
+                      ? "bg-[#c90000]"
+                      : ""
+                  } py-3 ps-5 text-white rounded group w-[215px]`}
+                >
+                  <img src={Users} alt="" className="w-[20px]" />
+                  <span className="ms-3">Orders</span>
+                </Link>
+              </li>
+
               <li className="flex items-center gap-x-2 ms-5">
                 <button
                   onClick={() => {
@@ -163,7 +218,6 @@ function SideBar() {
                   <span className="ms-3">Logout</span>
                 </button>
               </li>
-           
             </ul>
           </div>
         </div>
