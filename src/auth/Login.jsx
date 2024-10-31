@@ -23,16 +23,16 @@ const Login = () => {
           className="h-screen p-4 w-screen"
         />
       </div>
-      <div className="lg:w-1/2 md:w-1/1 w-1/1 w-full">
+      <div className="lg:w-1/2 md:w-1/1 w-1/1 w-full  opacity-75">
         <div className="login-box rounded-lg lg:px-24 md:px-2 px-2 py-6">
           <div className="flex justify-start mb-24 lg:mt-0 mt-32">
-            <img src={Logo} alt="logo" className="h-[50px] mt-2" />
+            <img src={Logo} alt="logo" className="h-[80px] mt-2" />
           </div>
           <div className="text-start mt-2">
             <p className="text-4xl text-[#003a5f] font-bold">
               Welcome back!
             </p>
-            <p className="text-[#003a5f] text-lg font-[500] mt-4">Access the admin portal to design and deliver certificates with ease.</p>
+            {/* <p className="text-[#003a5f] text-lg font-[500] mt-4">Access the admin portal to design and deliver certificates with ease.</p> */}
           </div>
           <form>
             <div className="relative mb-4 mt-3 text-start">
@@ -42,9 +42,9 @@ const Login = () => {
               <input
                 required
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Type Email"
+                placeholder="Email Address"
                 type="email"
-                className="w-full ps-4 py-3 mt-2 bg-[#ffff] rounded-lg border border-[#003a5f] text-[#003a5f] placeholder-gray-500"
+                className="w-full ps-4 py-3 mt-2 bg-[#ffff] rounded-lg border border-[#003b5f57] text-[#003a5f] placeholder-gray-500"
                 aria-label="Email Address"
               />
             </div>
@@ -55,9 +55,9 @@ const Login = () => {
               <input
                 required
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Type Password"
+                placeholder="Password"
                 type={isPasswordVisible ? "text" : "password"}
-                className="w-full ps-4 py-3 mt-2 rounded-lg bg-[#ffff] text-[#003a5f] border border-[#003a5f] placeholder-gray-500"
+                className="w-full ps-4 py-3 mt-2 rounded-lg bg-[#ffff] text-[#003a5f] border border-[#003b5f57] placeholder-gray-500"
                 aria-label="Password"
               />
               <div

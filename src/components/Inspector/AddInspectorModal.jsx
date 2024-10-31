@@ -29,8 +29,8 @@ function AddInspectorModal() {
     return (
         <div className='bg-black/50 backdrop-blur-lg overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full poppins'>
             <div className="flex items-center justify-center py-10 w-full min-h-screen ">
-                <div className='bg-[#ffff] rounded-xl w-[0%]\ sm:w-[40rem] p-3 flex flex-col items-center justify-center gap-2'>
-                    <h1 className='xs:text-[1.5rem] text-[1.2rem] sm:text-[2rem] font-medium'>Add Inspector</h1>
+                <div className='bg-[#ffff] rounded-xl w-[0%]\ sm:w-[40rem] pt-3 px-3 flex flex-col items-center justify-center gap-2'>
+                    <h1 className='xs:text-[1.5rem] text-[1.2rem] sm:text-[2rem] mb-[-22px] font-medium'>Add Inspector</h1>
                     <form  className='w-full p-6 flex flex-col gap-3'>
                         <div className='flex items-center justify-center'>
                             <div className="flex flex-col items-center justify-center w-32 h-32 sm:w-40 sm:h-40  rounded-lg cursor-pointer">
@@ -73,34 +73,34 @@ function AddInspectorModal() {
                         <div className='flex gap-3 lg:gap-8 lg:flex-row flex-col'>
                             <div className='lg:w-[50%] w-[100%]'>
                                 <p className='mb-1 font-medium'>Full Name</p>
-                                <input type="text" placeholder='Enter Name' className='w-full py-3 px-4 rounded-xl border shadow-sm'  />
+                                <input type="text" placeholder='Full Name' className='w-full py-3 px-4 rounded-xl border shadow-sm'  />
                             </div>
                             <div className='lg:w-[50%] w-[100%]'>
                                 <p className='mb-1 font-medium'>Email Address</p>
-                                <input type="text" placeholder='Enter Email' className='w-full py-3 px-4 rounded-xl border shadow-sm'  />
+                                <input type="text" placeholder='Email Address' className='w-full py-3 px-4 rounded-xl border shadow-sm'  />
                             </div>
                         </div>
                         <div className='flex gap-3 lg:gap-8 lg:flex-row flex-col'>
                             <div className='lg:w-[50%] w-[100%]'>
                                 <p className='mb-1 font-medium'>Password</p>
-                                <input type="text" placeholder='Enter Password' className='w-full py-3 px-4 rounded-xl border shadow-sm'  />
+                                <input type="text" placeholder='Password' className='w-full py-3 px-4 rounded-xl border shadow-sm'  />
                             </div>
                             <div className='lg:w-[50%] w-[100%]'>
                                 <p className='mb-1 font-medium'>Phone Number</p>
-                                <input type="text" placeholder='Enter Phone Number' className='w-full py-3 px-4 rounded-xl border shadow-sm'  />
+                                <input type="text" placeholder='Phone Number' className='w-full py-3 px-4 rounded-xl border shadow-sm'  />
                             </div>
                         </div>
                         <div className='flex gap-3 lg:gap-8 lg:flex-row flex-col'>
                             <div className='lg:w-[50%] w-[100%]'>
                                 <p className='mb-1 font-medium'>License Date</p>
-                                <input type="text" placeholder='Enter License Date' className='w-full py-3 px-4 rounded-xl border shadow-sm'  />
+                                <input type="text" placeholder='License Date' className='w-full py-3 px-4 rounded-xl border shadow-sm'  />
                             </div>
                             <div className='lg:w-[50%] w-[100%]'>
                                 <p className='mb-1 font-medium'>Expire Date</p>
-                                <input type="text" placeholder='Enter License Expire Date' className='w-full py-3 px-4 rounded-xl border shadow-sm'  />
+                                <input type="text" placeholder='License Expire Date' className='w-full py-3 px-4 rounded-xl border shadow-sm'  />
                             </div>
                         </div>
-                        <div className='font-medium flex items-center justify-center gap-3 mt-3'>
+                        <div className='font-medium flex items-center justify-center lg:gap-x-8 gap-3 mt-3'>
                             <button type="reset" onClick={()=>setOpenAddInspector(false)} className='w-[60%] sm:w-[35%] md:w-[40%] border shadow-sm py-3 rounded bg-white font-semibold text-black'>
                                 Cancel
                             </button>

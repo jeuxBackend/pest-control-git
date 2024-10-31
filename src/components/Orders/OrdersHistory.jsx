@@ -15,9 +15,18 @@ function OrdersHistory() {
           <div className="active-block-brns xl:w-[40%] lg:w-[100%] mt-2">
             <ul className="flex flex-wrap gap-3">
               <div className="flex items-center gap-x-6 bg-white h-[50px] border shadow-sm rounded-lg px-2">
+              <li>
+                  <Link
+                  to={"/Orders"}
+                  onClick={() => setPageHeading("Pending Orders")}
+                  className="flex justify-center py-2 font-semibold rounded w-[100px] h-[40px] text-[#000000] cursor-pointer">
+                    <div className="flex gap-x-2 items-center">Pendings</div>
+                  </Link>
+                </li>
                 <li>
                   <Link
-                    to={"/Orders"}
+                    onClick={() => setPageHeading("Active Orders")}
+                    to={"/Active-Orders"}
                     className="flex justify-center py-2 font-semibold rounded w-[100px] h-[40px] text-[#000000] cursor-pointer"
                   >
                     <div className="flex gap-x-2 items-center">Active</div>
@@ -76,7 +85,7 @@ function OrdersHistory() {
                   <ul className="flex justify-center w-full my-2">
                     <li>
                       <Link
-                        onClick={() => setPageHeading("Order Detail")}
+                        onClick={() => setPageHeading("Inspection Report")}
                         to={"/Orders-Detail"}
                         className="flex justify-center py-2 font-semibold rounded w-[250px] h-[45px] bg-[#c90000] text-[#ffff] cursor-pointer"
                       >

@@ -64,7 +64,7 @@ const ActiveUsers = () => {
         <div className="All-users-data mt-8">
           <div className="relative overflow-x-auto">
             <table className="w-full min-w-[800px] bg-transparent text-center shadow-sm overflow-hidden">
-              <thead className="uppercase text-sm">
+              <thead className="text-sm">
                 <tr>
                   <th className="px-0">
                     <p className="py-3 text-start ps-8 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 me-12 shadow-md">

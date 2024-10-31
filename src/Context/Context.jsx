@@ -42,7 +42,9 @@ export const MyContextProvider = ({ children }) => {
   const [openAddInspector, setOpenAddInspector] = useState(false);
   const [openEditInspector, setOpenEditInspector] = useState(false);
   const [openDeleteInspector, setOpenDeleteInspector] = useState(false);
-  const [openOfferModal, setOpenOfferModal] = useState(false);
+  const [openCreateOrder, setOpenCreateOrder] = useState(false);
+  const [openOrderDetail, setOpenOrderDetail] = useState(false);
+  const [openAssignInspector, setOpenAssignInspector] = useState(false);
 
   return (
     <MyContext.Provider
@@ -59,8 +61,12 @@ export const MyContextProvider = ({ children }) => {
         setOpenEditInspector,
         openDeleteInspector,
         setOpenDeleteInspector,
-        openOfferModal,
-        setOpenOfferModal,
+        openCreateOrder,
+        setOpenCreateOrder,
+        openOrderDetail,
+        setOpenOrderDetail,
+        openAssignInspector,
+        setOpenAssignInspector,
       }}
     >
       {children}

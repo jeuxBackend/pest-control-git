@@ -6,7 +6,7 @@ import CardBg from "./assets/card-bg.png";
 import { useMyContext } from "../../Context/Context";
 
 function Orders() {
-  const { pageHeading, setPageHeading, setOpenOrderDetail, setOpenAssignInspector } = useMyContext();
+  const { pageHeading, setPageHeading, setOpenOrderDetail } = useMyContext();
 
   return (
     <div className="w-full h-full min-h-screen bg-[#fafafa]">
@@ -16,15 +16,17 @@ function Orders() {
             <ul className="flex flex-wrap gap-3">
               <div className="flex items-center gap-x-6 bg-white h-[50px] border shadow-sm rounded-lg px-2">
                 <li>
-                  <Link className="flex justify-center py-2 font-semibold rounded bg-[#c90000]  w-[100px] h-[40px] text-[#ffff] cursor-pointer">
-                    <div className="flex gap-x-2 items-center">Pending</div>
+                  <Link
+                  to={"/Orders"}
+                  onClick={() => setPageHeading("Pending Orders")}
+                  className="flex justify-center py-2 font-semibold rounded w-[100px] h-[40px] text-[#000000] cursor-pointer">
+                    <div className="flex gap-x-2 items-center">Pendings</div>
                   </Link>
                 </li>
                 <li>
                   <Link
                   to={"/Active-Orders"}
-                  onClick={() => setPageHeading("Active Orders")}
-                  className="flex justify-center py-2 font-semibold rounded  w-[100px] h-[40px] text-[#00000] cursor-pointer">
+                  className="flex justify-center py-2 font-semibold rounded bg-[#c90000]  w-[100px] h-[40px] text-[#ffff] cursor-pointer">
                     <div className="flex gap-x-2 items-center">Active</div>
                   </Link>
                 </li>
@@ -80,12 +82,78 @@ function Orders() {
                 <div className="flex justify-center mt-2">
                   <button
                     onClick={function () {
-                      setOpenAssignInspector(true);
+                      setOpenOrderDetail(true);
                     }}
                     className="flex justify-center py-2 font-semibold rounded w-[250px] h-[45px] bg-[#003a5f] text-[#ffff] cursor-pointer"
                   >
                     <span className="flex gap-x-2 items-center">
-                      Assign Inspector
+                      View Detail
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="lg:w-1/3 md:w-1/2 w-full p-2">
+              <div
+                className="border shadow-sm rounded-lg p-2 bg-cover"
+                style={{ backgroundImage: `url(${CardBg})` }}
+              >
+                <div className="py-2 px-2">
+                  <span className="text-[#bdbcc1]">Client Name: </span>
+                  <span className="font-semibold">Savannah Nguyen</span>
+                </div>
+                <div className="py-2 px-2">
+                  <span className="text-[#bdbcc1]">Date: </span>
+                  <span className="font-semibold">October 25, 2019</span>
+                </div>
+                <div className="py-2 px-2">
+                  <span className="text-[#bdbcc1]">Location: </span>
+                  <span className="font-semibold">
+                    4517 Washington Ave. Manchester, Kentucky 39495
+                  </span>
+                </div>
+                <div className="flex justify-center mt-2">
+                  <button
+                    onClick={function () {
+                      setOpenOrderDetail(true);
+                    }}
+                    className="flex justify-center py-2 font-semibold rounded w-[250px] h-[45px] bg-[#003a5f] text-[#ffff] cursor-pointer"
+                  >
+                    <span className="flex gap-x-2 items-center">
+                      View Detail
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="lg:w-1/3 md:w-1/2 w-full p-2">
+              <div
+                className="border shadow-sm rounded-lg p-2 bg-cover"
+                style={{ backgroundImage: `url(${CardBg})` }}
+              >
+                <div className="py-2 px-2">
+                  <span className="text-[#bdbcc1]">Client Name: </span>
+                  <span className="font-semibold">Savannah Nguyen</span>
+                </div>
+                <div className="py-2 px-2">
+                  <span className="text-[#bdbcc1]">Date: </span>
+                  <span className="font-semibold">October 25, 2019</span>
+                </div>
+                <div className="py-2 px-2">
+                  <span className="text-[#bdbcc1]">Location: </span>
+                  <span className="font-semibold">
+                    4517 Washington Ave. Manchester, Kentucky 39495
+                  </span>
+                </div>
+                <div className="flex justify-center mt-2">
+                  <button
+                    onClick={function () {
+                      setOpenOrderDetail(true);
+                    }}
+                    className="flex justify-center py-2 font-semibold rounded w-[250px] h-[45px] bg-[#003a5f] text-[#ffff] cursor-pointer"
+                  >
+                    <span className="flex gap-x-2 items-center">
+                      View Detail
                     </span>
                   </button>
                 </div>

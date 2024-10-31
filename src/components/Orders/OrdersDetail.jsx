@@ -43,7 +43,7 @@ function OrdersDetail() {
               <img
                 src={mainImage}
                 alt="Main"
-                className="h-[500px] w-[500px] object-cover rounded-lg mb-2"
+                className="h-[422px] w-[500px] object-cover rounded-lg mb-2"
               />
               <div className="flex lg:flex-col flex-wrap gap-2">
                 {additionalImages.slice(0, 3).map((image, index) => (

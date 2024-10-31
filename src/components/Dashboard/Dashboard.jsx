@@ -19,7 +19,7 @@ function Dashboard() {
     <div className="w-full max-h-full min-h-screen bg-[#fafafa]">
       <div className="dashboard-div  relative lg:ml-[260px] px-3 top-[20px] h-full">
         <p className="text-3xl text-black font-bold">
-          Welcome, Cameron W.                   
+          Welcome                  
         </p>
         <div className="date_description flex flex-wrap gap-2 items-center mt-2">
         <p className="mb-0 font-semibold text-black text-lg">{currentDate}.</p>

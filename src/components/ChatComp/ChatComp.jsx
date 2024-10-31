@@ -22,7 +22,7 @@ function ChatComp() {
   const [chat, setChat] = useState("chat");
   const [openChats, setOpenChats] = useState(false);
   const [openSend, setOpenSend] = useState(false);
-  const { setOpenOfferModal } = useMyContext();
+  const { setOpenCreateOrder } = useMyContext();
 
   return (
     <div className="w-full h-full min-h-screen bg-[#fafafa]">
@@ -35,7 +35,7 @@ function ChatComp() {
           {/* contacts area */}
           <div
             onClick={() => setOpenSend(false)}
-            className={`lg:static w-full  px-2 overflow-auto h-full  transition-all chat bg-[#fafafa] overflow-chat`}
+            className={`lg:static w-full  px-2 overflow-auto h-full lg:pb-0 pb-12  transition-all chat bg-[#fafafa] overflow-chat`}
           >
             <div
               onClick={() => setOpenSend(false)}
@@ -87,14 +87,14 @@ function ChatComp() {
             </div>
             <div className="py-2">
               <div className="flex flex-col gap-3">
-                <div className="chatcard flex items-center gap-2 pt-2 pb-4 border-b-2 border-dashed border-[#799aad73]">
+                <div className="chatcard flex items-center gap-2 pt-2 pb-4 border-b-2 border-dashed border-[#799aad2a]">
                   <img
                     src={chatimg}
                     alt=""
                     className="w-[3.5rem] h-[3.5rem] rounded-full object-cover"
                   />
                   <div>
-                    <h1 className="text-lg font-bold text-[#003a5f]">
+                    <h1 className="text-lg font-semibold text-[#003a5f]">
                       Alber Flores
                     </h1>
                     <p className="text-[#799aad] text-sm leading-none">
@@ -102,14 +102,14 @@ function ChatComp() {
                     </p>
                   </div>
                 </div>
-                <div className="chatcard flex items-center gap-2 pt-2 pb-4 border-b-2 border-dashed border-[#799aad73]">
+                <div className="chatcard flex items-center gap-2 pt-2 pb-4 border-b-2 border-dashed border-[#799aad2a]">
                   <img
                     src={chatimg2}
                     alt=""
                     className="w-[3.5rem] h-[3.5rem] rounded-full object-cover"
                   />
                   <div>
-                    <h1 className="text-lg font-bold text-[#003a5f]">
+                    <h1 className="text-lg font-semibold text-[#003a5f]">
                       Ralph Edwards
                     </h1>
                     <p className="text-[#799aad] text-sm leading-none">
@@ -117,14 +117,14 @@ function ChatComp() {
                     </p>
                   </div>
                 </div>
-                <div className="chatcard flex items-center gap-2 pt-2 pb-4 border-b-2 border-dashed border-[#799aad73]">
+                <div className="chatcard flex items-center gap-2 pt-2 pb-4 border-b-2 border-dashed border-[#799aad2a]">
                   <img
                     src={chatimg3}
                     alt=""
                     className="w-[3.5rem] h-[3.5rem] rounded-full object-cover"
                   />
                   <div>
-                    <h1 className="text-lg font-bold text-[#003a5f]">
+                    <h1 className="text-lg font-semibold text-[#003a5f]">
                       Kathryn Murphy
                     </h1>
                     <p className="text-[#799aad] text-sm leading-none">
@@ -132,14 +132,14 @@ function ChatComp() {
                     </p>
                   </div>
                 </div>
-                <div className="chatcard flex items-center gap-2 pt-2 pb-4 border-b-2 border-dashed border-[#799aad73]">
+                <div className="chatcard flex items-center gap-2 pt-2 pb-4 border-b-2 border-dashed border-[#799aad2a]">
                   <img
                     src={chatimg4}
                     alt=""
                     className="w-[3.5rem] h-[3.5rem] rounded-full object-cover"
                   />
                   <div>
-                    <h1 className="text-lg font-bold text-[#003a5f]">
+                    <h1 className="text-lg font-semibold text-[#003a5f]">
                       Jacob Jones
                     </h1>
                     <p className="text-[#799aad] text-sm leading-none">
@@ -154,7 +154,7 @@ function ChatComp() {
                     className="w-[3.5rem] h-[3.5rem] rounded-full object-cover"
                   />
                   <div>
-                    <h1 className="text-lg font-bold text-[#003a5f]">
+                    <h1 className="text-lg font-semibold text-[#003a5f]">
                       Courtney Henry
                     </h1>
                     <p className="text-[#799aad] text-sm leading-none">
@@ -189,7 +189,7 @@ function ChatComp() {
             </div>
             <div>
               <div
-                onClick={() => setOpenOfferModal(true)}
+                onClick={() => setOpenCreateOrder(true)}
                 to="/Lawyer-CaseNotes"
                 className="py-2 lg:px-5 px-2 text-center font-medium bg-[#c90000] rounded text-white text-[0.6rem] sm:text-[0.8rem] cursor-pointer"
               >
@@ -255,7 +255,7 @@ function ChatComp() {
           </div>
           <div className="sendmessage p-3  flex items-end justify-center w-full h-[18%]">
             <div></div>
-            <div className="w-full lg:mb-3 mb-5 relative">
+            <div className="w-full lg:mb-3 mb-0 relative">
               {/* <div
                 className={`flex flex-col items-center gap-2 absolute bg-[#f6f0e4] p-4 rounded-t-2xl rounded-br-2xl shadow-lg -top-16 left-8 ${
                   openSend ? "" : "hidden"

@@ -5,7 +5,7 @@ import { useMyContext } from "../Context/Context";
 // import { useMyContext } from '../Context/Context';
 
 function MainModule() {
-  const { openAddUser, setOpenAddUser} = useMyContext();
+  const { openAddInspector, openEditInspector, openOrderDetail} = useMyContext();
 
   //   const { openAddUser, setOpenAddUser} = useMyContext();
 
@@ -21,7 +21,7 @@ function MainModule() {
   //   }, [navigate]);
 
   return (
-    <div  className={`${openAddUser===true?"h-screen overflow-hidden":""}`}>
+    <div  className={`${openAddInspector===true || openEditInspector===true || openOrderDetail===true ? "h-screen overflow-hidden":""}`}>
       <SideBar />
 
       <Outlet />

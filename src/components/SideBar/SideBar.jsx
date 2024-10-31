@@ -5,6 +5,8 @@ import SideLogo from "./assets/side-bar-logo.png";
 import Dashboard from "./assets/dashboard.png";
 import Inspector from "./assets/inspector.png";
 import Users from "./assets/users.png";
+import Chat from "./assets/chat.png";
+import Orders from "./assets/order.png";
 import Logout from "./assets/logout.png";
 import { useMyContext } from "../../Context/Context";
 
@@ -35,14 +37,14 @@ function SideBar() {
     <>
       <Navbar
         fluid
-        className="border-b border-[#e4e4e441] bg-[#ffff] lg:ps-[272px] poppins"
+        className="border-b border-[#0a0a0a1c] bg-[#ffff] lg:ps-[272px]"
       >
         <Navbar.Brand className="text-2xl font-semibold py-5 text-black">
           {pageHeading}
         </Navbar.Brand>
 
         <div className="flex md:order-2">
-          <Dropdown
+          {/* <Dropdown
             arrowIcon={false}
             inline
             label={[
@@ -58,13 +60,10 @@ function SideBar() {
                   Admin
                 </span>
               </p>,
-              // <RiArrowDownSFill className="text-2xl text-[#d2d3d9]" />,
             ]}
           >
-            {/* <Dropdown.Item>Settings</Dropdown.Item> */}
-            {/* <Dropdown.Divider /> */}
-            {/* <Dropdown.Item>Log out</Dropdown.Item> */}
-          </Dropdown>
+  
+          </Dropdown> */}
           <Navbar.Toggle
             onClick={toggleSidebar}
             className="ms-2 lg:hidden md:block text-black"
@@ -76,7 +75,7 @@ function SideBar() {
         className={`fixed top-0 left-0 lg:z-0 z-50 w-[255px] h-screen transition-transform ${toggleNav} lg:translate-x-0 poppins`}
         aria-label="Sidebar"
       >
-        <div className="h-full py-4 pe-5 pt-10 flex justify-between items-center flex-col overflow-y-auto bg-[#0064a5]">
+        <div className="h-full py-4 pe-5 pt-10 flex justify-between items-center flex-col overflow-y-auto bg-[#0064a5] relative">
           <div>
             <div className="flex justify-center items-center w-full">
               <img
@@ -147,7 +146,7 @@ function SideBar() {
                     isActive === "/Inspector" ? "bg-[#c90000]" : ""
                   } py-3 ps-5 text-white rounded group w-[215px]`}
                 >
-                  <img src={Inspector} alt="" className="w-[20px]" />
+                  <img src={Inspector} alt="" className="w-[18px]" />
                   <span className="ms-3">Inspector</span>
                 </Link>
               </li>
@@ -164,12 +163,17 @@ function SideBar() {
                     isActive === "/ChatComp" ? "bg-[#c90000]" : ""
                   } py-3 ps-5 text-white rounded group w-[215px]`}
                 >
-                  <img src={Dashboard} alt="" className="w-[20px]" />
+                  <img src={Chat} alt="" className="w-[20px]" />
                   <span className="ms-3">Chat</span>
                 </Link>
               </li>
               <li className="flex items-center gap-1">
                 {isActive === "/Orders" && (
+                  <span className="inline rounded-r h-full text-5xl w-1 me-3 bg-[#c90000]">
+                    &nbsp;
+                  </span>
+                )}
+                 {isActive === "/Active-Orders" && (
                   <span className="inline rounded-r h-full text-5xl w-1 me-3 bg-[#c90000]">
                     &nbsp;
                   </span>
@@ -190,23 +194,23 @@ function SideBar() {
                   </span>
                 )}
                 <Link
-                  onClick={() => handleLinkClick("Active Orders")}
+                  onClick={() => handleLinkClick("Pending Orders")}
                   to={"/Orders"}
                   className={`flex items-center ${
                     isActive === "/Orders" ||
                     isActive === "/Orders-History" ||
                     isActive == "/Orders-Detail" ||
-                    isActive == "/Gallery"
+                    isActive == "/Gallery" ||
+                    isActive == "/Active-Orders" 
                       ? "bg-[#c90000]"
                       : ""
                   } py-3 ps-5 text-white rounded group w-[215px]`}
                 >
-                  <img src={Users} alt="" className="w-[20px]" />
+                  <img src={Orders} alt="" className="w-[20px]" />
                   <span className="ms-3">Orders</span>
                 </Link>
               </li>
-
-              <li className="flex items-center gap-x-2 ms-5">
+              <li className="flex items-center gap-x-2 ms-5 absolute bottom-10">
                 <button
                   onClick={() => {
                     setOpenLogout(true);

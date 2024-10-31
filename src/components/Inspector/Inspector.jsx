@@ -23,7 +23,7 @@ function Inspector() {
                 className="w-[180px] h-[50px] flex justify-center gap-2 items-center bg-[#003a5f] text-white text-lg font-semibold shadow-sm rounded"
               >
                 <img src={Add} className="w-[15px]" alt="" />
-                Tax Inspector
+                Add Inspector
               </button>
               <div className="search-box flex gap-3">
                 <input

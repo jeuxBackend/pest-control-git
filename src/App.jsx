@@ -17,10 +17,21 @@ import OrdersHistory from "./components/Orders/OrdersHistory";
 import OrdersDetail from "./components/Orders/OrdersDetail";
 import Gallery from "./components/Orders/Gallery";
 import ChatComp from "./components/ChatComp/ChatComp";
-import OfferModal from "./components/ChatComp/OfferModal"
+import CreateOrderModal from "./components/ChatComp/CreateOrderModal";
+import OrederDetailModal from "./components/Orders/OrderDetailModal";
+import ActiveOrders from "./components/Orders/ActiveOrders";
+import AssignInspectorModal from "./components/Orders/AssignInspectorModal";
 
 function App() {
-  const { openLogout, openAddInspector, openEditInspector, openDeleteInspector, openOfferModal } = useMyContext();
+  const {
+    openLogout,
+    openAddInspector,
+    openEditInspector,
+    openDeleteInspector,
+    openCreateOrder,
+    openOrderDetail,
+    openAssignInspector,
+  } = useMyContext();
   return (
     <>
       <div className={`${openLogout === true ? "" : "hidden"}`}>
@@ -35,11 +46,16 @@ function App() {
       <div className={`${openDeleteInspector === true ? "" : "hidden"}`}>
         <DeleteInspectorModal />
       </div>
-      <div className={`${openOfferModal === true ? "" : "hidden"}`}>
-        <OfferModal />
+      <div className={`${openCreateOrder === true ? "" : "hidden"}`}>
+        <CreateOrderModal />
       </div>
 
-
+      <div className={`${openOrderDetail === true ? "" : "hidden"}`}>
+        <OrederDetailModal />
+      </div>
+      <div className={`${openAssignInspector === true ? "" : "hidden"}`}>
+        <AssignInspectorModal />
+      </div>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route element={<MainModule />}>
@@ -53,7 +69,7 @@ function App() {
           <Route path="/Orders-Detail" element={<OrdersDetail />} />
           <Route path="/Gallery" element={<Gallery />} />
           <Route path="/ChatComp" element={<ChatComp />} />
-          
+          <Route path="/Active-Orders" element={<ActiveOrders />} />
         </Route>
       </Routes>
     </>
