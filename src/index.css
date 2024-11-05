@@ -6,6 +6,9 @@
 .overflow-chat::-webkit-scrollbar {
     width: 4px;
 }
+.side-nav::-webkit-scrollbar {
+    width: 0px;
+}
 
 /* Track */
 ::-webkit-scrollbar-track {

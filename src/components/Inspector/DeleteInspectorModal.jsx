@@ -1,9 +1,32 @@
 import React, { useState } from "react";
 import { useMyContext } from "../../Context/Context";
 import DeleteImage from "./assets/delete-image.png";
+import axiosInstance from "../../axiosInstance/axioisInstance";
 
 function DeleteInspectorModal() {
-  const { openDeleteInspector, setOpenDeleteInspector } = useMyContext();
+  const { openDeleteInspector, setOpenDeleteInspector, inspectorId, setInspectorId } = useMyContext();
+
+  const handleSubmit = async ()=>{
+  
+    try{
+      const response = await axiosInstance.post("admin/delete-inspector",{
+        id:inspectorId
+      })
+      if(response.data){
+         console.log(response.data);
+         setOpenDeleteInspector(false)
+      }
+    }
+    catch(error){
+       if(error.response){
+        console.log(error.response);
+       }
+       else{
+        console.log(error);
+       }
+    }
+  }
+
 
   return (
     <div className="bg-black/50 backdrop-blur-lg overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full poppins">
@@ -28,7 +51,7 @@ function DeleteInspectorModal() {
               >
                 Cancel
               </button>
-              <button className="w-[60%] sm:w-[35%] md:w-[40%] py-3 rounded shadow-sm font-semibold bg-[#c90000] text-white">
+              <button onClick={handleSubmit} className="w-[60%] sm:w-[35%] md:w-[40%] py-3 rounded shadow-sm font-semibold bg-[#c90000] text-white">
                 Delete
               </button>
             </div>

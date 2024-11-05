@@ -45,6 +45,18 @@ export const MyContextProvider = ({ children }) => {
   const [openCreateOrder, setOpenCreateOrder] = useState(false);
   const [openOrderDetail, setOpenOrderDetail] = useState(false);
   const [openAssignInspector, setOpenAssignInspector] = useState(false);
+  const [openDeletePest, setOpenDeletePest] = useState(false);
+  const [openEditPest, setOpenEditPest] = useState(false);
+  const [openAddPest, setOpenAddPest] = useState(false);
+  const [openDeleteTreatment, setOpenDeleteTreatment] = useState(false);
+  const [openEditTreatment, setOpenEditTreatment] = useState(false);
+  const [openAddTreatment, setOpenAddTreatment] = useState(false);
+  const [inspectorId, setInspectorId] = useState(null);
+  const [inspectorData, setInspectorData] = useState({});
+  const [pestId, setPestId] = useState("");
+  const [pestName, setPestName] = useState("");
+  const [treatmentName, setTreatmentName] = useState("");
+  const [treatmentId, setTreatmentId] = useState("");
 
   return (
     <MyContext.Provider
@@ -67,6 +79,30 @@ export const MyContextProvider = ({ children }) => {
         setOpenOrderDetail,
         openAssignInspector,
         setOpenAssignInspector,
+        inspectorId,
+        setInspectorId,
+        inspectorData,
+        setInspectorData,
+        openDeletePest,
+        setOpenDeletePest,
+        openEditPest,
+        setOpenEditPest,
+        openAddPest,
+        setOpenAddPest,
+        openAddTreatment,
+        setOpenAddTreatment,
+        openEditTreatment,
+        setOpenEditTreatment,
+        openDeleteTreatment,
+        setOpenDeleteTreatment,
+        pestId,
+        setPestId,
+        pestName,
+        setPestName,
+        treatmentId,
+        setTreatmentId,
+        treatmentName,
+        setTreatmentName,
       }}
     >
       {children}

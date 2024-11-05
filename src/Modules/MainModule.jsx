@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import SideBar from "../components/SideBar/SideBar";
 import { useMyContext } from "../Context/Context";
 // import { useMyContext } from '../Context/Context';
@@ -9,16 +9,16 @@ function MainModule() {
 
   //   const { openAddUser, setOpenAddUser} = useMyContext();
 
-  //   const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  //   useEffect(() => {
-  // const token = localStorage.getItem('TaxToken');
+    useEffect(() => {
+  const token = localStorage.getItem('PestToken');
 
-  // if (!token) {
+  if (!token) {
   // Redirect to login if the token is not found
-  //   navigate('/');
-  // }
-  //   }, [navigate]);
+    navigate('/');
+  }
+    }, [navigate]);
 
   return (
     <div  className={`${openAddInspector===true || openEditInspector===true || openOrderDetail===true ? "h-screen overflow-hidden":""}`}>

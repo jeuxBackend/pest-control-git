@@ -9,9 +9,52 @@ import UserPic from "./assets/user-pic.png";
 import UserPic2 from "./assets/user-pic2.png";
 import UserPic3 from "./assets/user-pic3.png";
 import { useMyContext } from "../../Context/Context";
+import axiosInstance from "../../axiosInstance/axioisInstance";
 
 const ActiveUsers = () => {
   const { pageHeading, setPageHeading } = useMyContext();
+  const [activeUser, setActiveUser] = useState([]);
+
+
+
+  const getActiveUsers = async () => {
+    try {
+      const response = await axiosInstance.get("admin/get-active-user");
+      if (response.data) {
+        console.log(response.data);
+        setActiveUser(response.data.users);
+      }
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response);
+      } else {
+        console.log(error);
+      }
+    }
+  };
+  useEffect(() => {
+    getActiveUsers();
+  }, []);
+
+  const changeUserStatus = async (changeStatus) => {
+    try {
+      const response = await axiosInstance.post(`admin/user-toggle`, {
+        id: changeStatus,
+      });
+      if (response.data) {
+        console.log(response.data);
+        getActiveUsers();
+      }
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response);
+      } else {
+        console.log(error);
+      }
+    }
+  };
+
+
 
   return (
     <div
@@ -89,105 +132,42 @@ const ActiveUsers = () => {
                 </tr>
               </thead>
               <tbody className="text-gray-700">
-                <tr className="">
+                {activeUser.map((data, index)=>{
+                return(
+                <tr key={index} className="">
                   <td className="py-3 border-b border-r">
                     <div className="flex items-center justify-start ps-6 gap-x-3">
                       <div className="w-[50px] h-[50px] rounded-full overflow-hidden">
                         <img
-                          src={UserPic}
-                          alt="Admin"
-                          className="w-full h-full object-cover"
+                          src={data.profile_pic}
+                          alt="user"
+                          className="w-full border bg-white h-full object-cover"
                         />
                       </div>
                       <div>
                         <p className="text-lg text-black font-semibold">
-                          Brooklyn Sim
+                          {data.name}
                         </p>
                       </div>
                     </div>
                   </td>
                   <td className="py-3 border-b border-r">
-                    <p className="text-black px-8">brooklyn@mail.com</p>
+                    <p className="text-black px-8">{data.email}</p>
                   </td>
                   <td className="py-3 border-b border-r">
-                    <p className="text-black px-2">3517 W. Gray St. Utica, 
-                    Pennsylvania 57867</p>
+                    <p className="text-black px-2">{data.address}</p>
                   </td>
                   <td className="py-3 px-5 border-b border-r">
                     <div className="flex justify-center">
-                    <button className="px-5 py-2 text-[#ff2f16] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3">
+                    <button onClick={()=>changeUserStatus(data.id)} className="px-5 py-2 text-[#ff2f16] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3">
                         <img src={BlockColor} className="w-[18px]" alt="" />{" "}
                         Block
                       </button>
                     </div>
                   </td>
                 </tr>
-                <tr className="">
-                  <td className="py-3 border-b border-r">
-                    <div className="flex items-center justify-start ps-6 gap-x-3">
-                      <div className="w-[50px] h-[50px] rounded-full overflow-hidden">
-                        <img
-                          src={UserPic2}
-                          alt="Admin"
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div>
-                        <p className="text-lg text-black font-semibold">
-                          Courtney Henry
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="py-3 border-b border-r">
-                    <p className="text-black px-8">courtney@mail.com</p>
-                  </td>
-                  <td className="py-3 border-b border-r">
-                    <p className="text-black px-2">2715 Ash Dr. San Jose, South 
-                    Dakota 83475</p>
-                  </td>
-                  <td className="py-3 px-5 border-b border-r">
-                    <div className="flex justify-center">
-                    <button className="px-5 py-2 text-[#ff2f16] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3">
-                        <img src={BlockColor} className="w-[18px]" alt="" />{" "}
-                        Block
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr className="">
-                  <td className="py-3 border-b border-r">
-                    <div className="flex items-center justify-start ps-6 gap-x-3">
-                      <div className="w-[50px] h-[50px] rounded-full overflow-hidden">
-                        <img
-                          src={UserPic3}
-                          alt="Admin"
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div>
-                        <p className="text-lg text-black font-semibold">
-                          bessie Cooper
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="py-3 border-b border-r">
-                    <p className="text-black px-8">bessie@mail.com</p>
-                  </td>
-                  <td className="py-3 border-b border-r">
-                    <p className="text-black px-2">3517 W. Gray St. Utica, 
-                    Pennsylvania 57867</p>
-                  </td>
-                  <td className="py-3 px-5 border-b border-r">
-                    <div className="flex justify-center">
-                    <button className="px-5 py-2 text-[#ff2f16] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3">
-                        <img src={BlockColor} className="w-[18px]" alt="" />{" "}
-                        Block
-                      </button>
-                    </div>
-                  </td>
-                </tr>
+                  )  
+                })}
               </tbody>
             </table>
           </div>

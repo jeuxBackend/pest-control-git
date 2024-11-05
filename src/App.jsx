@@ -21,6 +21,14 @@ import CreateOrderModal from "./components/ChatComp/CreateOrderModal";
 import OrederDetailModal from "./components/Orders/OrderDetailModal";
 import ActiveOrders from "./components/Orders/ActiveOrders";
 import AssignInspectorModal from "./components/Orders/AssignInspectorModal";
+import PestsTypes from "./components/PestsTypes/PestsTypes";
+import DeletePestModal from "./components/PestsTypes/DeletePestModal";
+import AddPestModal from "./components/PestsTypes/AddPestModal";
+import EditPestModal from "./components/PestsTypes/EditPestModal";
+import TreatmentTypes from "./components/TreatmentTypes/TreatmentTypes";
+import AddTreatmentModal from "./components/TreatmentTypes/AddTreatmentModal";
+import EditTreatmentModal from "./components/TreatmentTypes/EditTreatmentModal";
+import DeleteTreatmentModal from "./components/TreatmentTypes/DeleteTreatmentModal";
 
 function App() {
   const {
@@ -31,6 +39,12 @@ function App() {
     openCreateOrder,
     openOrderDetail,
     openAssignInspector,
+    openDeletePest,
+    openAddPest,
+    openEditPest,
+    openEditTreatment,
+    openAddTreatment,
+    openDeleteTreatment,
   } = useMyContext();
   return (
     <>
@@ -56,6 +70,25 @@ function App() {
       <div className={`${openAssignInspector === true ? "" : "hidden"}`}>
         <AssignInspectorModal />
       </div>
+      <div className={`${openDeletePest === true ? "" : "hidden"}`}>
+        <DeletePestModal />
+      </div>
+      <div className={`${openAddPest === true ? "" : "hidden"}`}>
+        <AddPestModal />
+      </div>
+      <div className={`${openEditPest === true ? "" : "hidden"}`}>
+        <EditPestModal />
+      </div>
+      <div className={`${openAddTreatment === true ? "" : "hidden"}`}>
+        <AddTreatmentModal />
+      </div>
+      <div className={`${openEditTreatment === true ? "" : "hidden"}`}>
+        <EditTreatmentModal />
+      </div>
+      <div className={`${openDeleteTreatment === true ? "" : "hidden"}`}>
+        <DeleteTreatmentModal />
+      </div>
+
       <Routes>
         <Route path="/" element={<Login />} />
         <Route element={<MainModule />}>
@@ -70,6 +103,8 @@ function App() {
           <Route path="/Gallery" element={<Gallery />} />
           <Route path="/ChatComp" element={<ChatComp />} />
           <Route path="/Active-Orders" element={<ActiveOrders />} />
+          <Route path="/Pests" element={<PestsTypes />} />
+          <Route path="/Treatment" element={<TreatmentTypes />} />
         </Route>
       </Routes>
     </>

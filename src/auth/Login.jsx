@@ -1,15 +1,51 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import loginSideImage from "./assets/loginSideImage.png";
 import Logo from "./assets/logo.png";
 import Bg from "./assets/bg.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axiosInstance from "../axiosInstance/axioisInstance";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
+
+
+  const navigate = useNavigate();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axiosInstance.post("login", {
+        email: email,
+        password: password,
+      });
+      if (response.data && response.data.token) {
+        console.log(response.data);
+        localStorage.setItem("PestToken", response.data.token);
+        navigate("/Dashboard");
+      }
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response);
+      } else {
+        console.log(error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("PestToken");
+
+    if (token) {
+      navigate("/Dashboard");
+    }
+  }, [navigate]);
+
+ 
 
   return (
     <div
@@ -34,7 +70,7 @@ const Login = () => {
             </p>
             {/* <p className="text-[#003a5f] text-lg font-[500] mt-4">Access the admin portal to design and deliver certificates with ease.</p> */}
           </div>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="relative mb-4 mt-3 text-start">
               <label htmlFor="" className="text-[#003a5f] font-[600] text-lg">
                 Email
@@ -68,14 +104,14 @@ const Login = () => {
               </div>
             </div>
             <div className="w-full text-center">
-              <Link to="/Dashboard">
+              {/* <Link to="/Dashboard"> */}
                 <button
                   type="submit"
                   className="bg-[#c90000] w-[75%] py-3 text-lg text-white font-bold rounded-lg mt-3  text-center"
                 >
                   Login
                 </button>
-              </Link>
+              {/* </Link> */}
             </div>
           </form>
         </div>

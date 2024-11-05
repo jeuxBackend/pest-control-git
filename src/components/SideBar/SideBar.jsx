@@ -4,6 +4,8 @@ import { Link, useLocation } from "react-router-dom";
 import SideLogo from "./assets/side-bar-logo.png";
 import Dashboard from "./assets/dashboard.png";
 import Inspector from "./assets/inspector.png";
+import Pest from "./assets/pest.png";
+import Treatment from "./assets/treatment.png";
 import Users from "./assets/users.png";
 import Chat from "./assets/chat.png";
 import Orders from "./assets/order.png";
@@ -72,10 +74,10 @@ function SideBar() {
       </Navbar>
       <aside
         id="default-sidebar"
-        className={`fixed top-0 left-0 lg:z-0 z-50 w-[255px] h-screen transition-transform ${toggleNav} lg:translate-x-0 poppins`}
+        className={`fixed top-0 left-0 lg:z-0 z-50 w-[255px] h-full transition-transform ${toggleNav} lg:translate-x-0 poppins`}
         aria-label="Sidebar"
       >
-        <div className="h-full py-4 pe-5 pt-10 flex justify-between items-center flex-col overflow-y-auto bg-[#0064a5] relative">
+        <div className="h-full py-4 pe-5 pt-10 flex justify-between items-center flex-col overflow-y-auto overflow-x-hidden  bg-[#0064a5] relative side-nav">
           <div>
             <div className="flex justify-center items-center w-full">
               <img
@@ -151,6 +153,40 @@ function SideBar() {
                 </Link>
               </li>
               <li className="flex items-center gap-1">
+                {isActive === "/Pests" && (
+                  <span className="inline rounded-r h-full text-5xl w-1 me-3 bg-[#c90000]">
+                    &nbsp;
+                  </span>
+                )}
+                <Link
+                  onClick={() => handleLinkClick("Pests Types")}
+                  to={"/Pests"}
+                  className={`flex items-center ${
+                    isActive === "/Pests" ? "bg-[#c90000]" : ""
+                  } py-3 ps-5 text-white rounded group w-[215px]`}
+                >
+                  <img src={Pest} alt="" className="h-[25px] w-[20px]" />
+                  <span className="ms-3">Pests</span>
+                </Link>
+              </li>
+              <li className="flex items-center gap-1">
+                {isActive === "/Treatment" && (
+                  <span className="inline rounded-r h-full text-5xl w-1 me-3 bg-[#c90000]">
+                    &nbsp;
+                  </span>
+                )}
+                <Link
+                  onClick={() => handleLinkClick("Treatment Types")}
+                  to={"/Treatment"}
+                  className={`flex items-center ${
+                    isActive === "/Treatment" ? "bg-[#c90000]" : ""
+                  } py-3 ps-5 text-white rounded group w-[215px]`}
+                >
+                  <img src={Treatment} alt="" className="w-[27px]" />
+                  <span className="ms-3">Treatment</span>
+                </Link>
+              </li>
+              <li className="flex items-center gap-1">
                 {isActive === "/ChatComp" && (
                   <span className="inline rounded-r h-full text-5xl w-1 me-3 bg-[#c90000]">
                     &nbsp;
@@ -210,7 +246,7 @@ function SideBar() {
                   <span className="ms-3">Orders</span>
                 </Link>
               </li>
-              <li className="flex items-center gap-x-2 ms-5 absolute bottom-10">
+              <li className="flex items-center gap-x-2 ms-5">
                 <button
                   onClick={() => {
                     setOpenLogout(true);

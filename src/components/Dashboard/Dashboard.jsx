@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Bg from "./assets/bg.png";
+import axiosInstance from "../../axiosInstance/axioisInstance";
 
 function Dashboard() {
   const [currentDate, setCurrentDate] = useState("");
+  const [dataDashboard, setDataDashboard] = useState({});
  
   useEffect(() => {
     const date = new Date();
@@ -14,6 +16,27 @@ function Dashboard() {
     };
     setCurrentDate(date.toLocaleDateString(undefined, options));
   }, []);
+
+
+  const getDashboard = async () => {
+    try {
+      const response = await axiosInstance.get("admin/dashboard");
+      if (response.data) {
+        console.log(response.data);
+        setDataDashboard(response.data.data);
+      }
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response);
+      } else {
+        console.log(error);
+      }
+    }
+  };
+  useEffect(() => {
+    getDashboard();
+  }, []);
+
 
   return (
     <div className="w-full max-h-full min-h-screen bg-[#fafafa]">
@@ -33,7 +56,7 @@ function Dashboard() {
             <div className="rounded-xl bg-white border shadow-md px-5 py-10">
               <p className="text-3xl text-[#c90000] font-semibold">All Users</p>
               <p className="text-4xl mt-3 font-semibold text-[#003a5f]">
-                5,500
+                {dataDashboard.allUsers}
               </p>
             </div>
           </div>
@@ -43,7 +66,7 @@ function Dashboard() {
                 Inspector
               </p>
               <p className="text-4xl mt-3 font-semibold text-[#003a5f]">
-               5,000
+               {dataDashboard.allInspector}
               </p>
             </div>
           </div>
@@ -53,7 +76,7 @@ function Dashboard() {
                 Total Order
               </p>
               <p className="text-4xl mt-3 font-semibold text-[#003a5f]">
-                500
+                {dataDashboard.totalOrdera}
               </p>
             </div>
           </div>
@@ -63,7 +86,7 @@ function Dashboard() {
                 Total Active Order
               </p>       
               <p className="text-4xl mt-3 font-semibold text-[#003a5f]">
-                250
+                {dataDashboard.activeOrdera}
               </p>
             </div>
           </div>
