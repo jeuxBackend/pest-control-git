@@ -1,10 +1,13 @@
 import React, { useEffect } from "react";
+import toast, { Toaster } from 'react-hot-toast';
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import ActiveColorWhite from "./assets/active-color-white.png";
 import BlockColor from "./assets/block-color.png";
 import Block from "./assets/block.png";
 import SearchIcon from "./assets/search-icon.png";
+import LeftArrow from "./assets/left-arrow.png";
+import RightArrow from "./assets/right-arrow.png";
 import UserPic from "./assets/user-pic.png";
 import UserPic2 from "./assets/user-pic2.png";
 import UserPic3 from "./assets/user-pic3.png";
@@ -14,7 +17,13 @@ import axiosInstance from "../../axiosInstance/axioisInstance";
 const ActiveUsers = () => {
   const { pageHeading, setPageHeading } = useMyContext();
   const [activeUser, setActiveUser] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [usersPerPage, setUsersPerPage] = useState(10);
 
+
+  const notify = () => toast.success('Status Changed Successfully');
+  const notifyError = () => toast.error('Status Not Changed');
 
 
   const getActiveUsers = async () => {
@@ -42,11 +51,13 @@ const ActiveUsers = () => {
         id: changeStatus,
       });
       if (response.data) {
+        notify();
         console.log(response.data);
         getActiveUsers();
       }
     } catch (error) {
       if (error.response) {
+        notifyError();
         console.log(error.response);
       } else {
         console.log(error);
@@ -56,10 +67,71 @@ const ActiveUsers = () => {
 
 
 
+    // search code start
+
+const handleSearchChange = (event) => {
+  setSearchTerm(event.target.value);
+};
+
+
+const filteredUsers = activeUser.filter((item) => {
+  const lowerCaseSearchTerm = searchTerm.toLowerCase();
   return (
-    <div
-      className="w-full h-full min-h-screen poppins bg-[#fafafa]">
-      <div className="AllUsers-div relative  lg:ml-[260px] px-3 top-[20px]">
+    item.name?.toLowerCase().includes(lowerCaseSearchTerm) ||
+    item.email?.toLowerCase().includes(lowerCaseSearchTerm) ||
+    item.address?.toLowerCase().includes(lowerCaseSearchTerm)
+  );
+});
+
+// serch code end
+
+
+
+  // pagination satrt
+
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+  const totalPages = Math.ceil(activeUser.length / usersPerPage);
+  const totalUsers = activeUser.length;
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
+
+  const handleUsersPerPageChange = (event) => {
+    setUsersPerPage(Number(event.target.value));
+    setCurrentPage(1);
+  };
+
+  // Generate options for the dropdown
+
+  const generateOptions = () => {
+    const options = [];
+    for (let i = 10; i <= totalUsers; i += 10) {
+      options.push(i);
+    }
+    return options;
+  };
+
+  // pagination end
+
+
+  return (
+    <div className="w-full h-full min-h-screen poppins bg-[#fafafa] pb-[20px]">
+      <div className="activeUsers-div relative  lg:ml-[260px] px-3 top-[20px]">
         <div className="users-nav w-full flex flex-wrap justify-between">
           <div className="active-block-brns xl:w-[40%] lg:w-[100%] mt-2">
             <ul className="flex flex-wrap gap-3">
@@ -94,6 +166,8 @@ const ActiveUsers = () => {
               <div className="search-box flex gap-3">
                 <input
                   type="text"
+                  value={searchTerm}
+                  onChange={handleSearchChange}
                   className="bg-transparent text-black border h-[50px] lg:w-[300px] md:w-[300px] w-[230px] rounded ps-3"
                   placeholder="Search"
                 />
@@ -132,47 +206,116 @@ const ActiveUsers = () => {
                 </tr>
               </thead>
               <tbody className="text-gray-700">
-                {activeUser.map((data, index)=>{
-                return(
-                <tr key={index} className="">
-                  <td className="py-3 border-b border-r">
-                    <div className="flex items-center justify-start ps-6 gap-x-3">
-                      <div className="w-[50px] h-[50px] rounded-full overflow-hidden">
-                        <img
-                          src={data.profile_pic}
-                          alt="user"
-                          className="w-full border bg-white h-full object-cover"
-                        />
-                      </div>
-                      <div>
-                        <p className="text-lg text-black font-semibold">
-                          {data.name}
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="py-3 border-b border-r">
-                    <p className="text-black px-8">{data.email}</p>
-                  </td>
-                  <td className="py-3 border-b border-r">
-                    <p className="text-black px-2">{data.address}</p>
-                  </td>
-                  <td className="py-3 px-5 border-b border-r">
-                    <div className="flex justify-center">
-                    <button onClick={()=>changeUserStatus(data.id)} className="px-5 py-2 text-[#ff2f16] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3">
-                        <img src={BlockColor} className="w-[18px]" alt="" />{" "}
-                        Block
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                  )  
+                {currentUsers.map((data, index) => {
+                  return (
+                    <tr key={index} className="">
+                      <td className="py-3 border-b border-r">
+                        <div className="flex items-center justify-start ps-6 gap-x-3">
+                          <div className="w-[50px] h-[50px] rounded-full overflow-hidden">
+                            <img
+                              src={data.profile_pic}
+                              alt="user"
+                              className="w-full border bg-white h-full object-cover"
+                            />
+                          </div>
+                          <div>
+                            <p className="text-lg text-black font-semibold">
+                              {data.name}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="py-3 border-b border-r">
+                        <p className="text-black px-8">{data.email}</p>
+                      </td>
+                      <td className="py-3 border-b border-r">
+                        <p className="text-black px-2">{data.address}</p>
+                      </td>
+                      <td className="py-3 px-5 border-b border-r">
+                        <div className="flex justify-center">
+                          <button
+                            onClick={() => changeUserStatus(data.id)}
+                            className="px-5 py-2 text-[#ff2f16] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
+                          >
+                            <img src={BlockColor} className="w-[18px]" alt="" />{" "}
+                            Block
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
                 })}
               </tbody>
             </table>
           </div>
         </div>
+
+        {/* pagination code start */}
+        <div className="flex justify-between items-center">
+          <div className="text-[#00000062]">
+            Showing {currentUsers.length} of {totalUsers}
+          </div>
+          {/* Pagination Controls */}
+          <div className="flex justify-center items-center mt-4">
+            <div className="flex justify-center ml-4">
+              <button
+                onClick={handlePrevPage}
+                disabled={currentPage === 1}
+                className={`mx-1 w-[35px] flex justify-center items-center h-[35px] rounded ${
+                  currentPage === 1
+                    ? "bg-white border-2 rounded text-gray-400 cursor-not-allowed"
+                    : "bg-white border rounded text-black"
+                }`}
+              >
+                <img src={LeftArrow} className="w-[20px]" alt="" />
+              </button>
+              {Array.from({ length: totalPages }, (_, index) => (
+                <button
+                  key={index + 1}
+                  onClick={() => handlePageChange(index + 1)}
+                  className={`mx-1 w-[35px] h-[35px] rounded ${
+                    currentPage === index + 1
+                      ? "bg-[#003a5f] text-white"
+                      : "bg-white border rounded text-[#00000062]"
+                  }`}
+                >
+                  {index + 1}
+                </button>
+              ))}
+              <button
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
+                className={`mx-1 w-[35px] flex justify-center items-center h-[35px] rounded ${
+                  currentPage === totalPages
+                    ? "bg-white border-2 rounded text-gray-400 cursor-not-allowed"
+                    : "bg-white border rounded text-black"
+                }`}
+              >
+                <img src={RightArrow} className="w-[20px]" alt="" />
+              </button>
+            </div>
+          </div>
+          {/* Dropdown for selecting number of entries */}
+          <div className="flex items-center gap-x-2 justify-center mt-4">
+            <p className="text-[#00000062]">Show</p>
+            <div className="border px-2 py-2 bg-white rounded">
+              <select
+                value={usersPerPage}
+                onChange={handleUsersPerPageChange}
+                className="border-0 text-[#00000062]"
+              >
+                {generateOptions().map((option) => (
+                  <option key={option} value={option}>
+                    {option} entries
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+        {/* pagination code end */}
       </div>
+      <Toaster />
     </div>
   );
 };

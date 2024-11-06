@@ -29,6 +29,7 @@ import TreatmentTypes from "./components/TreatmentTypes/TreatmentTypes";
 import AddTreatmentModal from "./components/TreatmentTypes/AddTreatmentModal";
 import EditTreatmentModal from "./components/TreatmentTypes/EditTreatmentModal";
 import DeleteTreatmentModal from "./components/TreatmentTypes/DeleteTreatmentModal";
+import ConfirmOrderModal from "./components/Orders/ConfirmOrderModal";
 
 function App() {
   const {
@@ -45,6 +46,7 @@ function App() {
     openEditTreatment,
     openAddTreatment,
     openDeleteTreatment,
+    openConfirmModal,
   } = useMyContext();
   return (
     <>
@@ -88,7 +90,9 @@ function App() {
       <div className={`${openDeleteTreatment === true ? "" : "hidden"}`}>
         <DeleteTreatmentModal />
       </div>
-
+      <div className={`${openConfirmModal === true ? "" : "hidden"}`}>
+        <ConfirmOrderModal />
+      </div>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route element={<MainModule />}>

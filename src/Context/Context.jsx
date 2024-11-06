@@ -52,11 +52,17 @@ export const MyContextProvider = ({ children }) => {
   const [openEditTreatment, setOpenEditTreatment] = useState(false);
   const [openAddTreatment, setOpenAddTreatment] = useState(false);
   const [inspectorId, setInspectorId] = useState(null);
+  const [orderId, setOrderId] = useState(null);
+  const [activeOrderId, setActiveOrderId] = useState(null);
+  const [historyOrderId, setHistoryOrderId] = useState(null);
+  const [inspectorIdForAssign, setInspectorIdForAssign] = useState(null);
   const [inspectorData, setInspectorData] = useState({});
   const [pestId, setPestId] = useState("");
   const [pestName, setPestName] = useState("");
   const [treatmentName, setTreatmentName] = useState("");
   const [treatmentId, setTreatmentId] = useState("");
+  const [openConfirmModal, setOpenConfirmModal] = useState(false);
+  const [toaster, setToaster] = useState(0);
 
   return (
     <MyContext.Provider
@@ -103,6 +109,17 @@ export const MyContextProvider = ({ children }) => {
         setTreatmentId,
         treatmentName,
         setTreatmentName,
+        openConfirmModal,
+        setOpenConfirmModal,
+        orderId,
+        setOrderId,
+        inspectorIdForAssign,
+        setInspectorIdForAssign,
+        activeOrderId,
+        setActiveOrderId,
+        historyOrderId,
+        setHistoryOrderId,
+        toaster, setToaster
       }}
     >
       {children}

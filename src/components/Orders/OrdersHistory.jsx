@@ -4,9 +4,30 @@ import { Link } from "react-router-dom";
 import SearchIcon from "./assets/search-icon.png";
 import CardBg from "./assets/card-bg.png";
 import { useMyContext } from "../../Context/Context";
+import axiosInstance from "../../axiosInstance/axioisInstance";
 
 function OrdersHistory() {
-  const { pageHeading, setPageHeading } = useMyContext();
+  const { pageHeading, setPageHeading, historyOrderId, setHistoryOrderId } = useMyContext();
+  const [allHistoryOrders, setAllHistoryOrders] = useState([]);
+
+  const getAllHistoryOrders = async () => {
+    try {
+      const response = await axiosInstance.get("admin/get-history-order");
+      if (response.data) {
+        console.log(response.data.order);
+        setAllHistoryOrders(response.data.order);
+      }
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response);
+      } else {
+        console.log(error);
+      }
+    }
+  };
+  useEffect(() => {
+    getAllHistoryOrders();
+  }, []);
 
   return (
     <div className="w-full h-full min-h-screen bg-[#fafafa]">
@@ -15,11 +36,12 @@ function OrdersHistory() {
           <div className="active-block-brns xl:w-[40%] lg:w-[100%] mt-2">
             <ul className="flex flex-wrap gap-3">
               <div className="flex items-center gap-x-6 bg-white h-[50px] border shadow-sm rounded-lg px-2">
-              <li>
+                <li>
                   <Link
-                  to={"/Orders"}
-                  onClick={() => setPageHeading("Pending Orders")}
-                  className="flex justify-center py-2 font-semibold rounded w-[100px] h-[40px] text-[#000000] cursor-pointer">
+                    to={"/Orders"}
+                    onClick={() => setPageHeading("Pending Orders")}
+                    className="flex justify-center py-2 font-semibold rounded w-[100px] h-[40px] text-[#000000] cursor-pointer"
+                  >
                     <div className="flex gap-x-2 items-center">Pendings</div>
                   </Link>
                 </li>
@@ -58,46 +80,65 @@ function OrdersHistory() {
         <div className="orders-data mt-8">
           {/* order cards start */}
           <div className="flex flex-wrap">
-            <div className="lg:w-1/3 md:w-1/2 w-full p-2">
-              <div
-                className="border shadow-sm rounded-lg p-2 bg-cover"
-                style={{ backgroundImage: `url(${CardBg})` }}
-              >
-                <div className="py-2">
-                  <span className="text-[#bdbcc1]">Client Name: </span>
-                  <span className="font-[500] text-[15px]">
-                    Savannah Nguyen
-                  </span>
+            {Array.isArray(allHistoryOrders) && allHistoryOrders.length > 0 ? (
+              allHistoryOrders.map((data, index) => (
+                <div className="lg:w-1/3 md:w-1/2 w-full p-2">
+                  <div
+                    className="border shadow-sm rounded-lg p-2 bg-cover"
+                    style={{ backgroundImage: `url(${CardBg})` }}
+                  >
+                    <div className="py-2">
+                      <span className="text-[#bdbcc1]">Client Name: </span>
+                      <span className="font-[500] text-[15px]">
+                        {data.user.name}
+                      </span>
+                    </div>
+                    <div className="py-2">
+                      <span className="text-[#bdbcc1]">Start Date: </span>
+                      <span className="font-[500] text-[15px]">
+                        {data.starting_date}
+                      </span>
+                    </div>
+                    <div className="py-2">
+                      <span className="text-[#bdbcc1]">End Date: </span>
+                      <span className="font-[500] text-[15px]">
+                        {data.ending_date}
+                      </span>
+                    </div>
+                    <div className="py-2">
+                      <span className="text-[#bdbcc1]">Location: </span>
+                      <span className="font-[500] text-[15px]">
+                        {data.order_location.map((locationData, locIndex) => (
+                          <span key={locIndex} className="font-semibold">
+                            {locationData.location}
+                            {locIndex < data.order_location.length - 1 && ", "}
+                          </span>
+                        ))}
+                      </span>
+                    </div>
+                    <div className="">
+                      <ul className="flex justify-center w-full my-2">
+                        <li>
+                          <Link
+                            onClick={function(){ setPageHeading("Inspection Report");
+                              setHistoryOrderId(data.id);
+                            }}
+                            to={"/Orders-Detail"}
+                            className="flex justify-center py-2 font-semibold rounded w-[250px] h-[45px] bg-[#c90000] text-[#ffff] cursor-pointer"
+                          >
+                            <div className="flex gap-x-2 items-center">
+                              View Report
+                            </div>
+                          </Link>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
-                <div className="py-2">
-                  <span className="text-[#bdbcc1]">Date: </span>
-                  <span className="font-[500] text-[15px]">
-                    October 25, 2019
-                  </span>
-                </div>
-                <div className="py-2">
-                  <span className="text-[#bdbcc1]">Location: </span>
-                  <span className="font-[500] text-[15px]">
-                    4517 Washington Ave. Manchester, Kentucky 39495
-                  </span>
-                </div>
-                <div className="">
-                  <ul className="flex justify-center w-full my-2">
-                    <li>
-                      <Link
-                        onClick={() => setPageHeading("Inspection Report")}
-                        to={"/Orders-Detail"}
-                        className="flex justify-center py-2 font-semibold rounded w-[250px] h-[45px] bg-[#c90000] text-[#ffff] cursor-pointer"
-                      >
-                        <div className="flex gap-x-2 items-center">
-                          View Report
-                        </div>
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+              ))
+            ) : (
+              <p>No Order found.</p>
+            )}
           </div>
         </div>
       </div>

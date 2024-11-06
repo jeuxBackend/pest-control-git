@@ -4,10 +4,30 @@ import { Link } from "react-router-dom";
 import SearchIcon from "./assets/search-icon.png";
 import CardBg from "./assets/card-bg.png";
 import { useMyContext } from "../../Context/Context";
+import axiosInstance from "../../axiosInstance/axioisInstance";
 
 function Orders() {
-  const { pageHeading, setPageHeading, setOpenOrderDetail } = useMyContext();
+  const { pageHeading, setPageHeading, setOpenOrderDetail, openConfirmModal, setOpenConfirmModal, activeOrderId, setActiveOrderId } = useMyContext();
+  const [allActiveOrders, setAllActiveOrders] = useState([]);
 
+  const getAllActiveOrders = async () => {
+    try {
+      const response = await axiosInstance.get("admin/get-active-order");
+      if (response.data) {
+        console.log(response.data.order);
+        setAllActiveOrders(response.data.order);
+      }
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response);
+      } else {
+        console.log(error);
+      }
+    }
+  };
+  useEffect(() => {
+    getAllActiveOrders();
+  }, []);
   return (
     <div className="w-full h-full min-h-screen bg-[#fafafa]">
       <div className="AllUsers-div relative  lg:ml-[260px] px-3 top-[20px]">
@@ -60,6 +80,8 @@ function Orders() {
         <div className="orders-data mt-8">
           {/* order cards start */}
           <div className="flex flex-wrap">
+          {Array.isArray(allActiveOrders) && allActiveOrders.length > 0 ? (
+              allActiveOrders.map((data, index) => (
             <div className="lg:w-1/3 md:w-1/2 w-full p-2">
               <div
                 className="border shadow-sm rounded-lg p-2 bg-cover"
@@ -67,98 +89,57 @@ function Orders() {
               >
                 <div className="py-2 px-2">
                   <span className="text-[#bdbcc1]">Client Name: </span>
-                  <span className="font-semibold">Savannah Nguyen</span>
+                  <span className="font-semibold">{data.user.name}</span>
                 </div>
                 <div className="py-2 px-2">
-                  <span className="text-[#bdbcc1]">Date: </span>
-                  <span className="font-semibold">October 25, 2019</span>
+                  <span className="text-[#bdbcc1]">Start Date: </span>
+                  <span className="font-semibold">{data.starting_date}</span>
+                </div>
+                <div className="py-2 px-2">
+                  <span className="text-[#bdbcc1]">End Date: </span>
+                  <span className="font-semibold">{data.ending_date}</span>
                 </div>
                 <div className="py-2 px-2">
                   <span className="text-[#bdbcc1]">Location: </span>
-                  <span className="font-semibold">
-                    4517 Washington Ave. Manchester, Kentucky 39495
-                  </span>
+                  <span className="ms-1">
+                        {data.order_location.map((locationData, locIndex) => (
+                          <span key={locIndex} className="font-semibold">
+                            {locationData.location}
+                            {locIndex < data.order_location.length - 1 && ", "}
+                          </span>
+                        ))}
+                      </span>
                 </div>
-                <div className="flex justify-center mt-2">
+                <div className="flex flex-wrap gap-x-2 justify-center mt-2">
                   <button
                     onClick={function () {
-                      setOpenOrderDetail(true);
+                      setOpenOrderDetail(true),
+                      setActiveOrderId(data.id);
                     }}
-                    className="flex justify-center py-2 font-semibold rounded w-[250px] h-[45px] bg-[#003a5f] text-[#ffff] cursor-pointer"
+                    className="flex justify-center py-2 font-semibold rounded w-[130px] h-[45px] bg-[#003a5f] text-[#ffff] cursor-pointer"
                   >
                     <span className="flex gap-x-2 items-center">
                       View Detail
                     </span>
                   </button>
-                </div>
-              </div>
-            </div>
-            <div className="lg:w-1/3 md:w-1/2 w-full p-2">
-              <div
-                className="border shadow-sm rounded-lg p-2 bg-cover"
-                style={{ backgroundImage: `url(${CardBg})` }}
-              >
-                <div className="py-2 px-2">
-                  <span className="text-[#bdbcc1]">Client Name: </span>
-                  <span className="font-semibold">Savannah Nguyen</span>
-                </div>
-                <div className="py-2 px-2">
-                  <span className="text-[#bdbcc1]">Date: </span>
-                  <span className="font-semibold">October 25, 2019</span>
-                </div>
-                <div className="py-2 px-2">
-                  <span className="text-[#bdbcc1]">Location: </span>
-                  <span className="font-semibold">
-                    4517 Washington Ave. Manchester, Kentucky 39495
-                  </span>
-                </div>
-                <div className="flex justify-center mt-2">
                   <button
                     onClick={function () {
-                      setOpenOrderDetail(true);
+                      setOpenConfirmModal(true),
+                      setActiveOrderId(data.id);
                     }}
-                    className="flex justify-center py-2 font-semibold rounded w-[250px] h-[45px] bg-[#003a5f] text-[#ffff] cursor-pointer"
+                    className="flex justify-center py-2 font-semibold rounded w-[130px] h-[45px] bg-[#e00000] text-[#ffff] cursor-pointer"
                   >
                     <span className="flex gap-x-2 items-center">
-                      View Detail
+                      Complete Order
                     </span>
                   </button>
                 </div>
               </div>
             </div>
-            <div className="lg:w-1/3 md:w-1/2 w-full p-2">
-              <div
-                className="border shadow-sm rounded-lg p-2 bg-cover"
-                style={{ backgroundImage: `url(${CardBg})` }}
-              >
-                <div className="py-2 px-2">
-                  <span className="text-[#bdbcc1]">Client Name: </span>
-                  <span className="font-semibold">Savannah Nguyen</span>
-                </div>
-                <div className="py-2 px-2">
-                  <span className="text-[#bdbcc1]">Date: </span>
-                  <span className="font-semibold">October 25, 2019</span>
-                </div>
-                <div className="py-2 px-2">
-                  <span className="text-[#bdbcc1]">Location: </span>
-                  <span className="font-semibold">
-                    4517 Washington Ave. Manchester, Kentucky 39495
-                  </span>
-                </div>
-                <div className="flex justify-center mt-2">
-                  <button
-                    onClick={function () {
-                      setOpenOrderDetail(true);
-                    }}
-                    className="flex justify-center py-2 font-semibold rounded w-[250px] h-[45px] bg-[#003a5f] text-[#ffff] cursor-pointer"
-                  >
-                    <span className="flex gap-x-2 items-center">
-                      View Detail
-                    </span>
-                  </button>
-                </div>
-              </div>
-            </div>
+                ))
+              ) : (
+                <p>No Order found.</p>
+              )}
           </div>
         </div>
       </div>

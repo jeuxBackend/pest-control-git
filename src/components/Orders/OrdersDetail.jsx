@@ -1,24 +1,42 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import SearchIcon from "./assets/search-icon.png";
-import img1 from "./assets/img1.png";
-import img2 from "./assets/img2.png";
-import img3 from "./assets/img3.png";
-import img4 from "./assets/img4.png";
-import img5 from "./assets/img5.png";
-import img6 from "./assets/img6.png";
 import { useMyContext } from "../../Context/Context";
+import axiosInstance from "../../axiosInstance/axioisInstance";
 
 function OrdersDetail() {
-  const { setImages } = useMyContext();
+  const { setImages, historyOrderId, setHistoryOrderId } = useMyContext();
+  const [orderDetail, setOrderDetail] = useState({});
+  const [images, setImagesState] = useState([]);  
 
-  const images = [img1, img2, img3, img4, img5, img6];
   const mainImage = images[0];
   const additionalImages = images.slice(1);
 
   const handleGalleryClick = () => {
     setImages(additionalImages);
   };
+
+  const getOrderDetail = async (id) => {
+    try {
+      const response = await axiosInstance.get(`report-by-id/${id}`);
+      if (response.data) {
+        console.log(response.data);
+        setOrderDetail(response.data.report);
+    
+        const imageUrls = response.data.report.report_image.map(img => img.report_pic);
+        setImagesState(imageUrls);  
+      }
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response);
+      } else {
+        console.log(error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    getOrderDetail(historyOrderId);
+  }, [historyOrderId]);
 
   return (
     <div className="w-full h-full min-h-screen bg-[#fafafa]">
@@ -31,20 +49,20 @@ function OrdersDetail() {
             </div>
             <div className="">
               <span className="text-[#bdbcc1]">Date: </span>
-              <span className="font-semibold">October 25, 2019</span>
+              <span className="font-semibold">{orderDetail.date}</span>
             </div>
             <div className="pb-5">
               <span className="text-[#bdbcc1]">Location: </span>
-              <span className="font-semibold">
-                4517 Washington Ave. Manchester, Kentucky 39495
-              </span>
+              <span className="font-semibold">{orderDetail.location}</span>
             </div>
             <div className="photo-gallery lg:flex gap-x-3">
-              <img
-                src={mainImage}
-                alt="Main"
-                className="h-[422px] w-[500px] object-cover rounded-lg mb-2"
-              />
+              {mainImage && (
+                <img
+                  src={mainImage}
+                  alt="Main"
+                  className="h-[422px] w-[500px] object-cover rounded-lg mb-2"
+                />
+              )}           
               <div className="flex lg:flex-col flex-wrap gap-2">
                 {additionalImages.slice(0, 3).map((image, index) => (
                   <img
@@ -66,12 +84,8 @@ function OrdersDetail() {
               </div>
             </div>
             <div className="">
-              <p className="text-black text-xl font-semibold">
-                Description:
-              </p>
-              <p className="text-black">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae, excepturi temporibus earum a dignissimos, quidem veniam ea repellendus impedit asperiores provident modi cumque quia. Nulla veritatis cumque enim eos sunt vero quaerat molestias minima incidunt et ea velit, earum libero officiis corrupti asperiores harum delectus modi, perspiciatis illum fugit rerum, consequuntur eius. Velit cum eius, saepe rem veniam quae veritatis consequatur cupiditate, illum natus ipsum nam error fugit fugiat porro nisi maxime odio!
-              </p>
+              <p className="text-black text-xl font-semibold">Description:</p>
+              <p className="text-black">{orderDetail.description}</p>
             </div>
           </div>
         </div>

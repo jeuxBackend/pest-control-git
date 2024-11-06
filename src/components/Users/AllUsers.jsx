@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import toast, { Toaster } from 'react-hot-toast';
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import ActiveColor from "./assets/active-color.png";
@@ -18,8 +19,11 @@ const AllUsers = () => {
   const { pageHeading, setPageHeading } = useMyContext();
   const [allUser, setAllUser] = useState([]);
   const [changeStatus, setChangeStatus] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage, setUsersPerPage] = useState(10);
+
+  const notify = () => toast.success('Status Changed Successfully');
 
   const getAllUsers = async () => {
     try {
@@ -46,6 +50,8 @@ const AllUsers = () => {
         id: changeStatus,
       });
       if (response.data) {
+        notify();
+
         console.log(response.data);
         getAllUsers();
       }
@@ -58,11 +64,32 @@ const AllUsers = () => {
     }
   };
 
+
+  // search code start
+
+const handleSearchChange = (event) => {
+  setSearchTerm(event.target.value);
+};
+
+
+const filteredUsers = allUser.filter((item) => {
+  const lowerCaseSearchTerm = searchTerm.toLowerCase();
+  return (
+    item.name?.toLowerCase().includes(lowerCaseSearchTerm) ||
+    item.email?.toLowerCase().includes(lowerCaseSearchTerm) ||
+    item.address?.toLowerCase().includes(lowerCaseSearchTerm)
+  );
+});
+
+// serch code end
+
+
+
   // pagination satrt
 
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
-  const currentUsers = allUser.slice(indexOfFirstUser, indexOfLastUser);
+  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
   const totalPages = Math.ceil(allUser.length / usersPerPage);
   const totalUsers = allUser.length;
 
@@ -98,6 +125,8 @@ const AllUsers = () => {
   };
 
   // pagination end
+
+
 
   return (
     <div className="w-full h-full min-h-screen bg-[#fafafa] pb-10">
@@ -136,6 +165,8 @@ const AllUsers = () => {
               <div className="search-box flex gap-3">
                 <input
                   type="text"
+                  value={searchTerm}
+                  onChange={handleSearchChange}
                   className="bg-transparent text-black border h-[50px] lg:w-[300px] md:w-[300px] w-[230px] rounded ps-3"
                   placeholder="Search"
                 />
@@ -301,6 +332,8 @@ const AllUsers = () => {
         </div>
         {/* pagination code end */}
       </div>
+      <Toaster />
+
     </div>
   );
 };

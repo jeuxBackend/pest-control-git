@@ -1,8 +1,52 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useMyContext } from "../../Context/Context";
+import axiosInstance from "../../axiosInstance/axioisInstance";
 
 function AddInspectorModal() {
-  const { openAssignInspector, setOpenAssignInspector } = useMyContext();
+  const { openAssignInspector, setOpenAssignInspector, orderId, setOrderId, inspectorIdForAssign, setInspectorIdForAssign } = useMyContext();
+  const [allInspectors, setAllInspectors] = useState([]);
+
+  const getAllInspectors = async () => {
+    try {
+      const response = await axiosInstance.get("admin/get-all-inspector");
+      if (response.data) {
+        console.log(response.data);
+        setAllInspectors(response.data.inspector);
+      }
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response);
+      } else {
+        console.log(error);
+      }
+    }
+  };
+  useEffect(() => {
+    getAllInspectors();
+  }, []);
+
+console.log(inspectorIdForAssign)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+        const response = await axiosInstance.post("admin/assign-inspector", {
+          order_id: orderId,
+            inspector_id: inspectorIdForAssign
+        });
+        if (response.data) {
+            console.log(response.data.oredr);
+            setOpenAssignInspector(false);
+        }
+    } catch (error) {
+        if (error.response) {
+            console.log(error.response);
+        } else {
+            console.log(error);
+        }
+    }
+}
+
 
   return (
     <div className="bg-black/50 backdrop-blur-lg overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full poppins">
@@ -11,17 +55,20 @@ function AddInspectorModal() {
           <h1 className="xs:text-[1.5rem] text-[1.2rem] sm:text-[2rem] font-medium">
             Assign Inspector
           </h1>
-          <form className="w-full p-6 flex flex-col gap-3">
+          <form onSubmit={handleSubmit} className="w-full p-6 flex flex-col gap-3">
             <div className="flex gap-3 lg:gap-8 lg:flex-row flex-col">
               <div className="w-[100%]">
                 <p className="mb-1 font-medium">Assign Inspector</p>
                 <select
                   name=""
                   id=""
+                  onChange={(e) => setInspectorIdForAssign(e.target.value)}
                   className="w-full py-3 px-4 rounded-lg border shadow-sm"
                 >
                   <option value="">Select Inspector</option>
-                  <option value="">Esther Howard</option>
+                   {allInspectors.map((data,index)=>(
+                  <option value={data.inspector.id} key={index}>{data.name}</option>
+                ))}
                 </select>
               </div>
             </div>

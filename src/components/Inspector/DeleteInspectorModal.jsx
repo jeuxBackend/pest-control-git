@@ -10,7 +10,7 @@ function DeleteInspectorModal() {
   
     try{
       const response = await axiosInstance.post("admin/delete-inspector",{
-        id:inspectorId
+        user_id:inspectorId
       })
       if(response.data){
          console.log(response.data);
