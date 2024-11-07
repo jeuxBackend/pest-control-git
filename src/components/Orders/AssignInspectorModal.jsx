@@ -3,7 +3,7 @@ import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
 
 function AddInspectorModal() {
-  const { openAssignInspector, setOpenAssignInspector, orderId, setOrderId, inspectorIdForAssign, setInspectorIdForAssign } = useMyContext();
+  const { openAssignInspector, setOpenAssignInspector, orderId, setOrderId, inspectorIdForAssign, setInspectorIdForAssign, orderToast, setOrderToast } = useMyContext();
   const [allInspectors, setAllInspectors] = useState([]);
 
   const getAllInspectors = async () => {
@@ -35,11 +35,13 @@ console.log(inspectorIdForAssign)
             inspector_id: inspectorIdForAssign
         });
         if (response.data) {
+          setOrderToast(1);
             console.log(response.data.oredr);
             setOpenAssignInspector(false);
         }
     } catch (error) {
         if (error.response) {
+          setOrderToast(2);
             console.log(error.response);
         } else {
             console.log(error);
@@ -67,7 +69,7 @@ console.log(inspectorIdForAssign)
                 >
                   <option value="">Select Inspector</option>
                    {allInspectors.map((data,index)=>(
-                  <option value={data.inspector.id} key={index}>{data.name}</option>
+                  <option value={data.inspector.id ? data.inspector.id : ""} key={index}>{data.name}</option>
                 ))}
                 </select>
               </div>

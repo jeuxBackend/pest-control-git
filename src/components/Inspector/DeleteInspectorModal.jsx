@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import { useMyContext } from "../../Context/Context";
 import DeleteImage from "./assets/delete-image.png";
 import axiosInstance from "../../axiosInstance/axioisInstance";
 
 function DeleteInspectorModal() {
-  const { openDeleteInspector, setOpenDeleteInspector, inspectorId, setInspectorId } = useMyContext();
+  const { openDeleteInspector, setOpenDeleteInspector, inspectorId, setInspectorId, setToaster } = useMyContext();
 
   const handleSubmit = async ()=>{
   
@@ -13,11 +14,13 @@ function DeleteInspectorModal() {
         user_id:inspectorId
       })
       if(response.data){
+        setToaster(3);
          console.log(response.data);
          setOpenDeleteInspector(false)
       }
     }
     catch(error){
+      setToaster(4);
        if(error.response){
         console.log(error.response);
        }
@@ -30,6 +33,7 @@ function DeleteInspectorModal() {
 
   return (
     <div className="bg-black/50 backdrop-blur-lg overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full poppins">
+      <Toaster />
       <div className="flex items-center justify-center py-10 w-full min-h-screen ">
         <div className="bg-[#ffff] rounded-xl w-[0%]\ sm:w-[40rem] p-3 flex flex-col items-center justify-center gap-2">
           {/* <form className="w-full p-6 flex flex-col gap-3"> */}

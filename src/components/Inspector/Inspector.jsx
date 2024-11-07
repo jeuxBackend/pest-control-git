@@ -12,6 +12,7 @@ import UserPic3 from "./assets/user-pic3.png";
 import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
 import toast, { Toaster } from "react-hot-toast";
+import { TailSpin } from "react-loader-spinner";
 
 function Inspector() {
   const {
@@ -19,6 +20,7 @@ function Inspector() {
     setOpenEditInspector,
     openEditInspector,
     setOpenDeleteInspector,
+    openDeleteInspector,
     openAddInspector,
     setInspectorId,
     setInspectorData,
@@ -29,24 +31,44 @@ function Inspector() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage, setUsersPerPage] = useState(10);
+  const [loading, setLoading] = useState(false);  
+
 
   const notify = () => toast.success("Inspector Added Successfully");
   const notifyError = () => toast.error("Inspector Not Added");
 
+  const notifyDelete = () => toast.success("Inspector Deleted Successfully");
+  const notifyDeleteError = () => toast.error("Inspector Not Deleted");
+
+  const notifyEdit = () => toast.success("Inspector Updated Successfully");
+  const notifyEditError = () => toast.error("Inspector Not Updated");
+
   useEffect(() => {
-    if(toaster===1){
-      notify()
-    }else if(toaster===2){
-      notifyError()
-    }else{
-      
+    if (toaster === 1) {
+      notify();
+      setToaster(0);
+    } else if (toaster === 2) {
+      notifyError();
+      setToaster(0);
+    } else if (toaster === 3) {
+      notifyDelete();
+      setToaster(0);
+    } else if (toaster === 4) {
+      notifyDeleteError();
+      setToaster(0);
+    } else if (toaster === 5) {
+      notifyEdit();
+      setToaster(0);
+    } else if (toaster === 6) {
+      notifyEditError();
+      setToaster(0);
+    } else {
     }
-  
-  }, [toaster])
-  
+  }, [toaster]);
 
   const getAllInspectors = async () => {
     try {
+      setLoading(true);
       const response = await axiosInstance.get("admin/get-all-inspector");
       if (response.data) {
         console.log(response.data);
@@ -58,6 +80,8 @@ function Inspector() {
       } else {
         console.log(error);
       }
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -69,6 +93,9 @@ function Inspector() {
   useEffect(() => {
     getAllInspectors();
   }, [openEditInspector]);
+  useEffect(() => {
+    getAllInspectors();
+  }, [openDeleteInspector]);
 
   const getInspectorData = async (id) => {
     console.log("Fetching inspector data for ID:", id);
@@ -176,88 +203,100 @@ function Inspector() {
             </div>
           </div>
         </div>
-        <div className="All-users-data mt-8">
-          <div className="relative overflow-x-auto">
-            <table className="w-full min-w-[800px] bg-transparent text-center shadow-sm overflow-hidden">
-              <thead className="text-sm">
-                <tr>
-                  <th className="px-0">
-                    <p className="py-3 text-start ps-8 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 me-12 shadow-md">
-                      <span className="">Inspector Details</span>
-                    </p>
-                  </th>
-                  <th className="px-0">
-                    <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 shadow-md mx-6">
-                      Email
-                    </p>
-                  </th>
-                  <th className="px-0">
-                    <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md">
-                      Password
-                    </p>
-                  </th>
-                  <th className="px-0">
-                    <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md">
-                      Action
-                    </p>
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="text-gray-700">
-                {currentUsers.map((data, index) => {
-                  return (
-                    <tr key={index} className="">
-                      <td className="py-3 border-b border-r">
-                        <div className="flex items-center justify-start ps-6 gap-x-3">
-                          <div className="w-[50px] h-[50px] rounded-full border overflow-hidden">
-                            <img
-                              src={data.profile_pic}
-                              alt="inspector"
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                          <div>
-                            <p className="text-lg text-black font-semibold">
-                              {data.name}
-                            </p>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="py-3 border-b border-r">
-                        <p className="text-black ">{data.email}</p>
-                      </td>
-                      <td className="py-3 border-b border-r">
-                        <p className="text-black px-8">{data.show_password}</p>
-                      </td>
-                      <td className="py-3 border-b border-r">
-                        <div className="flex gap-x-3 justify-center">
-                          <button
-                            onClick={function () {
-                              setOpenEditInspector(true),
-                                setInspectorId(data.id),
-                                getInspectorData(data.id);
-                            }}
-                          >
-                            <img src={Edit} className="w-[30px]" alt="" />
-                          </button>
-                          <button
-                            onClick={function () {
-                              setInspectorId(data.id),
-                                setOpenDeleteInspector(true);
-                            }}
-                          >
-                            <img src={Delete} className="w-[30px]" alt="" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <TailSpin
+              height={50}
+              width={50}
+              color="#0066a5"
+              ariaLabel="loading"
+            />
           </div>
-        </div>
-
+        ) : (
+          <div className="All-users-data mt-8">
+            <div className="relative overflow-x-auto">
+              <table className="w-full min-w-[800px] bg-transparent text-center shadow-sm overflow-hidden">
+                <thead className="text-sm">
+                  <tr>
+                    <th className="px-0">
+                      <p className="py-3 text-start ps-8 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 me-12 shadow-md">
+                        <span className="">Inspector Details</span>
+                      </p>
+                    </th>
+                    <th className="px-0">
+                      <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 shadow-md mx-6">
+                        Email
+                      </p>
+                    </th>
+                    <th className="px-0">
+                      <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md">
+                        Password
+                      </p>
+                    </th>
+                    <th className="px-0">
+                      <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md">
+                        Action
+                      </p>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="text-gray-700">
+                  {currentUsers.map((data, index) => {
+                    return (
+                      <tr key={index} className="">
+                        <td className="py-3 border-b border-r">
+                          <div className="flex items-center justify-start ps-6 gap-x-3">
+                            <div className="w-[50px] h-[50px] rounded-full border overflow-hidden">
+                              <img
+                                src={data.profile_pic}
+                                alt="inspector"
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            <div>
+                              <p className="text-lg text-black font-semibold">
+                                {data.name}
+                              </p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="py-3 border-b border-r">
+                          <p className="text-black ">{data.email}</p>
+                        </td>
+                        <td className="py-3 border-b border-r">
+                          <p className="text-black px-8">
+                            {data.show_password}
+                          </p>
+                        </td>
+                        <td className="py-3 border-b border-r">
+                          <div className="flex gap-x-3 justify-center">
+                            <button
+                              onClick={function () {
+                                setOpenEditInspector(true),
+                                  setInspectorId(data.id),
+                                  getInspectorData(data.id);
+                              }}
+                            >
+                              <img src={Edit} className="w-[30px]" alt="" />
+                            </button>
+                            <button
+                              onClick={function () {
+                                setInspectorId(data.id),
+                                  setOpenDeleteInspector(true);
+                              }}
+                            >
+                              <img src={Delete} className="w-[30px]" alt="" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
         {/* pagination code start */}
         <div className="flex justify-between items-center">
           <div className="text-[#00000062]">

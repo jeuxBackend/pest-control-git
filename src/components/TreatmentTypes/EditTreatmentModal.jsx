@@ -3,7 +3,7 @@ import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
 
 function EditTreatmentModal() {
-  const { openEditTreatment, setOpenEditTreatment, treatmentName, setTreatmentName, treatmentId, setTreatmentId } = useMyContext();
+  const { openEditTreatment, setOpenEditTreatment, treatmentName, setTreatmentName, treatmentId, setTreatmentId, setTreatmentToast } = useMyContext();
   const [name, setName] = useState("");
   useEffect(() => {
     setName(treatmentName);
@@ -18,11 +18,13 @@ function EditTreatmentModal() {
             title: name
         });
         if (response.data) {
+          setTreatmentToast(5);
             console.log(response.data.treatmentType);
             setOpenEditTreatment(false);
         }
     } catch (error) {
         if (error.response) {
+          setTreatmentToast(6);
             console.log(error.response);
         } else {
             console.log(error);

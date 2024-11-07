@@ -5,13 +5,17 @@ import SearchIcon from "./assets/search-icon.png";
 import CardBg from "./assets/card-bg.png";
 import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
+import { TailSpin } from 'react-loader-spinner';
+
 
 function OrdersHistory() {
   const { pageHeading, setPageHeading, historyOrderId, setHistoryOrderId } = useMyContext();
   const [allHistoryOrders, setAllHistoryOrders] = useState([]);
+  const [loading, setLoading] = useState(false);  
 
   const getAllHistoryOrders = async () => {
     try {
+      setLoading(true); 
       const response = await axiosInstance.get("admin/get-history-order");
       if (response.data) {
         console.log(response.data.order);
@@ -23,6 +27,9 @@ function OrdersHistory() {
       } else {
         console.log(error);
       }
+    }
+    finally {
+      setLoading(false); 
     }
   };
   useEffect(() => {
@@ -77,6 +84,11 @@ function OrdersHistory() {
             </div>
           </div>
         </div>
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <TailSpin height={50} width={50} color="#0066a5" ariaLabel="loading" />
+          </div>
+        ) : (
         <div className="orders-data mt-8">
           {/* order cards start */}
           <div className="flex flex-wrap">
@@ -141,6 +153,7 @@ function OrdersHistory() {
             )}
           </div>
         </div>
+        )}
       </div>
     </div>
   );

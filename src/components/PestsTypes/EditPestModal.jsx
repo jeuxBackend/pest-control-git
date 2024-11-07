@@ -3,7 +3,7 @@ import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
 
 function EditPestModal() {
-  const { openEditPest, setOpenEditPest, pestId, setPestId, pestName } =
+  const { openEditPest, setOpenEditPest, pestId, setPestId, pestName, setPestToast } =
     useMyContext();
     const [name, setName] = useState("");
     useEffect(() => {
@@ -20,11 +20,13 @@ function EditPestModal() {
             title: name
         });
         if (response.data) {
+          setPestToast(5);
             console.log(response.data.pestTypes);
             setOpenEditPest(false);
         }
     } catch (error) {
         if (error.response) {
+          setPestToast(6);
             console.log(error.response);
         } else {
             console.log(error);

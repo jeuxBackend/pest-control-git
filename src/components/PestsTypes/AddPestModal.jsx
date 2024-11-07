@@ -3,7 +3,7 @@ import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
 
 function AddPestModal() {
-  const { openAddPest, setOpenAddPest } = useMyContext();
+  const { openAddPest, setOpenAddPest, setPestToast } = useMyContext();
   const [name, setName] = useState("");
 
   const handleSubmit = async (e) => {
@@ -13,11 +13,14 @@ function AddPestModal() {
         title: name,
       });
       if (response.data) {
+        setPestToast(1);
         console.log(response.data);
         setOpenAddPest(false);
+        setName("");
       }
     } catch (error) {
       if (error.response) {
+        setPestToast(2);
         console.log(error.response);
       } else {
         console.log(error);
@@ -41,6 +44,7 @@ function AddPestModal() {
                 <p className="mb-1 font-medium">Pest Name</p>
                 <input
                   type="text"
+                  value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Full Name"
                   className="w-full py-3 px-4 rounded-xl border shadow-sm"

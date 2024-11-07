@@ -3,7 +3,7 @@ import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
 
 function ConfirmOrderModal() {
-  const { openConfirmModal, setOpenConfirmModal, activeOrderId } = useMyContext();
+  const { openConfirmModal, setOpenConfirmModal, activeOrderId, activeOrderToast, setActiveOrderToast } = useMyContext();
 
 
   
@@ -12,12 +12,14 @@ function ConfirmOrderModal() {
     try{
       const response = await axiosInstance.get(`admin/confirm-order/${Id}`)
       if(response.data){
+        setActiveOrderToast(1);
          console.log(response.data);
          setOpenConfirmModal(false)
       }
     }
     catch(error){
        if(error.response){
+        setActiveOrderToast(2);
         console.log(error.response);
        }
        else{
@@ -36,7 +38,7 @@ function ConfirmOrderModal() {
             <p className="text-2xl text-[#003a5f] font-bold">Confirm Order</p>
           </div>
           <div className="flex justify-center px-10">
-            <p className="text-[#89959a] text-lg fon-[500] w-full text-center">
+            <p className="text-[#89959a] text-lg fon-[500] w-full text-center my-10">
               Are you sure you want to confirm order.
             </p>
           </div>

@@ -5,6 +5,8 @@ import SearchIcon from "./assets/search-icon.png";
 import CardBg from "./assets/card-bg.png";
 import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
+import { TailSpin } from "react-loader-spinner";
+import toast, { Toaster } from "react-hot-toast";
 
 function Orders() {
   const {
@@ -16,11 +18,19 @@ function Orders() {
     setOrderId,
     inspectorIdForAssign,
     setInspectorIdForAssign,
+    orderToast,
+    setOrderToast,
   } = useMyContext();
   const [allPendingOrders, setAllPendingOrders] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const notify = () => toast.success("Inspector Assigned Successfully");
+  const notifyError = () => toast.error("Inspector Not Assigned");
 
   const getAllPendingOrders = async () => {
     try {
+      setLoading(true);
+
       const response = await axiosInstance.get("admin/get-pending-order");
       if (response.data) {
         console.log(response.data.order);
@@ -32,13 +42,28 @@ function Orders() {
       } else {
         console.log(error);
       }
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
     getAllPendingOrders();
   }, []);
+
+  useEffect(() => {
+    if (orderToast === 1) {
+      notify();
+      setOrderToast(0);
+    } else if (orderToast === 2) {
+      notifyError();
+      setOrderToast(0);
+    } else {
+    }
+  }, [orderToast]);
+
   return (
     <div className="w-full h-full min-h-screen bg-[#fafafa]">
+      <Toaster />
       <div className="AllUsers-div relative  lg:ml-[260px] px-3 top-[20px]">
         <div className="users-nav w-full flex flex-wrap justify-between">
           <div className="active-block-brns xl:w-[40%] lg:w-[100%] mt-2">
@@ -85,41 +110,55 @@ function Orders() {
             </div>
           </div>
         </div>
-        <div className="orders-data mt-8">
-          {/* order cards start */}
-          <div className="flex flex-wrap">
-            {Array.isArray(allPendingOrders) && allPendingOrders.length > 0 ? (
-              allPendingOrders.map((data, index) => (
-                <div key={index} className="lg:w-1/3 md:w-1/2 w-full p-2">
-                  <div
-                    className="border shadow-sm rounded-lg p-2 bg-cover"
-                    style={{ backgroundImage: `url(${CardBg})` }}
-                  >
-                    <div className="py-2 px-2">
-                      <span className="text-[#bdbcc1]">Client Name: </span>
-                      <span className="font-semibold">{data.user.name}</span>
-                    </div>
-                    <div className="py-2 px-2">
-                      <span className="text-[#bdbcc1]">Start Date: </span>
-                      <span className="font-semibold">
-                        {data.starting_date}
-                      </span>
-                    </div>
-                    <div className="py-2 px-2">
-                      <span className="text-[#bdbcc1]">End Date: </span>
-                      <span className="font-semibold">{data.ending_date}</span>
-                    </div>
-                    <div className="py-2 px-2">
-                      <span className="text-[#bdbcc1]">Location: </span>
-                      <span className="ms-1">
-                        {data.order_location.map((locationData, locIndex) => (
-                          <span key={locIndex} className="font-semibold">
-                            {locationData.location}
-                            {locIndex < data.order_location.length - 1 && ", "}
-                          </span>
-                        ))}
-                      </span>
-                      {/* <div>
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <TailSpin
+              height={50}
+              width={50}
+              color="#0066a5"
+              ariaLabel="loading"
+            />
+          </div>
+        ) : (
+          <div className="orders-data mt-8">
+            {/* order cards start */}
+            <div className="flex flex-wrap">
+              {Array.isArray(allPendingOrders) &&
+              allPendingOrders.length > 0 ? (
+                allPendingOrders.map((data, index) => (
+                  <div key={index} className="lg:w-1/3 md:w-1/2 w-full p-2">
+                    <div
+                      className="border shadow-sm rounded-lg p-2 bg-cover"
+                      style={{ backgroundImage: `url(${CardBg})` }}
+                    >
+                      <div className="py-2 px-2">
+                        <span className="text-[#bdbcc1]">Client Name: </span>
+                        <span className="font-semibold">{data.user.name}</span>
+                      </div>
+                      <div className="py-2 px-2">
+                        <span className="text-[#bdbcc1]">Start Date: </span>
+                        <span className="font-semibold">
+                          {data.starting_date}
+                        </span>
+                      </div>
+                      <div className="py-2 px-2">
+                        <span className="text-[#bdbcc1]">End Date: </span>
+                        <span className="font-semibold">
+                          {data.ending_date}
+                        </span>
+                      </div>
+                      <div className="py-2 px-2">
+                        <span className="text-[#bdbcc1]">Location: </span>
+                        <span className="ms-1">
+                          {data.order_location.map((locationData, locIndex) => (
+                            <span key={locIndex} className="font-semibold">
+                              {locationData.location}
+                              {locIndex < data.order_location.length - 1 &&
+                                ", "}
+                            </span>
+                          ))}
+                        </span>
+                        {/* <div>
                         {data.order_location.map((locationData, locIndex) => (
                           <div
                             key={locIndex}
@@ -134,27 +173,28 @@ function Orders() {
                           </div>
                         ))}
                       </div> */}
-                    </div>
-                    <div className="flex justify-center mt-2">
-                      <button
-                        onClick={function () {
-                          setOpenAssignInspector(true), setOrderId(data.id);
-                        }}
-                        className="flex justify-center py-2 font-semibold rounded w-[250px] h-[45px] bg-[#003a5f] text-[#ffff] cursor-pointer"
-                      >
-                        <span className="flex gap-x-2 items-center">
-                          Assign Inspector
-                        </span>
-                      </button>
+                      </div>
+                      <div className="flex justify-center mt-2">
+                        <button
+                          onClick={function () {
+                            setOpenAssignInspector(true), setOrderId(data.id);
+                          }}
+                          className="flex justify-center py-2 font-semibold rounded w-[250px] h-[45px] bg-[#003a5f] text-[#ffff] cursor-pointer"
+                        >
+                          <span className="flex gap-x-2 items-center">
+                            Assign Inspector
+                          </span>
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))
-            ) : (
-              <p>No Order found.</p>
-            )}
+                ))
+              ) : (
+                <p>No Order found.</p>
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

@@ -1,17 +1,27 @@
 import React, { useEffect } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import SearchIcon from "./assets/search-icon.png";
 import CardBg from "./assets/card-bg.png";
 import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
+import { TailSpin } from 'react-loader-spinner';
+
 
 function Orders() {
-  const { pageHeading, setPageHeading, setOpenOrderDetail, openConfirmModal, setOpenConfirmModal, activeOrderId, setActiveOrderId } = useMyContext();
+  const { pageHeading, setPageHeading, setOpenOrderDetail, openConfirmModal, setOpenConfirmModal, activeOrderId, setActiveOrderId, activeOrderToast, setActiveOrderToast } = useMyContext();
   const [allActiveOrders, setAllActiveOrders] = useState([]);
+  const [loading, setLoading] = useState(false);  
+
+
+  const notify = () => toast.success("Order Confirmed Successfully");
+  const notifyError = () => toast.error("Order Not Confirmed");
+
 
   const getAllActiveOrders = async () => {
     try {
+      setLoading(true); 
       const response = await axiosInstance.get("admin/get-active-order");
       if (response.data) {
         console.log(response.data.order);
@@ -24,12 +34,34 @@ function Orders() {
         console.log(error);
       }
     }
+    finally {
+      setLoading(false); 
+    }
   };
   useEffect(() => {
     getAllActiveOrders();
   }, []);
+  useEffect(() => {
+    getAllActiveOrders();
+  }, [openConfirmModal]);
+
+
+
+  useEffect(() => {
+    if (activeOrderToast === 1) {
+      notify();
+      setActiveOrderToast(0);
+    } else if (activeOrderToast === 2) {
+      notifyError();
+      setActiveOrderToast(0);
+    } else {
+    }
+  }, [activeOrderToast]);
+
+
   return (
     <div className="w-full h-full min-h-screen bg-[#fafafa]">
+      <Toaster />
       <div className="AllUsers-div relative  lg:ml-[260px] px-3 top-[20px]">
         <div className="users-nav w-full flex flex-wrap justify-between">
           <div className="active-block-brns xl:w-[40%] lg:w-[100%] mt-2">
@@ -77,6 +109,11 @@ function Orders() {
             </div>
           </div>
         </div>
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <TailSpin height={50} width={50} color="#0066a5" ariaLabel="loading" />
+          </div>
+        ) : (
         <div className="orders-data mt-8">
           {/* order cards start */}
           <div className="flex flex-wrap">
@@ -142,6 +179,7 @@ function Orders() {
               )}
           </div>
         </div>
+        )}
       </div>
     </div>
   );

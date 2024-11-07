@@ -3,7 +3,7 @@ import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
 
 function AddTreatmentModal() {
-  const { openAddTreatment, setOpenAddTreatment } = useMyContext();
+  const { openAddTreatment, setOpenAddTreatment, setTreatmentToast } = useMyContext();
   const [name, setName] = useState("");
 
   const handleSubmit = async (e) => {
@@ -13,11 +13,14 @@ function AddTreatmentModal() {
         title: name,
       });
       if (response.data) {
+        setTreatmentToast(1);
         console.log(response.data);
         setOpenAddTreatment(false);
+        setName("");
       }
     } catch (error) {
       if (error.response) {
+        setTreatmentToast(2);
         console.log(error.response);
       } else {
         console.log(error);
@@ -41,6 +44,7 @@ function AddTreatmentModal() {
                 <p className="mb-1 font-medium">Treatment Name</p>
                 <input
                   type="text"
+                  value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Full Name"
                   className="w-full py-3 px-4 rounded-xl border shadow-sm"

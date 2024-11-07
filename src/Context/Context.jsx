@@ -63,6 +63,10 @@ export const MyContextProvider = ({ children }) => {
   const [treatmentId, setTreatmentId] = useState("");
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
   const [toaster, setToaster] = useState(0);
+  const [pestToast, setPestToast] = useState(0);
+  const [treatmentToast, setTreatmentToast] = useState(0);
+  const [orderToast, setOrderToast] = useState(0);
+  const [activeOrderToast, setActiveOrderToast] = useState(0);
 
   return (
     <MyContext.Provider
@@ -119,7 +123,16 @@ export const MyContextProvider = ({ children }) => {
         setActiveOrderId,
         historyOrderId,
         setHistoryOrderId,
-        toaster, setToaster
+        toaster,
+        setToaster,
+        pestToast,
+        setPestToast,
+        treatmentToast,
+        setTreatmentToast,
+        orderToast,
+        setOrderToast,
+        activeOrderToast,
+        setActiveOrderToast,
       }}
     >
       {children}

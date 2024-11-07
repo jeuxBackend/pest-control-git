@@ -4,7 +4,7 @@ import DeleteImage from "./assets/delete-image.png";
 import axiosInstance from "../../axiosInstance/axioisInstance";
 
 function DeletePestModal() {
-  const {setOpenDeletePest, pestId, setPestId } = useMyContext();
+  const {setOpenDeletePest, pestId, setPestId, setPestToast } = useMyContext();
 
 
   const handleSubmit = async (Id)=>{
@@ -12,12 +12,14 @@ function DeletePestModal() {
     try{
       const response = await axiosInstance.get(`delete-pest-types/${Id}`)
       if(response.data){
+        setPestToast(3);
          console.log(response.data);
          setOpenDeletePest(false)
       }
     }
     catch(error){
        if(error.response){
+        setPestToast(4);
         console.log(error.response);
        }
        else{

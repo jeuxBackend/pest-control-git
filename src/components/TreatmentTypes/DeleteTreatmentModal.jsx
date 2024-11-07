@@ -4,19 +4,21 @@ import DeleteImage from "./assets/delete-image.png";
 import axiosInstance from "../../axiosInstance/axioisInstance";
 
 function DeleteTreatmentModal() {
-  const {setOpenDeleteTreatment, treatmentId } = useMyContext();
+  const {setOpenDeleteTreatment, treatmentId, setTreatmentToast } = useMyContext();
 
   const handleSubmit = async (Id)=>{
   
     try{
       const response = await axiosInstance.get(`delete-treatment-types/${Id}`)
       if(response.data){
+        setTreatmentToast(3);
          console.log(response.data);
          setOpenDeleteTreatment(false)
       }
     }
     catch(error){
        if(error.response){
+        setTreatmentToast(4);
         console.log(error.response);
        }
        else{

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import ActiveColorWhite from "./assets/active-color-white.png";
@@ -13,21 +13,23 @@ import UserPic2 from "./assets/user-pic2.png";
 import UserPic3 from "./assets/user-pic3.png";
 import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
+import { TailSpin } from "react-loader-spinner";
 
 const ActiveUsers = () => {
   const { pageHeading, setPageHeading } = useMyContext();
   const [activeUser, setActiveUser] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage, setUsersPerPage] = useState(10);
 
+  const [loading, setLoading] = useState(false);
 
-  const notify = () => toast.success('Status Changed Successfully');
-  const notifyError = () => toast.error('Status Not Changed');
-
+  const notify = () => toast.success("Status Changed Successfully");
+  const notifyError = () => toast.error("Status Not Changed");
 
   const getActiveUsers = async () => {
     try {
+      setLoading(true);
       const response = await axiosInstance.get("admin/get-active-user");
       if (response.data) {
         console.log(response.data);
@@ -39,6 +41,9 @@ const ActiveUsers = () => {
       } else {
         console.log(error);
       }
+    }
+    finally {
+      setLoading(false); 
     }
   };
   useEffect(() => {
@@ -62,30 +67,25 @@ const ActiveUsers = () => {
       } else {
         console.log(error);
       }
-    }
+    } 
   };
 
+  // search code start
 
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
 
-    // search code start
+  const filteredUsers = activeUser.filter((item) => {
+    const lowerCaseSearchTerm = searchTerm.toLowerCase();
+    return (
+      item.name?.toLowerCase().includes(lowerCaseSearchTerm) ||
+      item.email?.toLowerCase().includes(lowerCaseSearchTerm) ||
+      item.address?.toLowerCase().includes(lowerCaseSearchTerm)
+    );
+  });
 
-const handleSearchChange = (event) => {
-  setSearchTerm(event.target.value);
-};
-
-
-const filteredUsers = activeUser.filter((item) => {
-  const lowerCaseSearchTerm = searchTerm.toLowerCase();
-  return (
-    item.name?.toLowerCase().includes(lowerCaseSearchTerm) ||
-    item.email?.toLowerCase().includes(lowerCaseSearchTerm) ||
-    item.address?.toLowerCase().includes(lowerCaseSearchTerm)
-  );
-});
-
-// serch code end
-
-
+  // serch code end
 
   // pagination satrt
 
@@ -127,7 +127,6 @@ const filteredUsers = activeUser.filter((item) => {
   };
 
   // pagination end
-
 
   return (
     <div className="w-full h-full min-h-screen poppins bg-[#fafafa] pb-[20px]">
@@ -178,78 +177,93 @@ const filteredUsers = activeUser.filter((item) => {
             </div>
           </div>
         </div>
-        <div className="All-users-data mt-8">
-          <div className="relative overflow-x-auto">
-            <table className="w-full min-w-[800px] bg-transparent text-center shadow-sm overflow-hidden">
-              <thead className="text-sm">
-                <tr>
-                  <th className="px-0">
-                    <p className="py-3 text-start ps-8 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 me-12 shadow-md">
-                      <span className="">User Details</span>
-                    </p>
-                  </th>
-                  <th className="px-0">
-                    <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 shadow-md mx-6">
-                      Email
-                    </p>
-                  </th>
-                  <th className="px-0">
-                    <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md">
-                      Location
-                    </p>
-                  </th>
-                  <th className="px-0">
-                    <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md">
-                      Status
-                    </p>
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="text-gray-700">
-                {currentUsers.map((data, index) => {
-                  return (
-                    <tr key={index} className="">
-                      <td className="py-3 border-b border-r">
-                        <div className="flex items-center justify-start ps-6 gap-x-3">
-                          <div className="w-[50px] h-[50px] rounded-full overflow-hidden">
-                            <img
-                              src={data.profile_pic}
-                              alt="user"
-                              className="w-full border bg-white h-full object-cover"
-                            />
-                          </div>
-                          <div>
-                            <p className="text-lg text-black font-semibold">
-                              {data.name}
-                            </p>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="py-3 border-b border-r">
-                        <p className="text-black px-8">{data.email}</p>
-                      </td>
-                      <td className="py-3 border-b border-r">
-                        <p className="text-black px-2">{data.address}</p>
-                      </td>
-                      <td className="py-3 px-5 border-b border-r">
-                        <div className="flex justify-center">
-                          <button
-                            onClick={() => changeUserStatus(data.id)}
-                            className="px-5 py-2 text-[#ff2f16] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
-                          >
-                            <img src={BlockColor} className="w-[18px]" alt="" />{" "}
-                            Block
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
 
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <TailSpin
+              height={50}
+              width={50}
+              color="#0066a5"
+              ariaLabel="loading"
+            />
+          </div>
+        ) : (
+          <div className="All-users-data mt-8">
+            <div className="relative overflow-x-auto">
+              <table className="w-full min-w-[800px] bg-transparent text-center shadow-sm overflow-hidden">
+                <thead className="text-sm">
+                  <tr>
+                    <th className="px-0">
+                      <p className="py-3 text-start ps-8 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 me-12 shadow-md">
+                        <span className="">User Details</span>
+                      </p>
+                    </th>
+                    <th className="px-0">
+                      <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 shadow-md mx-6">
+                        Email
+                      </p>
+                    </th>
+                    <th className="px-0">
+                      <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md">
+                        Location
+                      </p>
+                    </th>
+                    <th className="px-0">
+                      <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md">
+                        Status
+                      </p>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="text-gray-700">
+                  {currentUsers.map((data, index) => {
+                    return (
+                      <tr key={index} className="">
+                        <td className="py-3 border-b border-r">
+                          <div className="flex items-center justify-start ps-6 gap-x-3">
+                            <div className="w-[50px] h-[50px] rounded-full overflow-hidden">
+                              <img
+                                src={data.profile_pic}
+                                alt="user"
+                                className="w-full border bg-white h-full object-cover"
+                              />
+                            </div>
+                            <div>
+                              <p className="text-lg text-black font-semibold">
+                                {data.name}
+                              </p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="py-3 border-b border-r">
+                          <p className="text-black px-8">{data.email}</p>
+                        </td>
+                        <td className="py-3 border-b border-r">
+                          <p className="text-black px-2">{data.address}</p>
+                        </td>
+                        <td className="py-3 px-5 border-b border-r">
+                          <div className="flex justify-center">
+                            <button
+                              onClick={() => changeUserStatus(data.id)}
+                              className="px-5 py-2 text-[#ff2f16] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
+                            >
+                              <img
+                                src={BlockColor}
+                                className="w-[18px]"
+                                alt=""
+                              />{" "}
+                              Block
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
         {/* pagination code start */}
         <div className="flex justify-between items-center">
           <div className="text-[#00000062]">

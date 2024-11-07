@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Bg from "./assets/bg.png";
 import axiosInstance from "../../axiosInstance/axioisInstance";
+import { TailSpin } from 'react-loader-spinner';
+
 
 function Dashboard() {
   const [currentDate, setCurrentDate] = useState("");
   const [dataDashboard, setDataDashboard] = useState({});
+  const [loading, setLoading] = useState(false);  
  
   useEffect(() => {
     const date = new Date();
@@ -20,6 +23,7 @@ function Dashboard() {
 
   const getDashboard = async () => {
     try {
+      setLoading(true); 
       const response = await axiosInstance.get("admin/dashboard");
       if (response.data) {
         console.log(response.data);
@@ -31,6 +35,8 @@ function Dashboard() {
       } else {
         console.log(error);
       }
+    } finally {
+      setLoading(false); 
     }
   };
   useEffect(() => {
@@ -51,6 +57,11 @@ function Dashboard() {
             Here is a quick snnapshot of the overall business
           </p>
         </div>
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <TailSpin height={50} width={50} color="#0066a5" ariaLabel="loading" />
+          </div>
+        ) : (
         <div className="overViews flex flex-wrap w-full mt-4">
           <div className="p-2 lg:w-1/3 md:w-1/3 w-full">
             <div className="rounded-xl bg-white border shadow-md px-5 py-10">
@@ -91,6 +102,7 @@ function Dashboard() {
             </div>
           </div>
         </div>
+        )}
       </div>
     </div>
   );
