@@ -37,6 +37,15 @@ export const MyContextProvider = ({ children }) => {
       localStorage.setItem("pageHeading", JSON.stringify(pageHeading));
     }
   }, [pageHeading]);
+  const [adminID, setAdminID] = useState(() => {
+    const savedAdminID = localStorage.getItem("adminID");
+    return savedAdminID ? JSON.parse(savedAdminID) : "";
+  });
+  useEffect(() => {
+    if (adminID !== null) {
+      localStorage.setItem("adminID", JSON.stringify(adminID));
+    }
+  }, [adminID]);
 
   const [openLogout, setOpenLogout] = useState(false);
   const [openAddInspector, setOpenAddInspector] = useState(false);
@@ -133,6 +142,8 @@ export const MyContextProvider = ({ children }) => {
         setOrderToast,
         activeOrderToast,
         setActiveOrderToast,
+        adminID,
+        setAdminID
       }}
     >
       {children}

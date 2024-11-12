@@ -5,10 +5,12 @@ import Logo from "./assets/logo.png";
 import Bg from "./assets/bg.png";
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../axiosInstance/axioisInstance";
+import { useMyContext } from "../Context/Context";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const {adminID, setAdminID} = useMyContext();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -26,6 +28,7 @@ const Login = () => {
       if (response.data && response.data.token) {
         console.log(response.data);
         localStorage.setItem("PestToken", response.data.token);
+        setAdminID(response.data.user.id)
         navigate("/Dashboard");
       }
     } catch (error) {
