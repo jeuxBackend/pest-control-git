@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { db, auth, collection, addDoc, onSnapshot, updateDoc, query,where, getDocs, doc  } from "../../Firebase/firebase";
+import React, { useState, useEffect, useRef } from "react";
+import { db, auth, collection, addDoc, onSnapshot, updateDoc, query, where, getDocs, doc, orderBy } from "../../Firebase/firebase";
 import { CiSearch } from "react-icons/ci";
 import Video from "./Assets/video.png";
 import chatimg from "./Assets/chatimg.jpg";
@@ -9,85 +9,104 @@ import { IoReorderThreeOutline, IoCloseOutline } from "react-icons/io5";
 import { useMyContext } from "../../Context/Context";
 
 function ChatComp() {
-  const [chat, setChat] = useState("chat");
+  const [chat, setChat] = useState("chat")
   const [openChats, setOpenChats] = useState(false);
   const [openSend, setOpenSend] = useState(false);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const { setOpenCreateOrder, adminID } = useMyContext();
   const [conversations, setConversations] = useState([]);
-
+  const chatEndRef = useRef(null);
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "messages"), (snapshot) => {
-      setMessages(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+    const receiverID = "2";
+
+
+    const q = query(
+      collection(db, "messages"),
+      where("receiverID", "==", receiverID),
+      orderBy("timestamp", "asc")
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const sortedMessages = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setMessages(sortedMessages);
     });
+
     return unsubscribe;
   }, []);
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   useEffect(() => {
-    
+
     const unsubscribe = onSnapshot(collection(db, "conversations"), (snapshot) => {
       setConversations(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
     });
     return unsubscribe;
   }, []);
 
-  
+
 
   const handleSendMessage = async () => {
-    if (newMessage.trim()) {
-      try {
-      
-        await addDoc(collection(db, "messages"), {
-          text: newMessage,
-          timestamp: new Date(),
-          user: auth.currentUser ? auth.currentUser.displayName : "Guest",
-          adminID: adminID,
-          receiverID: "2",
-        });
-  
-        
-        const conversationRef = collection(db, "conversations");
-        
-      
-        const q = query(conversationRef, where("receiverID", "==", "2"));
-        const querySnapshot = await getDocs(q);
-        
-        if (!querySnapshot.empty) {
-          
-          querySnapshot.forEach(async (docSnap) => {
-            const conversationDoc = doc(db, "conversations", docSnap.id);
-            await updateDoc(conversationDoc, {
-              lastMessage: newMessage,
-              lastTimestamp: new Date(),
-            });
-          });
-        } else {
-          
-          await addDoc(conversationRef, {
-            adminID: adminID,
-            receiverID: "2",
+    if (!newMessage.trim()) {
+      alert("Please enter a message.");
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, "messages"), {
+        message: newMessage,
+        timestamp: new Date(),
+        user: "Admin",
+        senderID: '1',
+        receiverID: "2",
+      });
+
+      const conversationRef = collection(db, "conversations");
+      const q = query(conversationRef, where("receiverID", "==", "2"));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        querySnapshot.forEach(async (docSnap) => {
+          const conversationDoc = doc(db, "conversations", docSnap.id);
+          await updateDoc(conversationDoc, {
             lastMessage: newMessage,
             lastTimestamp: new Date(),
           });
-        }
-  
-        setNewMessage("");
-      } catch (error) {
-        console.error("Error sending message:", error);
+        });
+      } else {
+        await addDoc(conversationRef, {
+          adminID: adminID,
+          receiverID: "2",
+          lastMessage: newMessage,
+          lastTimestamp: new Date(),
+        });
       }
+
+      setNewMessage("");
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSendMessage();
     }
   };
 
 
 
   return (
-    <div className="w-full h-full min-h-screen bg-[#fafafa]">
-       <div className="chatModule-div relative lg:ml-[260px] px-3 top-[20px] flex">
+    <div className="w-full  h-[] bg-[#fafafa] overflow-hidden">
+      <div className="chatModule-div relative lg:ml-[260px] px-3 top-[20px] flex">
         <div
-          className={`absolute h-[88vh] lg:h-[86.8vh] bg-white top-0 transition-all duration-300 ${
-            openChats ? "left-0 h-full" : "-left-[140%]"
-          } lg:static lg:left-auto lg:w-1/4`}
+          className={`absolute h-[88vh] lg:h-[86.8vh] bg-white top-0 transition-all duration-300 ${openChats ? "left-0 h-full" : "-left-[140%]"
+            } lg:static lg:left-auto lg:w-1/4`}
         >
           {/* Sidebar and Contact List */}
           <div onClick={() => setOpenChats(false)} className="lg:static w-full px-2 overflow-auto h-full lg:pb-0 pb-12 transition-all chat bg-[#fafafa] overflow-chat">
@@ -98,17 +117,15 @@ function ChatComp() {
             <div className="btns bg-[#fff] lg:w-[90%] w-full lg:px-3 flex items-center justify-center gap-3 py-1 lg:py-1 px-1 rounded border text-[0.9rem] font-medium">
               <button
                 onClick={() => setChat("chat")}
-                className={`py-[0.6rem] ${
-                  chat === "chat" ? "bg-[#003a5f] shadow-md text-white" : "hover:bg-white hover:shadow-md"
-                } w-[50%] px-7 rounded text-center`}
+                className={`py-[0.6rem] ${chat === "chat" ? "bg-[#003a5f] shadow-md text-white" : "hover:bg-white hover:shadow-md"
+                  } w-[50%] px-7 rounded text-center`}
               >
                 Client
               </button>
               <button
                 onClick={() => setChat("casechat")}
-                className={`py-[0.6rem] ${
-                  chat === "casechat" ? "bg-[#003a5f] shadow-md text-white" : "hover:bg-white hover:shadow-md"
-                } w-[50%] px-5 rounded text-center`}
+                className={`py-[0.6rem] ${chat === "casechat" ? "bg-[#003a5f] shadow-md text-white" : "hover:bg-white hover:shadow-md"
+                  } w-[50%] px-5 rounded text-center`}
               >
                 Inspector
               </button>
@@ -140,32 +157,53 @@ function ChatComp() {
           </div>
 
           {/* Messages Display */}
-          <div className="overflow-auto chat w-full h-[70%] overflow-chat p-3">
-            {messages.map((msg) => (
-              <div key={msg.id} className={`flex ${msg.user === "Guest" ? "items-start" : "items-end"} gap-2 py-2`}>
-                <p className="text-[1.1rem] p-2 bg-[#ffc7c7] text-sm inline-block rounded-t-2xl shadow-lg rounded-br-2xl">
-                  {msg.text}
-                </p>
-                <p className="text-[10px] mt-1 text-[#b2b2b2]">{msg.user}</p>
-              </div>
-            ))}
+          <div className="overflow-auto chat w-full h-[75%] overflow-chat p-3">
+            {messages.map((msg) => {
+              const messageTime = msg.timestamp?.toDate().toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit'
+              });
+
+              return (
+                <div
+                  key={msg.id}
+                  className={`flex ${msg.user === 'Admin' ? "justify-end" : "justify-start"
+                    } gap-2 py-2`}
+                >
+                  <div
+                    className={`p-2 text-sm shadow-lg rounded-t-2xl ${msg.user === 'Admin'
+                      ? "bg-[#d1e7ff] text-black rounded-bl-2xl"
+                      : "bg-[#ffc7c7] text-black rounded-br-2xl"
+                      }`}
+                  >
+                    <p className="text-[1.1rem]">{msg.message}</p>
+                    <p className="text-[10px] mt-1 text-[#707070] text-right">{messageTime}</p>
+                  </div>
+                </div>
+              );
+            })}
+            <div ref={chatEndRef} />
           </div>
 
+
           {/* Message Input */}
-          <div className="sendmessage p-3 flex items-end justify-center w-full h-[18%]">
-            <input
-              type="text"
-              placeholder="Type Message..."
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              className="bg-[#fafafa] text-black w-full border-2 py-3 rounded-full px-3"
-            />
-            <img
-              src={sendmsg}
-              alt=""
-              className="w-[2.5rem] border-l-2 pl-1  cursor-pointer"
-              onClick={handleSendMessage}
-            />
+          <div className=" px-2">
+            <div className="sendmessage p-3 flex items-center justify-center w-full  bg-[#fafafa] text-black  border-2  rounded-full px-3">
+              <input
+                type="text"
+                placeholder="Type Message..."
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+                onKeyPress={handleKeyPress} 
+                className="text-black w-full h-full border-none outline-none"
+              />
+              <img
+                src={sendmsg}
+                alt=""
+                className="w-[2rem] border-l-2 pl-1  cursor-pointer"
+                onClick={handleSendMessage}
+              />
+            </div>
           </div>
         </div>
       </div>
