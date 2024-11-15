@@ -106,16 +106,7 @@ function OrederDetailModal() {
               >
                 Cancel
               </button>
-              <Link
-                className="w-[60%] sm:w-[35%] md:w-[40%] py-3 rounded shadow-sm font-semibold bg-[#003a5f] text-white"
-                to={"/Orders-Detail"}
-                onClick={function () {
-                  setPageHeading("Inspection Report");
-                  setOpenOrderDetail(false);
-                }}
-              >
-                <div className="flex justify-center">Inspection Report</div>
-              </Link>
+             
             </div>
           </div>
         </div>

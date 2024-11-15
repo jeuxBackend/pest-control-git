@@ -9,6 +9,7 @@ function OrdersDetail() {
   const [orderDetail, setOrderDetail] = useState({});
   const [images, setImagesState] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [name, setName] = useState('');
 
   const mainImage = images[0];
   const additionalImages = images.slice(1);
@@ -26,11 +27,12 @@ function OrdersDetail() {
       if (response.data) {
         console.log(response.data);
         setOrderDetail(response.data.report);
+        setName(response.data.report.order.user.name)
 
-        const imageUrls = response.data.report.report_image.map(
-          (img) => img.report_pic
-        );
-        setImagesState(imageUrls);
+        // const imageUrls = response.data.report.report_imgs.map(
+        //   (img) => img.report_imgs
+        // );
+        setImagesState(response.data.report.report_imgs);
       }
     } catch (error) {
       if (error.response) {
@@ -64,7 +66,7 @@ function OrdersDetail() {
             <div className="border shadow-sm rounded-lg p-2">
               <div className="">
                 <span className="text-[#bdbcc1]">Client Name: </span>
-                <span className="font-semibold">Savannah Nguyen</span>
+                <span className="font-semibold">{name}</span>
               </div>
               <div className="">
                 <span className="text-[#bdbcc1]">Date: </span>

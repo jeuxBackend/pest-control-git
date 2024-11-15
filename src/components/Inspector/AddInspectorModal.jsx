@@ -34,6 +34,10 @@ function AddInspectorModal() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    if (!imagevoucher) {
+      alert("Please upload an image.");
+      return;
+    }else{
     try {
       const response = await axiosInstance.post("admin/add-inspector", {
         name: name,
@@ -53,11 +57,13 @@ function AddInspectorModal() {
       if (error.response) {
         setToaster(2);
         console.log(error.response);
+        setImageVoucher(null)
       } else {
         console.log(error);
       }
     } finally {
       setIsLoading(false);
+    }
     }
   };
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
 import { Oval } from "react-loader-spinner";
+import md5 from "md5";
 
 function EditInspectorModal() {
   const {
@@ -21,7 +22,7 @@ function EditInspectorModal() {
   const [licenseDate, setLicenseDate] = useState("");
   const [expireDate, setExpireDate] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
+  const [md5Hash, setMd5Hash] = useState("");
   const [imagevoucher, setImageVoucher] = useState(null);
 
   const handleImageChangeVoucher = (e) => {
@@ -82,7 +83,7 @@ function EditInspectorModal() {
     if (!imagevoucher) {
       alert("Please upload an image.");
       return;
-    }
+    }else{
     try {
       const response = await axiosInstance.post("admin/update-inspector", {
         user_id: inspectorId,
@@ -106,7 +107,10 @@ function EditInspectorModal() {
       } else {
         console.log(error);
       }
+    }finally{
+      setIsLoading(false)
     }
+  }
   };
 
   return (

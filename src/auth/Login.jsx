@@ -21,7 +21,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axiosInstance.post("login", {
+      const response = await axiosInstance.post("admin/login", {
         email: email,
         password: password,
       });

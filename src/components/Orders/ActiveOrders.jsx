@@ -119,7 +119,7 @@ function Orders() {
           <div className="flex flex-wrap">
           {Array.isArray(allActiveOrders) && allActiveOrders.length > 0 ? (
               allActiveOrders.map((data, index) => (
-            <div className="lg:w-1/3 md:w-1/2 w-full p-2">
+            <div key={index} className="lg:w-1/3 md:w-1/2 w-full p-2">
               <div
                 className="border shadow-sm rounded-lg p-2 bg-cover"
                 style={{ backgroundImage: `url(${CardBg})` }}
