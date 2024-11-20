@@ -81,6 +81,17 @@ function ChatComp() {
     return unsubscribe;
   }, []);
 
+
+  
+
+
+  
+
+
+
+
+
+
   const handleSendMessage = async () => {
     if (!newMessage.trim()) {
       alert("Please enter a message.");
@@ -122,7 +133,7 @@ function ChatComp() {
         });
       }
 
-      // sendNotification()
+      // sendNotification(firebaseToken, "Hello!", "This is a test notification.");
       setNewMessage("");
     } catch (error) {
       console.error("Error sending message:", error);
@@ -157,7 +168,7 @@ function ChatComp() {
       if (response.data) {
         console.log(response.data);
         setUser(response.data.user);
-        setFirebaseToken(response.data.user.device_token);
+        console.log(response.data.user.device_token);
       }
     } catch (error) {
       if (error.response) {
@@ -212,6 +223,10 @@ function ChatComp() {
   };
 console.log(conversations)
 console.log(messages)
+
+
+
+
   return (
     <div className="w-full  h-[] bg-[#fafafa] overflow-hidden">
       <div className="chatModule-div relative lg:ml-[260px] px-3 top-[20px] flex">

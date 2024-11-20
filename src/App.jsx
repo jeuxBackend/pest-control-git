@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import Login from "./auth/Login";
 import Dashboard from "./components/Dashboard/Dashboard";
@@ -30,6 +30,8 @@ import AddTreatmentModal from "./components/TreatmentTypes/AddTreatmentModal";
 import EditTreatmentModal from "./components/TreatmentTypes/EditTreatmentModal";
 import DeleteTreatmentModal from "./components/TreatmentTypes/DeleteTreatmentModal";
 import ConfirmOrderModal from "./components/Orders/ConfirmOrderModal";
+import { getToken } from "firebase/messaging";
+import { messaging,db,collection,addDoc } from "./Firebase/firebase";
 
 function App() {
   const {
@@ -48,6 +50,46 @@ function App() {
     openDeleteTreatment,
     openConfirmModal,
   } = useMyContext();
+
+  const vapidKey='BNhmSaO-9liiuqa4vTmG2OHdOo-dQ3p4vyDyxIeSooW91Xql-7u1WcLskdLZrCqbyfbkBScerH3s1C3BFyeLNP4'
+
+  async function requestPermission() {
+    const permission = await Notification.requestPermission();
+  
+    if (permission === "granted") {
+      try {
+        const token = await getToken(messaging, {
+          vapidKey: vapidKey,
+          serviceWorkerRegistration: await navigator.serviceWorker.register('/firebase-messaging-sw.js'),
+        });
+  
+        console.log("Token generated: ", token);
+      } catch (error) {
+        console.error("Error getting token:", error);
+      }
+    } else {
+      console.error("Notification permission not granted.");
+    }
+  }
+
+  async function saveTokenToFirestore(token) {
+    try {
+      const tokensCollection = collection(db, "tokens");
+      await addDoc(tokensCollection, { token });
+      console.log("Token saved to Firestore!");
+    } catch (error) {
+      console.error("Error saving token:", error);
+    }
+  }
+
+  useEffect(() => {
+    requestPermission();
+  }, []);
+
+  
+
+
+
   return (
     <>
       <div className={`${openLogout === true ? "" : "hidden"}`}>

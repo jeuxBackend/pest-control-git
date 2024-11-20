@@ -61,6 +61,27 @@ function Orders() {
     }
   }, [orderToast]);
 
+  function convertMillisecondsToDate(milliseconds) {
+    if (!milliseconds || isNaN(milliseconds)) {
+      return "Invalid time";
+    }
+  
+    const date = new Date(Number(milliseconds));
+    
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0")
+    const day = date.getDate().toString().padStart(2, "0");
+    
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const seconds = date.getSeconds().toString().padStart(2, "0");
+    
+    return `${year}-${month}-${day} `;
+  }
+  
+
+
+
   return (
     <div className="w-full h-full min-h-screen bg-[#fafafa]">
       <Toaster />
@@ -138,13 +159,13 @@ function Orders() {
                       <div className="py-2 px-2">
                         <span className="text-[#bdbcc1]">Start Date: </span>
                         <span className="font-semibold">
-                          {data.starting_date}
+                          {convertMillisecondsToDate(data.starting_date)}
                         </span>
                       </div>
                       <div className="py-2 px-2">
                         <span className="text-[#bdbcc1]">End Date: </span>
                         <span className="font-semibold">
-                          {data.ending_date}
+                        {convertMillisecondsToDate(data.ending_date)}
                         </span>
                       </div>
                       <div className="py-2 px-2">
