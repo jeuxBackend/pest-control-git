@@ -113,7 +113,8 @@ function ChatComp() {
       const response = await axiosInstance.post("sendNotification", {
         deviceToken: tokenAuth,
         title:"Message From Admin",
-        body: newMessage
+        body: newMessage,
+        role:role
         
       });
       if (response.data) {
