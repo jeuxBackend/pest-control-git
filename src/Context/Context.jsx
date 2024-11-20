@@ -47,6 +47,16 @@ export const MyContextProvider = ({ children }) => {
     }
   }, [adminID]);
 
+  const [chatId, setChatID] = useState(() => {
+    const savedChatID = localStorage.getItem("chatID");
+    return savedChatID ? JSON.parse(savedChatID) : "";
+  });
+  useEffect(() => {
+    if (chatId !== null) {
+      localStorage.setItem("chatID", JSON.stringify(chatId));
+    }
+  }, [chatId]);
+
   const [openLogout, setOpenLogout] = useState(false);
   const [openAddInspector, setOpenAddInspector] = useState(false);
   const [openEditInspector, setOpenEditInspector] = useState(false);
@@ -143,7 +153,8 @@ export const MyContextProvider = ({ children }) => {
         activeOrderToast,
         setActiveOrderToast,
         adminID,
-        setAdminID
+        setAdminID,
+        chatId, setChatID
       }}
     >
       {children}

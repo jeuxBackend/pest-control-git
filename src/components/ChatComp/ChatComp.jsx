@@ -1,29 +1,57 @@
 import React, { useState, useEffect, useRef } from "react";
-import { db, auth, collection, addDoc, onSnapshot, updateDoc, query, where, getDocs, doc, orderBy } from "../../Firebase/firebase";
+import {
+  db,
+  auth,
+  collection,
+  addDoc,
+  onSnapshot,
+  updateDoc,
+  query,
+  where,
+  getDocs,
+  doc,
+  orderBy,
+} from "../../Firebase/firebase";
 import { CiSearch } from "react-icons/ci";
 import Video from "./Assets/video.png";
 import chatimg from "./Assets/chatimg.jpg";
 import receipt from "./Assets/receipt.png";
 import sendmsg from "./Assets/sendmsg.png";
+import msg from "./Assets/pngwing.com.png";
 import { IoReorderThreeOutline, IoCloseOutline } from "react-icons/io5";
+import { FaCircle } from "react-icons/fa";
 import { useMyContext } from "../../Context/Context";
+import axiosInstance from "../../axiosInstance/axioisInstance";
+import { SignJWT } from "jose";
+import { Buffer } from "buffer";
 
 function ChatComp() {
-  const [chat, setChat] = useState("chat")
+  const [userType, setUserType] = useState("user");
   const [openChats, setOpenChats] = useState(false);
   const [openSend, setOpenSend] = useState(false);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const { setOpenCreateOrder, adminID } = useMyContext();
+  const { setOpenCreateOrder, adminID, chatId, setChatID } = useMyContext();
   const [conversations, setConversations] = useState([]);
+  const [firebaseToken, setFirebaseToken] = useState("");
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [tokenAuth, setToken] = useState("");
+
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem("userData");
+    return savedUser ? JSON.parse(savedUser) : {};
+  });
+  useEffect(() => {
+    if (user !== null) {
+      localStorage.setItem("userData", JSON.stringify(user));
+    }
+  }, [user]);
   const chatEndRef = useRef(null);
   useEffect(() => {
-    const receiverID = "2";
-
-
     const q = query(
       collection(db, "messages"),
-      where("receiverID", "==", receiverID),
+      where("chatId", "==", chatId),
       orderBy("timestamp", "asc")
     );
 
@@ -36,20 +64,22 @@ function ChatComp() {
     });
 
     return unsubscribe;
-  }, []);
+  }, [chatId]);
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   useEffect(() => {
-
-    const unsubscribe = onSnapshot(collection(db, "conversations"), (snapshot) => {
-      setConversations(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-    });
+    const unsubscribe = onSnapshot(
+      collection(db, "conversations"),
+      (snapshot) => {
+        setConversations(
+          snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+        );
+      }
+    );
     return unsubscribe;
   }, []);
-
-
 
   const handleSendMessage = async () => {
     if (!newMessage.trim()) {
@@ -60,14 +90,16 @@ function ChatComp() {
     try {
       await addDoc(collection(db, "messages"), {
         message: newMessage,
-        timestamp: new Date(),
+        timestamp: new Date().getTime(),
         user: "Admin",
-        senderID: '1',
-        receiverID: "2",
+        senderID: "1",
+        receiverID: chatId,
+        messageType: "text",
+        chatId: chatId,
       });
 
       const conversationRef = collection(db, "conversations");
-      const q = query(conversationRef, where("receiverID", "==", "2"));
+      const q = query(conversationRef, where("chatId", "==", chatId));
       const querySnapshot = await getDocs(q);
 
       if (!querySnapshot.empty) {
@@ -75,18 +107,22 @@ function ChatComp() {
           const conversationDoc = doc(db, "conversations", docSnap.id);
           await updateDoc(conversationDoc, {
             lastMessage: newMessage,
-            lastTimestamp: new Date(),
+            lastTimestamp: new Date().getTime(),
+            seen: true,
           });
         });
       } else {
         await addDoc(conversationRef, {
-          adminID: adminID,
-          receiverID: "2",
+          adminID: "1",
+          senderID: "1",
+          receiverID: chatId,
+          chatId: chatId,
           lastMessage: newMessage,
-          lastTimestamp: new Date(),
+          lastTimestamp: new Date().getTime(),
         });
       }
 
+      // sendNotification()
       setNewMessage("");
     } catch (error) {
       console.error("Error sending message:", error);
@@ -99,113 +135,266 @@ function ChatComp() {
     }
   };
 
+  function convertMillisecondsToTime(milliseconds) {
+    if (!milliseconds || isNaN(milliseconds)) {
+      return "Invalid time";
+    }
 
+    const date = new Date(Number(milliseconds));
+    let hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const seconds = date.getSeconds().toString().padStart(2, "0");
 
+    const ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12 || 12;
+
+    return `${hours}:${minutes} ${ampm}`;
+  }
+
+  const getUser = async (id) => {
+    try {
+      const response = await axiosInstance.get(`getUserById/${id}`);
+      if (response.data) {
+        console.log(response.data);
+        setUser(response.data.user);
+        setFirebaseToken(response.data.user.device_token);
+      }
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response);
+      } else {
+        console.log(error);
+      }
+    } finally {
+    }
+  };
+  useEffect(() => {
+    getUser(chatId);
+  }, [chatId]);
+
+  const [users, setUsers] = useState([]);
+
+  const getUserChat = async (id) => {
+    try {
+      const response = await axiosInstance.get(`getUserById/${id}`);
+      if (response.data && response.data.user) {
+        const { name, profile_pic } = response.data.user;
+        return { name, profile_pic };
+      }
+      return null;
+    } catch (error) {
+      console.error(error.response || error);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const fetchedUsers = await Promise.all(
+        conversations.map((data) => getUserChat(data.chatId))
+      );
+      setUsers(fetchedUsers.filter((user) => user !== null));
+    };
+    fetchUsers();
+  }, []);
+
+  const handleConversationClick = async (conversation) => {
+    try {
+      const conversationDoc = doc(db, "conversations", conversation.id);
+      await updateDoc(conversationDoc, {
+        seen: true,
+      });
+
+      setChatID(conversation.chatId);
+    } catch (error) {
+      console.error("Error updating conversation seen status:", error);
+    }
+  };
+console.log(conversations)
+console.log(messages)
   return (
     <div className="w-full  h-[] bg-[#fafafa] overflow-hidden">
       <div className="chatModule-div relative lg:ml-[260px] px-3 top-[20px] flex">
         <div
-          className={`absolute h-[88vh] lg:h-[86.8vh] bg-white top-0 transition-all duration-300 ${openChats ? "left-0 h-full" : "-left-[140%]"
-            } lg:static lg:left-auto lg:w-1/4`}
+          className={`absolute h-[88vh] lg:h-[86.8vh] bg-white top-0 transition-all duration-300 ${
+            openChats ? "left-0 h-full" : "-left-[140%]"
+          } lg:static lg:left-auto lg:w-1/4`}
         >
-          {/* Sidebar and Contact List */}
-          <div onClick={() => setOpenChats(false)} className="lg:static w-full px-2 overflow-auto h-full lg:pb-0 pb-12 transition-all chat bg-[#fafafa] overflow-chat">
+          <div
+            onClick={() => setOpenChats(false)}
+            className="lg:static w-full px-2 overflow-auto h-full lg:pb-0 pb-12 transition-all chat bg-[#fafafa] overflow-chat"
+          >
             <div className="flex items-center justify-between">
-              <IoCloseOutline className="text-[2rem] lg:hidden" onClick={() => setOpenChats(false)} />
+              <IoCloseOutline
+                className="text-[2rem] lg:hidden"
+                onClick={() => setOpenChats(false)}
+              />
             </div>
-            {/* Chat Buttons */}
+
             <div className="btns bg-[#fff] lg:w-[90%] w-full lg:px-3 flex items-center justify-center gap-3 py-1 lg:py-1 px-1 rounded border text-[0.9rem] font-medium">
               <button
-                onClick={() => setChat("chat")}
-                className={`py-[0.6rem] ${chat === "chat" ? "bg-[#003a5f] shadow-md text-white" : "hover:bg-white hover:shadow-md"
-                  } w-[50%] px-7 rounded text-center`}
+                onClick={() => setUserType("user")}
+                className={`py-[0.6rem] ${
+                  userType === "user"
+                    ? "bg-[#003a5f] shadow-md text-white"
+                    : "hover:bg-white hover:shadow-md"
+                } w-[50%] px-7 rounded text-center`}
               >
                 Client
               </button>
               <button
-                onClick={() => setChat("casechat")}
-                className={`py-[0.6rem] ${chat === "casechat" ? "bg-[#003a5f] shadow-md text-white" : "hover:bg-white hover:shadow-md"
-                  } w-[50%] px-5 rounded text-center`}
+                onClick={() => setUserType("inspector")}
+                className={`py-[0.6rem] ${
+                  userType === "inspector"
+                    ? "bg-[#003a5f] shadow-md text-white"
+                    : "hover:bg-white hover:shadow-md"
+                } w-[50%] px-5 rounded text-center`}
               >
                 Inspector
               </button>
             </div>
-            <div>
-              {/* Display Conversations */}
-              {conversations.map((conversation) => (
-                <div key={conversation.id} className="p-3 border-b">
-                  <h2 className="text-lg font-semibold">Receiver ID: {conversation.receiverID}</h2>
-                  <p className="text-sm text-gray-600">Last Message: {conversation.lastMessage}</p>
-                  <p className="text-xs text-gray-400">{conversation.lastTimestamp?.toDate().toLocaleString()}</p>
-                </div>
-              ))}
+
+            <div className="">
+              { conversations.filter((conversation) => conversation.user_type === userType).length >0? conversations
+                .filter((conversation) => conversation.user_type === userType)
+                .map((conversation) => (
+                  <div
+                    onClick={() => handleConversationClick(conversation)}
+                    key={conversation.id}
+                    className="p-3 border-b cursor-pointer hover:bg-slate-200 transition-all flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={conversation.profile}
+                        alt=""
+                        className="w-12 h-12 rounded-full"
+                      />
+                      <div>
+                        <h2 className="text-lg font-semibold">
+                          {conversation.name}
+                        </h2>
+                        <p
+                          className={`text-sm ${
+                            conversation.seen === true
+                              ? "text-gray-600"
+                              : "text-[#c90000]"
+                          }`}
+                        >
+                          {conversation.lastMessage?.length > 30
+                            ? `${conversation.lastMessage.slice(0, 30)}...`
+                            : conversation.lastMessage}
+                        </p>
+                        <p className="text-xs text-gray-400">
+                          {convertMillisecondsToTime(
+                            conversation.lastTimestamp
+                          )}
+                        </p>
+                      </div>
+                    </div>
+                    <div
+                      className={`${
+                        conversation.seen === true ? "hidden" : "block"
+                      }`}
+                    >
+                      <FaCircle className="text-[0.8rem] text-[#c90000]" />
+                    </div>
+                  </div>
+                )):<p className="mt-4">No Conversation Started Yet!</p>}
             </div>
           </div>
         </div>
 
-        {/* Chat Area */}
-        <div className="w-full lg:w-3/4 h-[88vh] rounded border bg-[#fefefe]">
-          <div className="px-2 py-3 border-b-2 border-dashed flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <IoReorderThreeOutline onClick={() => setOpenChats(true)} className="text-[2rem] lg:hidden" />
-              <img src={chatimg} alt="" className="w-[3.5rem] h-[3.5rem] rounded-full object-cover" />
-              <div className="leading-none">
-                <h1 className="text-[1.4rem] font-medium">Albert Flores</h1>
-                <p className="text-sm text-[#799aad]">Active now</p>
+        {messages.length>0 ? (
+          <div className="w-full lg:w-3/4 h-[88vh] rounded border bg-[#fefefe]">
+            <div className="px-2 py-3 border-b-2 border-dashed flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <IoReorderThreeOutline
+                  onClick={() => setOpenChats(true)}
+                  className="text-[2rem] lg:hidden"
+                />
+                <img
+                  src={user.profile_pic}
+                  alt=""
+                  className="w-[3.5rem] h-[3.5rem] rounded-full object-cover"
+                />
+                <div className="leading-none">
+                  <h1 className="text-[1.4rem] font-medium">{user.name}</h1>
+                  {/* <p className="text-sm text-[#799aad]">Active now</p> */}
+                </div>
+              </div>
+              <div
+                onClick={() => setOpenCreateOrder(true)}
+                className="bg-[#c90000] cursor-pointer p-2 font-medium text-white rounded"
+              >
+                Create Order
+              </div>
+            </div>
+
+            <div className="overflow-auto chat w-full h-[75%] overflow-chat p-3">
+              {messages.map((msg) => {
+                const messageTime = convertMillisecondsToTime(msg.timestamp);
+
+                return (
+                  <div
+                    key={msg.id}
+                    className={`flex ${
+                      msg.user === "Admin" ? "justify-end" : "justify-start"
+                    } gap-2 py-2`}
+                  >
+                    <div
+                      className={`p-2 text-sm shadow-lg  rounded-t-2xl ${
+                        msg.user === "Admin"
+                          ? "bg-[#d1e7ff] text-black rounded-bl-2xl"
+                          : "bg-[#ffc7c7] text-black rounded-br-2xl"
+                      }`}
+                    >
+                      {msg.messageType === "text" ? (
+                        <p className="text-[1.1rem]">{msg.message}</p>
+                      ) : msg.messageType === "picture" ? (
+                        <a href={msg.message} target="_blank">
+                          <img
+                            src={msg.message}
+                            alt="Message"
+                            className="max-w-[300px] max-h-[200px] rounded object-cover"
+                          />
+                        </a>
+                      ) : null}
+
+                      <p className="text-[10px] mt-1 text-[#707070] text-right">
+                        {messageTime}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+              <div ref={chatEndRef} />
+            </div>
+
+            <div className=" px-2">
+              <div className="sendmessage p-3 flex items-center justify-center w-full  bg-[#fafafa] text-black  border-2  rounded-full px-3">
+                <input
+                  type="text"
+                  placeholder="Type Message..."
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  className="text-black w-full h-full border-none outline-none"
+                />
+                <img
+                  src={sendmsg}
+                  alt=""
+                  className="w-[2rem] border-l-2 pl-1  cursor-pointer"
+                  onClick={handleSendMessage}
+                />
               </div>
             </div>
           </div>
-
-          {/* Messages Display */}
-          <div className="overflow-auto chat w-full h-[75%] overflow-chat p-3">
-            {messages.map((msg) => {
-              const messageTime = msg.timestamp?.toDate().toLocaleTimeString([], {
-                hour: '2-digit',
-                minute: '2-digit'
-              });
-
-              return (
-                <div
-                  key={msg.id}
-                  className={`flex ${msg.user === 'Admin' ? "justify-end" : "justify-start"
-                    } gap-2 py-2`}
-                >
-                  <div
-                    className={`p-2 text-sm shadow-lg rounded-t-2xl ${msg.user === 'Admin'
-                      ? "bg-[#d1e7ff] text-black rounded-bl-2xl"
-                      : "bg-[#ffc7c7] text-black rounded-br-2xl"
-                      }`}
-                  >
-                    <p className="text-[1.1rem]">{msg.message}</p>
-                    <p className="text-[10px] mt-1 text-[#707070] text-right">{messageTime}</p>
-                  </div>
-                </div>
-              );
-            })}
-            <div ref={chatEndRef} />
+        ): (
+          <div className="flex flex-col items-center justify-center w-full lg:w-3/4 h-[88vh] border">
+            <img src={msg} alt="" className="w-[15rem]" />
+            <p className="text-[2rem]">Select Chat to Start Conversation!</p>
           </div>
-
-
-          {/* Message Input */}
-          <div className=" px-2">
-            <div className="sendmessage p-3 flex items-center justify-center w-full  bg-[#fafafa] text-black  border-2  rounded-full px-3">
-              <input
-                type="text"
-                placeholder="Type Message..."
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                onKeyPress={handleKeyPress} 
-                className="text-black w-full h-full border-none outline-none"
-              />
-              <img
-                src={sendmsg}
-                alt=""
-                className="w-[2rem] border-l-2 pl-1  cursor-pointer"
-                onClick={handleSendMessage}
-              />
-            </div>
-          </div>
-        </div>
+        ) }
       </div>
     </div>
   );

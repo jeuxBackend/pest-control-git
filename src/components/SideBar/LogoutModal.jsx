@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMyContext } from "../../Context/Context";
 import DeleteImage from "./assets/logout-image.png";
 
 function AddUser() {
   const { pageHeading, setPageHeading } = useMyContext();
   const { openLogout, setOpenLogout } = useMyContext();
+  const navigate = useNavigate()
   function handlelogout(){
+    navigate('/')
     localStorage.clear()
   }
   return (
@@ -33,13 +35,14 @@ function AddUser() {
                 Cancel
               </button>
               <button
-                onClick={() => setOpenLogout(false)}
+               onClick={function(){setOpenLogout(false), setPageHeading("Dashboard"), handlelogout()}}
+                
                 className="w-[60%] sm:w-[35%] md:w-[40%] py-3 rounded shadow-sm font-semibold bg-[#c90000] text-white"
               >
-                <Link
-                onClick={function(){setOpenLogout(false), setPageHeading("Dashboard"), handlelogout()}}
+                <div
+               
                 
-                to={"/"}>Logout</Link>
+                to={"/"}>Logout</div>
               </button>
             </div>
           {/* </form> */}

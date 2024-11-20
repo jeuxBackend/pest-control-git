@@ -14,6 +14,7 @@ function OrederDetailModal() {
   const [order, setOrder] = useState({});
   const [orderUserName, setOrderUserName] = useState({});
   const [orderLocation, setOrderLocation] = useState([]);
+  const [pest, setPest] = useState([]);
 
   const getOrder = async (id) => {
     try {
@@ -23,6 +24,7 @@ function OrederDetailModal() {
         setOrder(response.data.order);
         setOrderUserName(response.data.order.user);
         setOrderLocation(response.data.order.order_location);
+        setPest(response.data.order.pest_type.title)
       }
     } catch (error) {
       if (error.response) {
@@ -64,8 +66,8 @@ function OrederDetailModal() {
                 <span className="text-[#00000067] font-semibold">
                   Pest Type:{" "}
                 </span>
-                <span className="text-black">
-                  {order ? order.pest_type : ""}
+                <span className="text-black capitalize">
+                  {pest ? pest : ""}
                 </span>
               </div>
             </div>

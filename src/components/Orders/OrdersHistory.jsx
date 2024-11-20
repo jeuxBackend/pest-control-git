@@ -101,7 +101,7 @@ function OrdersHistory() {
                   >
                     <div className="py-2">
                       <span className="text-[#bdbcc1]">Client Name: </span>
-                      <span className="font-[500] text-[15px]">
+                      <span className="font-[500] text-[15px] capitalize">
                         {data.user.name}
                       </span>
                     </div>

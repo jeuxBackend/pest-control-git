@@ -66,7 +66,7 @@ function OrdersDetail() {
             <div className="border shadow-sm rounded-lg p-2">
               <div className="">
                 <span className="text-[#bdbcc1]">Client Name: </span>
-                <span className="font-semibold">{name}</span>
+                <span className="font-semibold capitalize">{name}</span>
               </div>
               <div className="">
                 <span className="text-[#bdbcc1]">Date: </span>
