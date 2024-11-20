@@ -142,14 +142,14 @@ function SideBar() {
                   </span>
                 )}
                 <Link
-                  onClick={() => handleLinkClick("Inspector")}
+                  onClick={() => handleLinkClick("Technician")}
                   to={"/Inspector"}
                   className={`flex items-center ${
                     isActive === "/Inspector" ? "bg-[#c90000]" : ""
                   } py-3 ps-5 text-white rounded group w-[215px]`}
                 >
                   <img src={Inspector} alt="" className="w-[18px]" />
-                  <span className="ms-3">Inspector</span>
+                  <span className="ms-3">Technician</span>
                 </Link>
               </li>
               <li className="flex items-center gap-1">

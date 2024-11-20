@@ -206,6 +206,11 @@ const BlockUsers = () => {
                     </th>
                     <th className="px-0">
                       <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md">
+                        Date
+                      </p>
+                    </th>
+                    <th className="px-0">
+                      <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md">
                         Status
                       </p>
                     </th>
@@ -235,7 +240,11 @@ const BlockUsers = () => {
                           <p className="text-black px-8">{data.email}</p>
                         </td>
                         <td className="py-3 border-b border-r">
-                          <p className="text-black px-2">{data.address}</p>
+                          <p className="text-black px-8">{data.address ?data.address:<span className="text-red-500">Not Available</span>}</p>
+                        </td>
+                        <td className="py-3 border-b border-r">
+                        <p className="text-black px-8">{data.created_at.split('T')[0]} </p>
+
                         </td>
                         <td className="py-3 px-5 border-b border-r">
                           <div className="flex justify-center">

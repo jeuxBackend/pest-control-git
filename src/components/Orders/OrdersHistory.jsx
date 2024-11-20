@@ -12,6 +12,8 @@ function OrdersHistory() {
   const { pageHeading, setPageHeading, historyOrderId, setHistoryOrderId } = useMyContext();
   const [allHistoryOrders, setAllHistoryOrders] = useState([]);
   const [loading, setLoading] = useState(false);  
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredOrder, setFilteredOrders] = useState([]);
 
   const getAllHistoryOrders = async () => {
     try {
@@ -35,6 +37,36 @@ function OrdersHistory() {
   useEffect(() => {
     getAllHistoryOrders();
   }, []);
+  function convertMillisecondsToDate(milliseconds) {
+    if (!milliseconds || isNaN(milliseconds)) {
+      return "Invalid time";
+    }
+  
+    const date = new Date(Number(milliseconds));
+    
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0")
+    const day = date.getDate().toString().padStart(2, "0");
+    
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const seconds = date.getSeconds().toString().padStart(2, "0");
+    
+    return `${year}-${month}-${day} `;
+  }
+
+useEffect(() => {
+  let filteredOrders = searchQuery && searchQuery.trim() !== "" 
+    ? allHistoryOrders.filter((order) =>
+        order.user.name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : allHistoryOrders; 
+  
+  setFilteredOrders(filteredOrders);
+}, [searchQuery, allHistoryOrders]); 
+
+  
+  
 
   return (
     <div className="w-full h-full min-h-screen bg-[#fafafa]">
@@ -76,6 +108,8 @@ function OrdersHistory() {
                   type="text"
                   className="bg-transparent text-black border h-[50px] lg:w-[300px] md:w-[300px] w-[230px] rounded ps-3"
                   placeholder="Search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
                 <button className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
                   <img src={SearchIcon} className="w-[22px]" alt="" />
@@ -93,7 +127,7 @@ function OrdersHistory() {
           {/* order cards start */}
           <div className="flex flex-wrap">
             {Array.isArray(allHistoryOrders) && allHistoryOrders.length > 0 ? (
-              allHistoryOrders.map((data, index) => (
+              filteredOrder.map((data, index) => (
                 <div className="lg:w-1/3 md:w-1/2 w-full p-2">
                   <div
                     className="border shadow-sm rounded-lg p-2 bg-cover"
@@ -108,13 +142,13 @@ function OrdersHistory() {
                     <div className="py-2">
                       <span className="text-[#bdbcc1]">Start Date: </span>
                       <span className="font-[500] text-[15px]">
-                        {data.starting_date}
+                        {convertMillisecondsToDate(data.starting_date)}
                       </span>
                     </div>
                     <div className="py-2">
                       <span className="text-[#bdbcc1]">End Date: </span>
                       <span className="font-[500] text-[15px]">
-                        {data.ending_date}
+                        {convertMillisecondsToDate(data.ending_date)}
                       </span>
                     </div>
                     <div className="py-2">

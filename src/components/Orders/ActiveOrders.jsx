@@ -13,6 +13,8 @@ function Orders() {
   const { pageHeading, setPageHeading, setOpenOrderDetail, openConfirmModal, setOpenConfirmModal, activeOrderId, setActiveOrderId, activeOrderToast, setActiveOrderToast } = useMyContext();
   const [allActiveOrders, setAllActiveOrders] = useState([]);
   const [loading, setLoading] = useState(false);  
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredOrder, setFilteredOrders] = useState([]);
 
 
   const notify = () => toast.success("Order Confirmed Successfully");
@@ -59,6 +61,40 @@ function Orders() {
   }, [activeOrderToast]);
 
 
+  function convertMillisecondsToDate(milliseconds) {
+    if (!milliseconds || isNaN(milliseconds)) {
+      return "Invalid time";
+    }
+  
+    const date = new Date(Number(milliseconds));
+    
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0")
+    const day = date.getDate().toString().padStart(2, "0");
+    
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const seconds = date.getSeconds().toString().padStart(2, "0");
+    
+    return `${year}-${month}-${day} `;
+  }
+
+  useEffect(() => {
+    let filteredOrders = searchQuery && searchQuery.trim() !== "" 
+      ? allActiveOrders.filter((order) =>
+          order.user.name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      : allActiveOrders; 
+    
+    setFilteredOrders(filteredOrders);
+  }, [searchQuery, allActiveOrders]); 
+  
+ 
+
+  
+  
+
+
   return (
     <div className="w-full h-full min-h-screen bg-[#fafafa]">
       <Toaster />
@@ -101,6 +137,8 @@ function Orders() {
                   type="text"
                   className="bg-transparent text-black border h-[50px] lg:w-[300px] md:w-[300px] w-[230px] rounded ps-3"
                   placeholder="Search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
                 <button className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
                   <img src={SearchIcon} className="w-[22px]" alt="" />
@@ -118,7 +156,7 @@ function Orders() {
           {/* order cards start */}
           <div className="flex flex-wrap">
           {Array.isArray(allActiveOrders) && allActiveOrders.length > 0 ? (
-              allActiveOrders.map((data, index) => (
+              filteredOrder.map((data, index) => (
             <div key={index} className="lg:w-1/3 md:w-1/2 w-full p-2">
               <div
                 className="border shadow-sm rounded-lg p-2 bg-cover"
@@ -130,11 +168,11 @@ function Orders() {
                 </div>
                 <div className="py-2 px-2">
                   <span className="text-[#bdbcc1]">Start Date: </span>
-                  <span className="font-semibold">{data.starting_date}</span>
+                  <span className="font-semibold">{convertMillisecondsToDate(data.starting_date)}</span>
                 </div>
                 <div className="py-2 px-2">
                   <span className="text-[#bdbcc1]">End Date: </span>
-                  <span className="font-semibold">{data.ending_date}</span>
+                  <span className="font-semibold">{convertMillisecondsToDate(data.ending_date)}</span>
                 </div>
                 <div className="py-2 px-2">
                   <span className="text-[#bdbcc1]">Location: </span>

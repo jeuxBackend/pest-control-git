@@ -37,6 +37,7 @@ function ChatComp() {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [tokenAuth, setToken] = useState("");
+  const [role, setRole] = useState("");
 
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem("userData");
@@ -80,6 +81,58 @@ function ChatComp() {
     );
     return unsubscribe;
   }, []);
+
+  
+  const getUser = async (id) => {
+    try {
+      const response = await axiosInstance.get(`getUserById/${id}`);
+      if (response.data) {
+        console.log(response.data);
+        setUser(response.data.user);
+        setToken(response.data.user.device_token);
+        setRole(response.data.user.role)
+      }
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response);
+      } else {
+        console.log(error);
+      }
+    } finally {
+    }
+  };
+  useEffect(() => {
+    getUser(chatId);
+  }, [chatId]);
+
+  const handleSubmit = async (e) => {
+    
+   
+
+    try {
+      const response = await axiosInstance.post("sendNotification", {
+        deviceToken: tokenAuth,
+        title:"Message From Admin",
+        body: newMessage
+        
+      });
+      if (response.data) {
+        console.log(response)
+        
+      }
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response);
+        notify()
+      } else {
+        console.log(error);
+      }
+    } finally {
+    
+     
+    }
+  };
+
 
 
   
@@ -135,6 +188,7 @@ function ChatComp() {
 
       // sendNotification(firebaseToken, "Hello!", "This is a test notification.");
       setNewMessage("");
+      handleSubmit()
     } catch (error) {
       console.error("Error sending message:", error);
     }
@@ -162,26 +216,6 @@ function ChatComp() {
     return `${hours}:${minutes} ${ampm}`;
   }
 
-  const getUser = async (id) => {
-    try {
-      const response = await axiosInstance.get(`getUserById/${id}`);
-      if (response.data) {
-        console.log(response.data);
-        setUser(response.data.user);
-        console.log(response.data.user.device_token);
-      }
-    } catch (error) {
-      if (error.response) {
-        console.log(error.response);
-      } else {
-        console.log(error);
-      }
-    } finally {
-    }
-  };
-  useEffect(() => {
-    getUser(chatId);
-  }, [chatId]);
 
   const [users, setUsers] = useState([]);
 
@@ -221,8 +255,9 @@ function ChatComp() {
       console.error("Error updating conversation seen status:", error);
     }
   };
-console.log(conversations)
-console.log(messages)
+
+
+
 
 
 
@@ -265,7 +300,7 @@ console.log(messages)
                     : "hover:bg-white hover:shadow-md"
                 } w-[50%] px-5 rounded text-center`}
               >
-                Inspector
+                Technician
               </button>
             </div>
 
@@ -339,7 +374,7 @@ console.log(messages)
               </div>
               <div
                 onClick={() => setOpenCreateOrder(true)}
-                className="bg-[#c90000] cursor-pointer p-2 font-medium text-white rounded"
+                className={`bg-[#c90000] cursor-pointer p-2 font-medium text-white rounded ${role==='user'?"block":"hidden"}`}
               >
                 Create Order
               </div>

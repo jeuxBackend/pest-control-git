@@ -55,19 +55,19 @@ console.log(inspectorIdForAssign)
       <div className="flex items-center justify-center py-10 w-full min-h-screen ">
         <div className="bg-[#ffff] rounded-xl w-[0%]\ sm:w-[40rem] p-3 flex flex-col items-center justify-center gap-2">
           <h1 className="xs:text-[1.5rem] text-[1.2rem] sm:text-[2rem] font-medium">
-            Assign Inspector
+            Assign Technician
           </h1>
           <form onSubmit={handleSubmit} className="w-full p-6 flex flex-col gap-3">
             <div className="flex gap-3 lg:gap-8 lg:flex-row flex-col">
               <div className="w-[100%]">
-                <p className="mb-1 font-medium">Assign Inspector</p>
+                <p className="mb-1 font-medium">Assign Technician</p>
                 <select
                   name=""
                   id=""
                   onChange={(e) => setInspectorIdForAssign(e.target.value)}
                   className="w-full py-3 px-4 rounded-lg border shadow-sm"
                 >
-                  <option value="">Select Inspector</option>
+                  <option value="">Select Technician</option>
                    {allInspectors.map((data,index)=>(
                   <option value={data.inspector.id ? data.inspector.id : ""} key={index}>{data.name}</option>
                 ))}

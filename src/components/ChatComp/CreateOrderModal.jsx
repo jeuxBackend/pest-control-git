@@ -4,6 +4,7 @@ import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
 import { MdDeleteForever } from "react-icons/md";
 import { Oval } from "react-loader-spinner";
+import toast, { Toaster } from "react-hot-toast";
 
 function CreateOrederModal() {
   const { openCreateOrder, setOpenCreateOrder,chatId, setChatID } = useMyContext();
@@ -24,10 +25,12 @@ function CreateOrederModal() {
   const [number, setNumber] = useState("");
   const [loading, setLoading] = useState("");
   const [locationsList, setLocationsList] = useState([]);
+
+  const notify = () => toast.error("Creating Order Not Completed");
   
 
   const clearForm =()=>{
-    setLocationsList('')
+    setLocationsList([])
     setDescription('')
     setInspectorID('')
     setTreatmentID('')
@@ -39,16 +42,20 @@ function CreateOrederModal() {
     setNumber('')
   }
 
+  const starting_date= new Date(startDate)
+  const ending_date= new Date(endDate)
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
    
 
     try {
       const response = await axiosInstance.post("admin/add-order-by-admin", {
         user_id: chatId,
         inspector_id: inspectorID,
-        starting_date: startDate,
-        ending_date: endDate,
+        starting_date: starting_date.getTime(),
+        ending_date: ending_date.getTime(),
         number: number,
         time: time,
         pest_type: pestID,
@@ -64,16 +71,19 @@ function CreateOrederModal() {
     } catch (error) {
       if (error.response) {
         console.log(error.response);
+        notify()
       } else {
         console.log(error);
       }
     } finally {
+      setLoading(false)
+      clearForm()
      
     }
   };
 
   const getAllInspectors = async () => {
-    setLoading(true);
+    // setLoading(true);
     try {
       const response = await axiosInstance.get("admin/get-all-inspector");
       if (response.data) {
@@ -87,7 +97,7 @@ function CreateOrederModal() {
         console.log(error);
       }
     } finally {
-      setLoading(false);
+      // setLoading(false);
     }
   };
 
@@ -210,13 +220,13 @@ function CreateOrederModal() {
 
   useEffect(() => {
     loadGoogleMapsApi();
-  },[]);
+  });
 
   useEffect(() => {
     if (apiLoaded) {
       initAutocomplete();
     }
-  }, [apiLoaded]);
+  });
 
   console.log(locationsList);
   
@@ -224,6 +234,7 @@ function CreateOrederModal() {
   return (
     <div className="bg-black/50 backdrop-blur-lg overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full poppins">
       <div className="flex items-center justify-center py-10 w-full min-h-screen ">
+      <Toaster />
         <div className="bg-[#ffff] rounded-lg w-[0%]\ sm:w-[40rem] pt-3 px-3 flex flex-col items-center justify-center gap-2">
           <h1 className="xs:text-[1.5rem] text-[1.2rem] sm:text-[2rem] mb-[-22px] font-medium">
             Create Order
@@ -312,6 +323,7 @@ function CreateOrederModal() {
                     id=""
                     className="w-full border-0"
                   >
+                    <option value="">Select Sessions</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -332,7 +344,7 @@ function CreateOrederModal() {
             </div>
             <div className="flex gap-3 lg:gap-8 lg:flex-row flex-col">
               <div className="lg:w-[100%] w-[100%]">
-                <p className="mb-1 font-medium">Inspector</p>
+                <p className="mb-1 font-medium">Technician</p>
                 <div className="border rounded-lg px-2 py-3">
                   <select
                     required
@@ -341,7 +353,7 @@ function CreateOrederModal() {
                     id=""
                     className="w-full rounded-lg border-0"
                   >
-                    <option value="">Select Inspector</option>
+                    <option value="">Select Technician</option>
                     {allInspectors.map((data, index) => (
                       <option key={index} value={data.inspector.id}>
                         {data.name}
@@ -353,7 +365,7 @@ function CreateOrederModal() {
             </div>
             <div className="flex gap-3 lg:gap-8 lg:flex-row flex-col">
               <div className="lg:w-[100%] w-[100%]">
-                <p className="mb-1 font-medium">Inspector</p>
+                <p className="mb-1 font-medium">Number</p>
                 <input
                   type="number"
                   onChange={(e) => setNumber(e.target.value)}
@@ -370,7 +382,8 @@ function CreateOrederModal() {
                   
                   onChange={(e) => setDescription(e.target.value)}
                   required
-                  placeholder="Enter Number"
+                  rows={5}
+                  placeholder="Enter Description"
                   className="w-full py-3 px-2 rounded-lg border shadow-sm"
                 />
               </div>
@@ -411,12 +424,12 @@ function CreateOrederModal() {
                       <div>
                         <p>{loc.address}</p>
                       </div>
-                      <button
+                      <div
                         className="text-red-500 text-xl font-bold cursor-pointer"
                         onClick={() => handleRemoveLocation(index)}
                       >
                         <MdDeleteForever />
-                      </button>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -430,7 +443,7 @@ function CreateOrederModal() {
               >
                 Cancel
               </button>
-              <button className="w-[60%] sm:w-[35%] md:w-[40%] py-3 rounded shadow-sm font-semibold bg-[#c90000] text-white">
+              <button type="submit" className="w-[60%] sm:w-[35%] md:w-[40%] py-3 rounded shadow-sm font-semibold bg-[#c90000] text-white">
                 Create
               </button>
             </div>

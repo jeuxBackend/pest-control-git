@@ -7,6 +7,8 @@ import axiosInstance from "../../axiosInstance/axioisInstance";
 function DeleteInspectorModal() {
   const { openDeleteInspector, setOpenDeleteInspector, inspectorId, setInspectorId, setToaster } = useMyContext();
 
+  console.log(inspectorId)
+
   const handleSubmit = async ()=>{
   
     try{

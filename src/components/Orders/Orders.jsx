@@ -23,7 +23,8 @@ function Orders() {
   } = useMyContext();
   const [allPendingOrders, setAllPendingOrders] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredOrder, setFilteredOrders] = useState([]);
   const notify = () => toast.success("Inspector Assigned Successfully");
   const notifyError = () => toast.error("Inspector Not Assigned");
 
@@ -78,6 +79,16 @@ function Orders() {
     
     return `${year}-${month}-${day} `;
   }
+
+  useEffect(() => {
+    let filteredOrders = searchQuery && searchQuery.trim() !== "" 
+      ? allPendingOrders.filter((order) =>
+          order.user.name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      : allPendingOrders; 
+    
+    setFilteredOrders(filteredOrders);
+  }, [searchQuery, allPendingOrders]); 
   
 
 
@@ -123,6 +134,8 @@ function Orders() {
                   type="text"
                   className="bg-transparent text-black border h-[50px] lg:w-[300px] md:w-[300px] w-[230px] rounded ps-3"
                   placeholder="Search"
+                  value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
                 />
                 <button className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
                   <img src={SearchIcon} className="w-[22px]" alt="" />
@@ -146,7 +159,7 @@ function Orders() {
             <div className="flex flex-wrap">
               {Array.isArray(allPendingOrders) &&
               allPendingOrders.length > 0 ? (
-                allPendingOrders.map((data, index) => (
+                filteredOrder.map((data, index) => (
                   <div key={index} className="lg:w-1/3 md:w-1/2 w-full p-2">
                     <div
                       className="border shadow-sm rounded-lg p-2 bg-cover"
@@ -203,7 +216,7 @@ function Orders() {
                           className="flex justify-center py-2 font-semibold rounded w-[250px] h-[45px] bg-[#003a5f] text-[#ffff] cursor-pointer"
                         >
                           <span className="flex gap-x-2 items-center">
-                            Assign Inspector
+                            Assign Technician
                           </span>
                         </button>
                       </div>

@@ -28,6 +28,8 @@ function PestsTypes() {
 
   const [allTreatments, setAllTreatments] = useState([]);
   const [loading, setLoading] = useState(false);  
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredOrder, setFilteredOrders] = useState([]);
 
   const getAllTreatments = async () => {
     try {
@@ -93,6 +95,21 @@ function PestsTypes() {
     }
   }, [treatmentToast]);
 
+  
+
+  useEffect(() => {
+    let filteredOrders = searchQuery && searchQuery.trim() !== "" 
+      ? allTreatments.filter((order) =>
+          order.user.name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      : allTreatments; 
+    
+    setFilteredOrders(filteredOrders);
+  }, [searchQuery, allTreatments]); 
+  
+
+  
+
   return (
     <div className="w-full h-full min-h-screen bg-[#fafafa]">
       <Toaster />
@@ -113,6 +130,8 @@ function PestsTypes() {
                   type="text"
                   className="bg-transparent text-black border h-[50px] lg:w-[300px] md:w-[300px] w-[230px] rounded ps-3"
                   placeholder="Search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
                 <button className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
                   <img src={SearchIcon} className="w-[22px]" alt="" />
@@ -147,7 +166,7 @@ function PestsTypes() {
                 </thead>
                 <tbody className="text-gray-700">
                   {Array.isArray(allTreatments) && allTreatments.length > 0 ? (
-                    allTreatments.map((data, index) => (
+                    filteredOrder.map((data, index) => (
                       <tr key={index} className="">
                         <td className="py-3 border-b border-r">
                           <div className="flex items-center justify-start ps-6 gap-x-3">

@@ -34,14 +34,14 @@ function Inspector() {
   const [loading, setLoading] = useState(false);  
 
 
-  const notify = () => toast.success("Inspector Added Successfully");
-  const notifyError = () => toast.error("Inspector Not Added");
+  const notify = () => toast.success("Technician Added Successfully");
+  const notifyError = () => toast.error("Technician Not Added");
 
-  const notifyDelete = () => toast.success("Inspector Deleted Successfully");
-  const notifyDeleteError = () => toast.error("Inspector Not Deleted");
+  const notifyDelete = () => toast.success("Technician Deleted Successfully");
+  const notifyDeleteError = () => toast.error("Technician Not Deleted");
 
-  const notifyEdit = () => toast.success("Inspector Updated Successfully");
-  const notifyEditError = () => toast.error("Inspector Not Updated");
+  const notifyEdit = () => toast.success("Technician Updated Successfully");
+  const notifyEditError = () => toast.error("Technician Not Updated");
 
   useEffect(() => {
     if (toaster === 1) {
@@ -186,7 +186,7 @@ function Inspector() {
                 className="w-[180px] h-[50px] flex justify-center gap-2 items-center bg-[#003a5f] text-white text-lg font-semibold shadow-sm rounded"
               >
                 <img src={Add} className="w-[15px]" alt="" />
-                Add Inspector
+                Add Technician 
               </button>
               <div className="search-box flex gap-3">
                 <input
@@ -220,7 +220,7 @@ function Inspector() {
                   <tr>
                     <th className="px-0">
                       <p className="py-3 text-start ps-8 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 me-12 shadow-md">
-                        <span className="">Inspector Details</span>
+                        <span className="">Technician Details</span>
                       </p>
                     </th>
                     <th className="px-0">
