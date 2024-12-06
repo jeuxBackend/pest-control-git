@@ -134,6 +134,15 @@ function AddInspectorModal() {
                   />
                 </div>
               </div>
+              <div className=" w-[100%]">
+                  <p className="mb-1 font-medium">User Name</p>
+                  <input
+                    type="text"
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="User Name"
+                    className="w-full py-3 px-4 rounded-xl border shadow-sm"
+                  />
+                </div>
               <div className="flex gap-3 lg:gap-8 lg:flex-row flex-col">
                 <div className="lg:w-[50%] w-[100%]">
                   <p className="mb-1 font-medium">Full Name</p>

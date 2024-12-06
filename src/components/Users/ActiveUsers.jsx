@@ -14,14 +14,18 @@ import UserPic3 from "./assets/user-pic3.png";
 import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
 import { TailSpin } from "react-loader-spinner";
+import del from "./assets/del.svg"
+import delRed from "./assets/del-red.svg"
+import atoz from "/atoz.svg"
+import ztoa from "/ztoa.svg"
 
 const ActiveUsers = () => {
-  const { pageHeading, setPageHeading } = useMyContext();
+  const { pageHeading, setPageHeading,userId, setUserId,setOpenActiveUser,setOpenDelUser } = useMyContext();
   const [activeUser, setActiveUser] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage, setUsersPerPage] = useState(10);
-
+  const [sort, setSort] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const notify = () => toast.success("Status Changed Successfully");
@@ -132,7 +136,7 @@ const ActiveUsers = () => {
     <div className="w-full h-full min-h-screen poppins bg-[#fafafa] pb-[20px]">
       <div className="activeUsers-div relative  lg:ml-[260px] px-3 top-[20px]">
         <div className="users-nav w-full flex flex-wrap justify-between">
-          <div className="active-block-brns xl:w-[40%] lg:w-[100%] mt-2">
+          <div className="active-block-brns xl:w-[60%] lg:w-[100%] mt-2">
             <ul className="flex flex-wrap gap-3">
               <li>
                 <a className="flex justify-center py-2 border border-[#003a5f] bg-[#003a5f] shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded text-[#ffff] cursor-pointer">
@@ -148,19 +152,31 @@ const ActiveUsers = () => {
               </li>
               <li>
                 <Link
-                  to={"/Block-Users"}
-                  onClick={() => setPageHeading("Block Users")}
+                  to={"/Inactive-Users"}
+                  onClick={() => setPageHeading("Inactive Users")}
                   className="flex justify-center py-2 border shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded text-[#828282] bg-transparent cursor-pointer"
                 >
                   <div className="flex gap-x-2 items-center">
                     <img className="w-[20px]" src={Block} alt="active Icon" />
-                    Block Users
+                    Inactive Users
+                  </div>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to={"/Delete-Users"}
+                  onClick={() => setPageHeading("Delete Users")}
+                  className="flex justify-center py-2 border shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded text-[#828282] bg-transparent cursor-pointer"
+                >
+                  <div className="flex gap-x-2 items-center">
+                    <img className="w-[20px]" src={del} alt="active Icon" />
+                    Delete
                   </div>
                 </Link>
               </li>
             </ul>
           </div>
-          <div className="user-add-search-div xl:w-[60%] lg:w-[100%] mt-2 flex justify-end">
+          <div className="user-add-search-div xl:w-[40%] lg:w-[100%] mt-2 flex justify-end">
             <div className="flex flex-wrap gap-3">
               <div className="search-box flex gap-3">
                 <input
@@ -170,8 +186,8 @@ const ActiveUsers = () => {
                   className="bg-transparent text-black border h-[50px] lg:w-[300px] md:w-[300px] w-[230px] rounded ps-3"
                   placeholder="Search"
                 />
-                <button className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
-                  <img src={SearchIcon} className="w-[22px]" alt="" />
+                <button onClick={()=>setSort(!sort)} className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
+                  <img src={sort? ztoa:atoz} className="w-[22px]" alt="" />
                 </button>
               </div>
             </div>
@@ -251,9 +267,9 @@ const ActiveUsers = () => {
 
                         </td>
                         <td className="py-3 px-5 border-b border-r">
-                          <div className="flex justify-center">
+                          <div className="flex justify-center gap-2">
                             <button
-                              onClick={() => changeUserStatus(data.id)}
+                             onClick={function(){ setUserId({id:data.id,type:"Active"}),setOpenActiveUser(true)}}
                               className="px-5 py-2 text-[#ff2f16] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
                             >
                               <img
@@ -262,6 +278,17 @@ const ActiveUsers = () => {
                                 alt=""
                               />{" "}
                               Block
+                            </button>
+                            <button
+                             
+                              className="px-3 py-3 text-[#ff2f16] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
+                              onClick={()=>setOpenDelUser(true)}
+                            >
+                              <img
+                                src={delRed}
+                                className="w-[18px]"
+                                alt=""
+                              />
                             </button>
                           </div>
                         </td>

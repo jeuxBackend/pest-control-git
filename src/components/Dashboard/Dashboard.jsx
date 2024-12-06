@@ -84,7 +84,7 @@ function Dashboard() {
           <div className="p-2 lg:w-1/3 md:w-1/3 w-full">
             <div className="rounded-xl bg-white shadow-md border px-5 py-10">
               <p className="text-3xl text-[#c90000] font-semibold">
-                Total Order
+                Completed Order
               </p>
               <p className="text-4xl mt-3 font-semibold text-[#003a5f]">
                 {dataDashboard.totalOrdera}

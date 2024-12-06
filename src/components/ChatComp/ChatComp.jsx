@@ -24,6 +24,7 @@ import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
 import { SignJWT } from "jose";
 import { Buffer } from "buffer";
+import { FaRegSquarePlus } from "react-icons/fa6";
 
 function ChatComp() {
   const [userType, setUserType] = useState("user");
@@ -31,7 +32,7 @@ function ChatComp() {
   const [openSend, setOpenSend] = useState(false);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const { setOpenCreateOrder, adminID, chatId, setChatID } = useMyContext();
+  const { setOpenCreateOrder, adminID, chatId, setChatID,sendMessage, setSendMessage } = useMyContext();
   const [conversations, setConversations] = useState([]);
   const [firebaseToken, setFirebaseToken] = useState("");
   const [title, setTitle] = useState("");
@@ -282,7 +283,7 @@ function ChatComp() {
               />
             </div>
 
-            <div className="btns bg-[#fff] lg:w-[90%] w-full lg:px-3 flex items-center justify-center gap-3 py-1 lg:py-1 px-1 rounded border text-[0.9rem] font-medium">
+            <div className="btns bg-[#fff] lg:w-[95%] w-full lg:px-3 flex items-center justify-center gap-3 py-1 lg:py-1 px-1 rounded border text-[0.9rem] font-medium mt-3">
               <button
                 onClick={() => setUserType("user")}
                 className={`py-[0.6rem] ${
@@ -304,6 +305,18 @@ function ChatComp() {
                 Technician
               </button>
             </div>
+            <div className="search-box flex gap-3 my-2 lg:w-[95%] w-full">
+                <input
+                  type="text"
+                  className="bg-transparent text-black border h-[45px] lg:w-[300px] md:w-[300px] w-[230px] rounded ps-3"
+                  placeholder="Search chat by name..."
+                  // value={searchQuery}
+                  // onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <button onClick={()=>setSendMessage(true)} className="h-[45px] w-[50px] bg-[#c90000] rounded flex justify-center items-center ">
+                <FaRegSquarePlus className="text-white text-[1.4rem]" />
+                </button>
+              </div>
 
             <div className="">
               { conversations.filter((conversation) => conversation.user_type === userType).length >0? conversations

@@ -13,7 +13,10 @@ import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
 import toast, { Toaster } from "react-hot-toast";
 import { TailSpin } from "react-loader-spinner";
-
+import atoz from "/atoz.svg"
+import ztoa from "/ztoa.svg"
+import del from "./assets/del.svg"
+import delWhite from "./assets/del-white.svg"
 function Inspector() {
   const {
     setOpenAddInspector,
@@ -25,13 +28,14 @@ function Inspector() {
     setInspectorId,
     setInspectorData,
     toaster,
-    setToaster,
+    setToaster,delTechnician, setDelTechnician
   } = useMyContext();
   const [allInspectors, setAllInspectors] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage, setUsersPerPage] = useState(10);
   const [loading, setLoading] = useState(false);  
+  const [sort, setSort] = useState(false);
 
 
   const notify = () => toast.success("Technician Added Successfully");
@@ -178,8 +182,20 @@ function Inspector() {
       <Toaster />
       <div className="allInspectorss-div relative  lg:ml-[260px] px-3 top-[20px]">
         <div className="users-nav w-full flex flex-wrap justify-between">
-          <div className="active-block-brns xl:w-[40%] lg:w-[100%] mt-2"></div>
+          <div className="active-block-brns xl:w-[40%] lg:w-[100%] mt-2">
+          <div>
+            <button
+                onClick={() => setDelTechnician(true)}
+                className={`w-[120px] h-[50px] flex justify-center gap-2 items-center border  text-lg font-semibold shadow-sm rounded ${delTechnician?"bg-[#C90000] text-white":"text-[#828282]"}`}
+              >
+                <img src={delTechnician?delWhite:del} className="w-[15px]" alt="" />
+               Delete
+              </button>
+
+            </div>
+          </div>
           <div className="user-add-search-div xl:w-[60%] lg:w-[100%] mt-2 flex justify-end">
+          
             <div className="flex flex-wrap gap-3">
               <button
                 onClick={() => setOpenAddInspector(true)}
@@ -196,8 +212,8 @@ function Inspector() {
                   className="bg-transparent text-black border h-[50px] lg:w-[300px] md:w-[300px] w-[230px] rounded ps-3"
                   placeholder="Search"
                 />
-                <button className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
-                  <img src={SearchIcon} className="w-[22px]" alt="" />
+                <button onClick={()=>setSort(!sort)} className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
+                <img src={sort? ztoa:atoz} className="w-[22px]" alt="" />
                 </button>
               </div>
             </div>

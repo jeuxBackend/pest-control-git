@@ -76,6 +76,7 @@ function OrdersDetail() {
                 <span className="text-[#bdbcc1]">Location: </span>
                 <span className="font-semibold">{orderDetail.location}</span>
               </div>
+             
               <div className="photo-gallery lg:flex gap-x-3">
                 {mainImage && (
                   <img

@@ -20,11 +20,11 @@ function OrederDetailModal() {
     try {
       const response = await axiosInstance.get(`admin/get-order-by-id/${id}`);
       if (response.data) {
-        console.log(response.data);
-        setOrder(response.data.order);
-        setOrderUserName(response.data.order.user);
-        setOrderLocation(response.data.order.order_location);
-        setPest(response.data.order.pest_type.title)
+        console.log(response?.data);
+        setOrder(response?.data?.order);
+        setOrderUserName(response?.data?.order?.user);
+        setOrderLocation(response?.data?.order?.order_location);
+        setPest(response?.data?.order?.pest_type?.title)
       }
     } catch (error) {
       if (error.response) {
@@ -48,11 +48,11 @@ function OrederDetailModal() {
           <div className="w-full p-6 flex flex-col gap-3">
             <div className="flex justify-between pb-3 border-b-2 border-dashed">
               <p className="text-lg font-semibold">
-                {orderUserName.name ? orderUserName.name : ""}
+                {orderUserName?.name ? orderUserName?.name : ""}
               </p>
               <span className="leading-none text-end">
-                <p className="text-sm">{order ? order.starting_date : ""}</p>
-                <p className="text-sm">{order ? order.time : ""}</p>
+                <p className="text-sm">{order ? order?.starting_date : ""}</p>
+                <p className="text-sm">{order ? order?.time : ""}</p>
               </span>
             </div>
             <div className="flex justify-between pb-3 border-b-2 border-dashed">
@@ -60,7 +60,7 @@ function OrederDetailModal() {
                 <span className="text-[#00000067] font-semibold">
                   Phone no:{" "}
                 </span>
-                <span className="text-black">{order ? order.number : ""}</span>
+                <span className="text-black">{order ? order?.number : ""}</span>
               </div>
               <div className="">
                 <span className="text-[#00000067] font-semibold">
@@ -81,8 +81,8 @@ function OrederDetailModal() {
                   {orderLocation && orderLocation.length > 0 ? (
                     orderLocation.map((locationData, locIndex) => (
                       <span key={locIndex} className="font-semibold">
-                        {locationData.location}
-                        {locIndex < orderLocation.length - 1 && ", "}
+                        {locationData?.location}
+                        {locIndex < orderLocation?.length - 1 && ", "}
                       </span>
                     ))
                   ) : (
@@ -91,6 +91,10 @@ function OrederDetailModal() {
                 </span>
               </div>
             </div>
+            <div className="  pb-3 border-b-2 border-dashed">
+                <span className="text-[#00000067] font-semibold">Technician Name: </span>
+                <span className="font-semibold">Brooklyn Simmons</span>
+              </div>
 
             <div className="flex justify-between pb-3">
               <div className="">

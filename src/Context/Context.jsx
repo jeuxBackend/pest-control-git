@@ -72,6 +72,7 @@ export const MyContextProvider = ({ children }) => {
   const [openAddTreatment, setOpenAddTreatment] = useState(false);
   const [inspectorId, setInspectorId] = useState(null);
   const [orderId, setOrderId] = useState(null);
+  const [userId, setUserId] = useState({id: null, type: 'block'});
   const [activeOrderId, setActiveOrderId] = useState(null);
   const [historyOrderId, setHistoryOrderId] = useState(null);
   const [inspectorIdForAssign, setInspectorIdForAssign] = useState(null);
@@ -81,11 +82,17 @@ export const MyContextProvider = ({ children }) => {
   const [treatmentName, setTreatmentName] = useState("");
   const [treatmentId, setTreatmentId] = useState("");
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
+  const [openActiveUser, setOpenActiveUser] = useState(false);
+  const [openDelUser, setOpenDelUser] = useState(false);
   const [toaster, setToaster] = useState(0);
   const [pestToast, setPestToast] = useState(0);
   const [treatmentToast, setTreatmentToast] = useState(0);
   const [orderToast, setOrderToast] = useState(0);
   const [activeOrderToast, setActiveOrderToast] = useState(0);
+  const [delTechnician, setDelTechnician] = useState(false);
+  const [pestDetails, setPestDetails] = useState(false);
+  const [treatmentDetails, setTreatmentDetails] = useState(false);
+  const [sendMessage, setSendMessage] = useState(false);
 
   return (
     <MyContext.Provider
@@ -154,7 +161,10 @@ export const MyContextProvider = ({ children }) => {
         setActiveOrderToast,
         adminID,
         setAdminID,
-        chatId, setChatID
+        chatId, setChatID,
+        openActiveUser, setOpenActiveUser,
+        userId, setUserId,
+        openDelUser, setOpenDelUser,delTechnician, setDelTechnician,pestDetails, setPestDetails,treatmentDetails, setTreatmentDetails,sendMessage, setSendMessage
       }}
     >
       {children}

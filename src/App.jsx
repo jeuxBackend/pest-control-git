@@ -32,6 +32,12 @@ import DeleteTreatmentModal from "./components/TreatmentTypes/DeleteTreatmentMod
 import ConfirmOrderModal from "./components/Orders/ConfirmOrderModal";
 import { getToken } from "firebase/messaging";
 import { messaging,db,collection,addDoc } from "./Firebase/firebase";
+import DeleteUsers from "./components/Users/DeleteUsers";
+import ActiveClient from "./components/Users/ActiveClient";
+import DelClient from "./components/Users/DelClient";
+import PestDetail from "./components/PestsTypes/PestDetail";
+import TreatmentDetails from "./components/TreatmentTypes/TreatmentDetails";
+import AddMessage from "./components/ChatComp/AddMessage";
 
 function App() {
   const {
@@ -49,6 +55,9 @@ function App() {
     openAddTreatment,
     openDeleteTreatment,
     openConfirmModal,
+    setOpenActiveUser,
+    openActiveUser,
+    openDelUser, setOpenDelUser,pestDetails, setPestDetails,treatmentDetails, setTreatmentDetails,sendMessage, setSendMessage
   } = useMyContext();
 
   const vapidKey='BNhmSaO-9liiuqa4vTmG2OHdOo-dQ3p4vyDyxIeSooW91Xql-7u1WcLskdLZrCqbyfbkBScerH3s1C3BFyeLNP4'
@@ -135,13 +144,29 @@ function App() {
       <div className={`${openConfirmModal === true ? "" : "hidden"}`}>
         <ConfirmOrderModal />
       </div>
+      <div className={`${openActiveUser === true ? "" : "hidden"}`}>
+        <ActiveClient/>
+      </div>
+      <div className={`${openDelUser === true ? "" : "hidden"}`}>
+        <DelClient/>
+      </div>
+      <div className={`${pestDetails === true ? "" : "hidden"}`}>
+        <PestDetail/>
+      </div>
+      <div className={`${treatmentDetails === true ? "" : "hidden"}`}>
+        <TreatmentDetails/>
+      </div>
+      <div className={`${sendMessage === true ? "" : "hidden"}`}>
+        <AddMessage/>
+      </div>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route element={<MainModule />}>
           <Route path="/Dashboard" element={<Dashboard />} />
           <Route path="/All-Users" element={<AllUsers />} />
           <Route path="/Active-Users" element={<ActiveUsers />} />
-          <Route path="/Block-Users" element={<BlockUsers />} />
+          <Route path="/Inactive-Users" element={<BlockUsers />} />
+          <Route path="/Delete-Users" element={<DeleteUsers />} />
           <Route path="/Inspector" element={<Inspector />} />
           <Route path="/Orders" element={<Orders />} />
           <Route path="/Orders-History" element={<OrdersHistory />} />

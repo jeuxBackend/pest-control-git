@@ -4,41 +4,38 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import ActiveColor from "./assets/active-color.png";
 import Active from "./assets/active.png";
-import BlockColor from "./assets/block-color.png";
-import Block from "./assets/block.png";
+import BlockColorWhite from "./assets/block.png";
 import SearchIcon from "./assets/search-icon.png";
 import LeftArrow from "./assets/left-arrow.png";
 import RightArrow from "./assets/right-arrow.png";
 import UserPic from "./assets/user-pic.png";
-import UserPic2 from "./assets/user-pic2.png";
-import UserPic3 from "./assets/user-pic3.png";
 import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
 import { TailSpin } from "react-loader-spinner";
-import del from "./assets/del.svg"
+import delWhite from "./assets/del-white.svg"
 import delRed from "./assets/del-red.svg"
 import atoz from "/atoz.svg"
 import ztoa from "/ztoa.svg"
 
-const AllUsers = () => {
-  const { pageHeading, setPageHeading,openActiveUser, setOpenActiveUser,userId, setUserId,openDelUser, setOpenDelUser } = useMyContext();
-  const [allUser, setAllUser] = useState([]);
-  const [changeStatus, setChangeStatus] = useState([]);
+const DeleteUsers = () => {
+  const { pageHeading, setPageHeading } = useMyContext();
+  const [blockUser, setBlockUser] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage, setUsersPerPage] = useState(10);
+
   const [loading, setLoading] = useState(false);
   const [sort, setSort] = useState(false);
-
   const notify = () => toast.success("Status Changed Successfully");
+  const notifyError = () => toast.error("Status Not Changed");
 
-  const getAllUsers = async () => {
+  const getBlockUsers = async () => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get("admin/get-all-user");
+      const response = await axiosInstance.get("admin/get-block-user");
       if (response.data) {
         console.log(response.data);
-        setAllUser(response.data.users);
+        setBlockUser(response.data.users);
       }
     } catch (error) {
       if (error.response) {
@@ -51,11 +48,8 @@ const AllUsers = () => {
     }
   };
   useEffect(() => {
-    getAllUsers();
+    getBlockUsers();
   }, []);
-  useEffect(() => {
-    getAllUsers();
-  }, [openActiveUser]);
 
   const changeUserStatus = async (changeStatus) => {
     try {
@@ -64,12 +58,12 @@ const AllUsers = () => {
       });
       if (response.data) {
         notify();
-
         console.log(response.data);
-        getAllUsers();
+        getBlockUsers();
       }
     } catch (error) {
       if (error.response) {
+        notifyError();
         console.log(error.response);
       } else {
         console.log(error);
@@ -83,7 +77,7 @@ const AllUsers = () => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredUsers = allUser.filter((item) => {
+  const filteredUsers = blockUser.filter((item) => {
     const lowerCaseSearchTerm = searchTerm.toLowerCase();
     return (
       item.name?.toLowerCase().includes(lowerCaseSearchTerm) ||
@@ -99,8 +93,8 @@ const AllUsers = () => {
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
-  const totalPages = Math.ceil(allUser.length / usersPerPage);
-  const totalUsers = allUser.length;
+  const totalPages = Math.ceil(blockUser.length / usersPerPage);
+  const totalUsers = blockUser.length;
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -136,7 +130,7 @@ const AllUsers = () => {
   // pagination end
 
   return (
-    <div className="w-full h-full min-h-screen bg-[#fafafa] pb-10">
+    <div className="w-full h-full min-h-screen bg-[#fafafa]">
       <div className="AllUsers-div relative  lg:ml-[260px] px-3 top-[20px]">
         <div className="users-nav w-full flex flex-wrap justify-between">
           <div className="active-block-brns xl:w-[60%] lg:w-[100%] mt-2">
@@ -154,28 +148,28 @@ const AllUsers = () => {
                 </Link>
               </li>
               <li>
-                <Link
-                  onClick={() => setPageHeading("Inactive Users")}
-                  to={"/Inactive-Users"}
-                  className="flex justify-center py-2 border shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded text-[#828282] bg-transparent cursor-pointer"
-                >
+                <Link to="/Inactive-Users" onClick={() => setPageHeading("Inactive Users")}className="flex justify-center py-2 border text-[#828282] shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded  cursor-pointer">
                   <div className="flex gap-x-2 items-center">
-                    <img className="w-[20px]" src={Block} alt="active Icon" />
+                    <img
+                      className="w-[20px]"
+                      src={BlockColorWhite}
+                      alt="active Icon"
+                    />
                     Inactive Users
                   </div>
                 </Link>
               </li>
               <li>
-                <Link
-                  onClick={() => setPageHeading("Delete Users")}
-                  to={"/Delete-Users"}
-                  className="flex justify-center py-2 border shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded text-[#828282] bg-transparent cursor-pointer"
-                >
+                <a className="flex justify-center py-2 border border-[#c90000] bg-[#c90000] shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded text-[#ffff] cursor-pointer">
                   <div className="flex gap-x-2 items-center">
-                    <img className="w-[20px]" src={del} alt="active Icon" />
+                    <img
+                      className="w-[20px]"
+                      src={delWhite}
+                      alt="active Icon"
+                    />
                     Delete
                   </div>
-                </Link>
+                </a>
               </li>
             </ul>
           </div>
@@ -239,88 +233,48 @@ const AllUsers = () => {
                   </tr>
                 </thead>
                 <tbody className="text-gray-700">
-                  {currentUsers?.map((data, index) => {
+                  {[1,2,3,4,5,6].map((data, index) => {
                     return (
                       <tr key={index} className="">
                         <td className="py-3 border-b border-r">
                           <div className="flex items-center justify-start ps-6 gap-x-3">
                             <div className="w-[50px] h-[50px] rounded-full bg-white border overflow-hidden">
                               <img
-                                src={data.profile_pic}
+                                src={UserPic}
                                 alt="user"
                                 className="w-full h-full object-cover"
                               />
                             </div>
                             <div>
                               <p className="text-lg text-black font-semibold">
-                                {data.name}
+                                Delete User
                               </p>
                             </div>
                           </div>
                         </td>
                         <td className="py-3 border-b border-r">
-                          <p className="text-black ">{data.email}</p>
+                          <p className="text-black px-8">deleted@dummy.com</p>
                         </td>
                         <td className="py-3 border-b border-r">
-                          <p className="text-black px-8">{data.address ?data.address:<span className="text-red-500">Not Available</span>}</p>
+                          <p className="text-black px-8">deleted Location</p>
                         </td>
                         <td className="py-3 border-b border-r">
-                        <p className="text-black px-8">{data.created_at.split('T')[0]} </p>
+                        <p className="text-black px-8">dd/mm/yyyy </p>
 
                         </td>
                         <td className="py-3 px-5 border-b border-r">
                           <div className="flex justify-center">
-                            {data?.status === 1 ? (<div className="flex items-center gap-2">
-                              <button
-                                onClick={function(){ setUserId({id:data.id,type:"block"}),setOpenActiveUser(true)}}
-                                className="px-5 py-2 text-[#003a5f] text-lg font-semibold rounded-full bg-[#d4dee3] flex justify-center items-center gap-3"
-                              >
-                                <img
-                                  src={ActiveColor}
-                                  className="w-[20px]"
-                                  alt=""
-                                />{" "}
-                                Active
-                              </button>
-                                <button
-                                
-                                className="px-3 py-3 text-[#ff2f16] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
-                                onClick={()=>setOpenDelUser(true)}
-                              >
-                                <img
-                                  src={delRed}
-                                  className="w-[18px]"
-                                  alt=""
-                                />
-                               
-                              </button>
-                              </div>
-                            ) : (<div className="flex items-center gap-2">
-                              <button
-                                onClick={function(){ setUserId({id:data.id,type:"Active"}),setOpenActiveUser(true)}}
-                                className="px-5 py-2 text-[#ff2f16] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
-                              >
-                                <img
-                                  src={delRed}
-                                  className="w-[18px]"
-                                  alt=""
-                                />{" "}
-                                Block
-                              </button>
-                              <button
-                                
-                                className="px-3 py-3 text-[#ff2f16] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
-                                onClick={()=>setOpenDelUser(true)}
-                              >
-                                <img
-                                  src={delRed}
-                                  className="w-[18px]"
-                                  alt=""
-                                />
-                               
-                              </button>
-                              </div>
-                            )}
+                            <button
+                              onClick={() => changeUserStatus(data.id)}
+                              className="px-8 py-2 text-[#C90000] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
+                            >
+                              <img
+                                src={delRed}
+                                className="w-[20px]"
+                                alt=""
+                              />
+                              Deleted
+                            </button>
                           </div>
                         </td>
                       </tr>
@@ -396,10 +350,9 @@ const AllUsers = () => {
         </div>
         {/* pagination code end */}
       </div>
-
       <Toaster />
     </div>
   );
 };
 
-export default AllUsers;
+export default DeleteUsers;

@@ -8,7 +8,11 @@ import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
 
 import { TailSpin } from 'react-loader-spinner';
-
+import atoz from "/atoz.svg"
+import ztoa from "/ztoa.svg"
+import del from "./assets/del.svg";
+import delWhite from "./assets/del-white.svg";
+import eye from "./assets/eye.svg";
 function PestsTypes() {
   const {
     setOpenAddTreatment,
@@ -23,14 +27,14 @@ function PestsTypes() {
     openEditTreatment,
     openDeleteTreatment,
     treatmentToast,
-    setTreatmentToast,
+    setTreatmentToast,setDelTechnician,delTechnician,treatmentDetails, setTreatmentDetails
   } = useMyContext();
 
   const [allTreatments, setAllTreatments] = useState([]);
   const [loading, setLoading] = useState(false);  
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredOrder, setFilteredOrders] = useState([]);
-
+  const [sort, setSort] = useState(false);
   const getAllTreatments = async () => {
     try {
       setLoading(true); 
@@ -115,7 +119,15 @@ function PestsTypes() {
       <Toaster />
       <div className="AllUsers-div relative lg:ml-[260px] px-3 top-[20px]">
         <div className="users-nav w-full flex flex-wrap justify-between">
-          <div className="active-block-brns xl:w-[40%] lg:w-[100%] mt-2"></div>
+          <div className="active-block-brns xl:w-[40%] lg:w-[100%] mt-2">
+          <button
+                onClick={() => setDelTechnician(true)}
+                className={`w-[130px] h-[50px] flex justify-center gap-2 items-center border  text-lg font-semibold shadow-sm rounded ${delTechnician?"bg-[#C90000] text-white":"text-[#828282]"}`}
+              >
+                <img src={delTechnician?delWhite:del} className="w-[15px]" alt="" />
+                Delete
+              </button>
+          </div>
           <div className="user-add-search-div xl:w-[60%] lg:w-[100%] mt-2 flex justify-end">
             <div className="flex flex-wrap gap-3">
               <button
@@ -133,8 +145,8 @@ function PestsTypes() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
-                <button className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
-                  <img src={SearchIcon} className="w-[22px]" alt="" />
+                <button onClick={()=>setSort(!sort)} className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
+                <img src={sort? ztoa:atoz} className="w-[22px]" alt="" />
                 </button>
               </div>
             </div>
@@ -193,6 +205,14 @@ function PestsTypes() {
                               }}
                             >
                               <img src={Delete} className="w-[30px]" alt="" />
+                            </button>
+                            <button
+                              onClick={function () {
+                           
+                                setTreatmentDetails(true);
+                              }}
+                            >
+                              <img src={eye} className="w-[30px]" alt="" />
                             </button>
                           </div>
                         </td>

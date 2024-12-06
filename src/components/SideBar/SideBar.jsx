@@ -13,7 +13,7 @@ import Logout from "./assets/logout.png";
 import { useMyContext } from "../../Context/Context";
 
 function SideBar() {
-  const { pageHeading, setPageHeading } = useMyContext();
+  const { pageHeading, setPageHeading,setDelTechnician } = useMyContext();
   const { openLogout, setOpenLogout } = useMyContext();
   const activeNave = useLocation();
   const [isActive, setActive] = useState();
@@ -34,6 +34,7 @@ function SideBar() {
   const handleLinkClick = (heading) => {
     setPageHeading(heading);
     toggleSidebar();
+    setDelTechnician(false)
   };
   return (
     <>
@@ -115,7 +116,12 @@ function SideBar() {
                     &nbsp;
                   </span>
                 )}
-                {isActive === "/Block-Users" && (
+                {isActive === "/Inactive-Users" && (
+                  <span className="inline rounded-r h-full text-5xl w-1 me-3 bg-[#c90000]">
+                    &nbsp;
+                  </span>
+                )}
+                {isActive === "/Delete-Users" && (
                   <span className="inline rounded-r h-full text-5xl w-1 me-3 bg-[#c90000]">
                     &nbsp;
                   </span>
@@ -126,13 +132,13 @@ function SideBar() {
                   className={`flex items-center ${
                     isActive === "/All-Users" ||
                     isActive === "/Active-Users" ||
-                    isActive == "/Block-Users"
+                    isActive == "/Inactive-Users" || isActive == "/Delete-Users" 
                       ? "bg-[#c90000]"
                       : ""
                   } py-3 ps-5 text-white rounded group w-[215px]`}
                 >
                   <img src={Users} alt="" className="w-[20px]" />
-                  <span className="ms-3">All Users</span>
+                  <span className="ms-3">All Clients</span>
                 </Link>
               </li>
               <li className="flex items-center gap-1">
