@@ -121,7 +121,7 @@ function Orders() {
                     to={"/Orders-History"}
                     className="flex justify-center py-2 font-semibold w-[100px] h-[40px] text-[#000000] cursor-pointer"
                   >
-                    <div className="flex gap-x-2 items-center">History</div>
+                    <div className="flex gap-x-2 items-center">Completed</div>
                   </Link>
                 </li>
               </div>
@@ -213,7 +213,7 @@ function Orders() {
                           onClick={function () {
                             setOpenAssignInspector(true), setOrderId(data.id);
                           }}
-                          className="flex justify-center py-2 font-semibold rounded w-[250px] h-[45px] bg-[#003a5f] text-[#ffff] cursor-pointer"
+                          className="flex justify-center items-center py-2 font-semibold rounded w-[250px] h-[45px] bg-[#003a5f] text-[#ffff] cursor-pointer"
                         >
                           <span className="flex gap-x-2 items-center">
                             Assign Technician

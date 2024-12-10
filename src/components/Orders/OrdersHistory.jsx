@@ -81,7 +81,7 @@ useEffect(() => {
                     onClick={() => setPageHeading("Pending Orders")}
                     className="flex justify-center py-2 font-semibold rounded w-[100px] h-[40px] text-[#000000] cursor-pointer"
                   >
-                    <div className="flex gap-x-2 items-center">Pendings</div>
+                    <div className="flex gap-x-2 items-center">Pending</div>
                   </Link>
                 </li>
                 <li>
@@ -95,7 +95,7 @@ useEffect(() => {
                 </li>
                 <li>
                   <Link className="flex justify-center py-2 font-semibold w-[100px] h-[40px] bg-[#c90000] rounded text-[#ffff] cursor-pointer">
-                    <div className="flex gap-x-2 items-center">History</div>
+                    <div className="flex gap-x-2 items-center">Completed</div>
                   </Link>
                 </li>
               </div>

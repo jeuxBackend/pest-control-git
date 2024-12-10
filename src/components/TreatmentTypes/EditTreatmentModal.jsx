@@ -55,6 +55,19 @@ function EditTreatmentModal() {
                 />
               </div>
             </div>
+            <div className="flex gap-3 lg:gap-8 lg:flex-row flex-col">
+              <div className="lg:w-[100%] w-[100%]">
+                <p className="mb-1 font-medium">Description</p>
+                <textarea
+                
+                  value={name}
+                  // onChange={(e) => setName(e.target.value)}
+                  placeholder="Treat description"
+                  rows={5}
+                  className="w-full py-3 px-4 rounded-xl border shadow-sm"
+                />
+              </div>
+            </div>
             <div className="font-medium flex items-center justify-center lg:gap-x-8 gap-3 mt-3">
               <button
                 type="reset"

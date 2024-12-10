@@ -262,7 +262,7 @@ const AllUsers = () => {
                           <p className="text-black ">{data.email}</p>
                         </td>
                         <td className="py-3 border-b border-r">
-                          <p className="text-black px-8">{data.address ?data.address:<span className="text-red-500">Not Available</span>}</p>
+                          <p className="text-black px-8">{data.address ?data.address:<span className="text-[#c90000]">Not Available</span>}</p>
                         </td>
                         <td className="py-3 border-b border-r">
                         <p className="text-black px-8">{data.created_at.split('T')[0]} </p>
@@ -298,7 +298,7 @@ const AllUsers = () => {
                             ) : (<div className="flex items-center gap-2">
                               <button
                                 onClick={function(){ setUserId({id:data.id,type:"Active"}),setOpenActiveUser(true)}}
-                                className="px-5 py-2 text-[#ff2f16] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
+                                className="px-5 py-2 text-[#c90000] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
                               >
                                 <img
                                   src={delRed}

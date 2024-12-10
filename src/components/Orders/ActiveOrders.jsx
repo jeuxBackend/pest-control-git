@@ -108,7 +108,7 @@ function Orders() {
                   to={"/Orders"}
                   onClick={() => setPageHeading("Pending Orders")}
                   className="flex justify-center py-2 font-semibold rounded w-[100px] h-[40px] text-[#000000] cursor-pointer">
-                    <div className="flex gap-x-2 items-center">Pendings</div>
+                    <div className="flex gap-x-2 items-center">Pending</div>
                   </Link>
                 </li>
                 <li>
@@ -124,7 +124,7 @@ function Orders() {
                     to={"/Orders-History"}
                     className="flex justify-center py-2 font-semibold w-[100px] h-[40px] text-[#000000] cursor-pointer"
                   >
-                    <div className="flex gap-x-2 items-center">History</div>
+                    <div className="flex gap-x-2 items-center">Completed</div>
                   </Link>
                 </li>
               </div>
@@ -185,15 +185,15 @@ function Orders() {
                         ))}
                       </span>
                 </div>
-                <div className="flex flex-wrap gap-x-2 justify-center mt-2">
+                <div className="flex flex-wrap gap-x-2 justify-center mt-2 items-center">
                   <button
                     onClick={function () {
                       setOpenOrderDetail(true),
                       setActiveOrderId(data.id);
                     }}
-                    className="flex justify-center py-2 font-semibold rounded w-[130px] h-[45px] bg-[#003a5f] text-[#ffff] cursor-pointer"
+                    className="flex justify-center items-center py-2 font-semibold rounded w-[135px] h-[45px] bg-[#003a5f] text-[#ffff] cursor-pointer"
                   >
-                    <span className="flex gap-x-2 items-center">
+                    <span className="flex  items-center">
                       View Detail
                     </span>
                   </button>
@@ -202,9 +202,9 @@ function Orders() {
                       setOpenConfirmModal(true),
                       setActiveOrderId(data.id);
                     }}
-                    className="flex justify-center py-2 font-semibold rounded w-[130px] h-[45px] bg-[#e00000] text-[#ffff] cursor-pointer"
+                    className="flex justify-center items-center py-2 font-semibold rounded w-[135px] h-[45px] bg-[#c90000] text-[#ffff] cursor-pointer"
                   >
-                    <span className="flex gap-x-2 items-center">
+                    <span className="flex  items-center">
                       Complete Order
                     </span>
                   </button>

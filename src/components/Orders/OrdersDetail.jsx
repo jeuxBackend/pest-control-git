@@ -64,6 +64,8 @@ function OrdersDetail() {
         <div className="AllUsers-div relative lg:ml-[260px] px-3 top-[20px]">
           <div className="w-full pb-2">
             <div className="border shadow-sm rounded-lg p-2">
+              <div className="flex items-center justify-between">
+              <div>
               <div className="">
                 <span className="text-[#bdbcc1]">Client Name: </span>
                 <span className="font-semibold capitalize">{name}</span>
@@ -75,6 +77,15 @@ function OrdersDetail() {
               <div className="pb-5">
                 <span className="text-[#bdbcc1]">Location: </span>
                 <span className="font-semibold">{orderDetail.location}</span>
+              </div>
+              </div>
+              <button
+                // onClick={() => setOpenAddTreatment(true)}
+                className="w-[180px] h-[50px] flex justify-center gap-2 items-center bg-[#003a5f] text-white text-lg font-semibold shadow-sm rounded"
+              >
+         
+                Share Report
+              </button>
               </div>
              
               <div className="photo-gallery lg:flex gap-x-3">
@@ -108,6 +119,9 @@ function OrdersDetail() {
               <div className="">
                 <p className="text-black text-xl font-semibold">Description:</p>
                 <p className="text-black">{orderDetail.description}</p>
+              </div>
+              <div className="w-full flex items-center justify-center my-4">
+             
               </div>
             </div>
           </div>
