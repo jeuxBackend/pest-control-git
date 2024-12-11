@@ -28,7 +28,7 @@ function PestsTypes() {
     setPestName,
     pestToast,
     setPestToast,
-    setDelTechnician,delTechnician,setPestDetails
+    setDelTechnician,delTechnician,setPestDetails,pestDescription, setPestDescription
   } = useMyContext();
   const [allPests, setAllPests] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -46,6 +46,7 @@ function PestsTypes() {
   const notifyEditError = () => toast.error("Pest Not Updated");
 
   const getAllPests = async () => {
+    if(delTechnician===false){
     try {
       setLoading(true);
       const response = await axiosInstance.get("get-all-pest-types");
@@ -56,19 +57,40 @@ function PestsTypes() {
     } catch (error) {
       if (error.response) {
         console.log(error.response);
+        setAllPests([])
       } else {
         console.log(error);
       }
     } finally {
       setLoading(false);
     }
+  }if(delTechnician){
+    try {
+      setLoading(true);
+      const response = await axiosInstance.get("admin/showDeletePestType");
+      if (response.data) {
+        console.log(response.data);
+        setAllPests(response.data.pestType);
+      }
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response);
+        setAllPests([])
+      } else {
+        console.log(error);
+      }
+    } finally {
+      setLoading(false);
+    }
+
+  }
   };
   useEffect(() => {
     getAllPests();
   }, []);
   useEffect(() => {
     getAllPests();
-  }, [openAddPest]);
+  }, [openAddPest,delTechnician]);
   useEffect(() => {
     getAllPests();
   }, [openEditPest]);
@@ -100,6 +122,17 @@ function PestsTypes() {
   }, [pestToast]);
 
   // search code start
+  const handleSort = () => {
+    const sortedUsers = [...allPests].sort((a, b) => {
+      if (sort) {
+        return b.name.localeCompare(a.name); 
+      } else {
+        return a.name.localeCompare(b.name); 
+      }
+    });
+    setAllPests(sortedUsers);
+    setSort(!sort);
+  };
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -171,7 +204,7 @@ function PestsTypes() {
             <div className="flex flex-wrap gap-3">
               <button
                 onClick={() => setOpenAddPest(true)}
-                className="w-[180px] h-[50px] flex justify-center gap-2 items-center bg-[#003a5f] text-white text-lg font-semibold shadow-sm rounded"
+                className={`w-[180px] h-[50px] flex justify-center gap-2 items-center bg-[#003a5f] text-white text-lg font-semibold shadow-sm rounded ${delTechnician?"hidden":""}`}
               >
                 <img src={Add} className="w-[15px]" alt="" />
                 Add Pest
@@ -184,7 +217,7 @@ function PestsTypes() {
                   className="bg-transparent text-black border h-[50px] lg:w-[300px] md:w-[300px] w-[230px] rounded ps-3"
                   placeholder="Search"
                 />
-               <button onClick={()=>setSort(!sort)} className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
+               <button onClick={handleSort} className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
                 <img src={sort? ztoa:atoz} className="w-[22px]" alt="" />
                 </button>
               </div>
@@ -211,7 +244,7 @@ function PestsTypes() {
                         <span className="">Pest Type</span>
                       </p>
                     </th>
-                    <th className="px-0">
+                    <th className={`px-0 ${delTechnician?"hidden":""}`}>
                       <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md">
                         Action
                       </p>
@@ -231,12 +264,12 @@ function PestsTypes() {
                             </p>
                           </div>
                         </td>
-                        <td className="py-3 border-b border-r lg:px-10">
+                        <td className={`py-3 border-b border-r lg:px-10 ${delTechnician?"hidden":""}`}>
                           <div className="flex gap-x-3 justify-center">
                             <button
                               onClick={function () {
                                 setOpenEditPest(true);
-                                setPestId(data.id), setPestName(data.title);
+                                setPestId(data.id), setPestName(data.title), setPestDescription(data.description)
                               }}
                             >
                               <img src={Edit} className="w-[30px]" alt="" />
@@ -249,7 +282,7 @@ function PestsTypes() {
                               <img src={Delete} className="w-[30px]" alt="" />
                             </button>
                             <button
-                              onClick={function () {setPestDetails(true)
+                              onClick={function () {setPestDetails(true), setPestName(data.title), setPestDescription(data.description)
                                
                               }}
                             >

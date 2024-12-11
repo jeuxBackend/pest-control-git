@@ -71,6 +71,7 @@ function Inspector() {
   }, [toaster]);
 
   const getAllInspectors = async () => {
+    if(delTechnician===false){
     try {
       setLoading(true);
       const response = await axiosInstance.get("admin/get-all-inspector");
@@ -87,13 +88,34 @@ function Inspector() {
     } finally {
       setLoading(false);
     }
+  }if(delTechnician){
+    try {
+      setLoading(true);
+      const response = await axiosInstance.post("admin/showDeleteUser",{
+        role: "inspector"
+      });
+      if (response.data) {
+        console.log(response.data);
+        setAllInspectors(response.data.user);
+      }
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response);
+        setAllInspectors([])
+      } else {
+        console.log(error);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
   };
   useEffect(() => {
     getAllInspectors();
   }, []);
   useEffect(() => {
     getAllInspectors();
-  }, [openAddInspector]);
+  }, [openAddInspector,delTechnician]);
   useEffect(() => {
     getAllInspectors();
   }, [openEditInspector]);
@@ -119,6 +141,17 @@ function Inspector() {
   };
 
   // search code start
+  const handleSort = () => {
+    const sortedUsers = [...allInspectors].sort((a, b) => {
+      if (sort) {
+        return b.name.localeCompare(a.name); 
+      } else {
+        return a.name.localeCompare(b.name); 
+      }
+    });
+    setAllInspectors(sortedUsers);
+    setSort(!sort);
+  };
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -199,7 +232,7 @@ function Inspector() {
             <div className="flex flex-wrap gap-3">
               <button
                 onClick={() => setOpenAddInspector(true)}
-                className="w-[180px] h-[50px] flex justify-center gap-2 items-center bg-[#003a5f] text-white text-lg font-semibold shadow-sm rounded"
+                className={`w-[180px] h-[50px] flex justify-center gap-2 items-center bg-[#003a5f] text-white text-lg font-semibold shadow-sm rounded ${delTechnician?"hidden":""}`}
               >
                 <img src={Add} className="w-[15px]" alt="" />
                 Add Technician 
@@ -212,7 +245,7 @@ function Inspector() {
                   className="bg-transparent text-black border h-[50px] lg:w-[300px] md:w-[300px] w-[230px] rounded ps-3"
                   placeholder="Search"
                 />
-                <button onClick={()=>setSort(!sort)} className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
+                <button onClick={handleSort} className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
                 <img src={sort? ztoa:atoz} className="w-[22px]" alt="" />
                 </button>
               </div>
@@ -249,7 +282,7 @@ function Inspector() {
                         Password
                       </p>
                     </th>
-                    <th className="px-0">
+                    <th className={`px-0 ${delTechnician?"hidden":""}`} >
                       <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md">
                         Action
                       </p>
@@ -284,7 +317,7 @@ function Inspector() {
                             {data.show_password}
                           </p>
                         </td>
-                        <td className="py-3 border-b border-r">
+                        <td className={`py-3 border-b border-r ${delTechnician?"hidden":""}`}>
                           <div className="flex gap-x-3 justify-center">
                             <button
                               onClick={function () {

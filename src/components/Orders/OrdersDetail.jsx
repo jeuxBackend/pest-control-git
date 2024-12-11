@@ -49,6 +49,45 @@ function OrdersDetail() {
     getOrderDetail(historyOrderId);
   }, [historyOrderId]);
 
+  const handleSubmit = async (id) => {
+    // e.preventDefault();
+    setLoading(true);
+    try {
+        const response = await axiosInstance.post("reportPdf", {
+            order_id: id,
+         
+        });
+        if (response.data) {
+          // console.log(response.data)
+          
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+
+     
+      const url = window.URL.createObjectURL(blob);
+
+      
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'report.pdf'; 
+      document.body.appendChild(link);
+      link.click();
+
+    
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+        }
+    } catch (error) {
+        if (error.response) {
+          // setTreatmentToast(6);
+            console.log(error);
+        } else {
+            console.log(error);
+        }
+    }finally{
+      setLoading(false)
+    }
+}
+
   return (
     <div className="w-full h-full min-h-screen bg-[#fafafa]">
       {loading ? (
@@ -80,7 +119,7 @@ function OrdersDetail() {
               </div>
               </div>
               <button
-                // onClick={() => setOpenAddTreatment(true)}
+                onClick={() => handleSubmit(orderDetail.id)}
                 className="w-[180px] h-[50px] flex justify-center gap-2 items-center bg-[#003a5f] text-white text-lg font-semibold shadow-sm rounded"
               >
          

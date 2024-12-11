@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Oval } from "react-loader-spinner";
+import { Oval, TailSpin } from "react-loader-spinner";
 import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
 
@@ -7,6 +7,7 @@ function AddInspectorModal() {
   const { openAddInspector, setOpenAddInspector, setToaster } = useMyContext();
   const [profile, setProfile] = useState();
   const [name, setName] = useState("");
+  const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
@@ -33,14 +34,16 @@ function AddInspectorModal() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
+    // setIsLoading(true);
     if (!imagevoucher) {
       alert("Please upload an image.");
       return;
     }else{
     try {
+      setIsLoading(true)
       const response = await axiosInstance.post("admin/add-inspector", {
         name: name,
+        user_name: userName,
         email: email,
         number: phone,
         password: password,
@@ -77,14 +80,13 @@ function AddInspectorModal() {
             Add Technician
           </h1>
           {isLoading ? (
-            <div className="flex items-center justify-center w-[60%] sm:w-[35%] md:w-[40%] py-3 rounded shadow-sm bg-[#white] text-white">
-              <Oval
-                height={24}
-                width={24}
-                color="white"
-                ariaLabel="loading"
-                visible={true}
-              />
+            <div className="flex items-center justify-center h-[40vh] w-[60%] sm:w-[35%] md:w-[40%] py-3 rounded  bg-[#white] text-white">
+              <TailSpin
+              height={50}
+              width={50}
+              color="#0066a5"
+              ariaLabel="loading"
+            />
             </div>
           ) : (
             <form
@@ -138,7 +140,7 @@ function AddInspectorModal() {
                   <p className="mb-1 font-medium">User Name</p>
                   <input
                     type="text"
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => setUserName(e.target.value)}
                     placeholder="User Name"
                     className="w-full py-3 px-4 rounded-xl border shadow-sm"
                   />

@@ -5,12 +5,14 @@ import axiosInstance from "../../axiosInstance/axioisInstance";
 function AddTreatmentModal() {
   const { openAddTreatment, setOpenAddTreatment, setTreatmentToast } = useMyContext();
   const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axiosInstance.post("create-treatment-types", {
         title: name,
+        description: description
       });
       if (response.data) {
         setTreatmentToast(1);
@@ -56,9 +58,9 @@ function AddTreatmentModal() {
                 <p className="mb-1 font-medium">Description</p>
                 <textarea
                 
-                  value={name}
-                  // onChange={(e) => setName(e.target.value)}
-                  placeholder="Treat description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Treatment description"
                   rows={5}
                   className="w-full py-3 px-4 rounded-xl border shadow-sm"
                 />

@@ -97,7 +97,7 @@ function SideBar() {
                 <Link
                   onClick={() => handleLinkClick("Dashboard")}
                   to={"/Dashboard"}
-                  className={`flex items-center ${
+                  className={`flex items-center cursor-pointer ${
                     isActive === "/Dashboard" ? "bg-[#c90000]" : ""
                   } py-3 ps-5 text-white rounded group w-[215px]`}
                 >
@@ -127,9 +127,9 @@ function SideBar() {
                   </span>
                 )}
                 <Link
-                  onClick={() => handleLinkClick("All Users")}
+                  onClick={() => handleLinkClick("All Clients")}
                   to={"/All-Users"}
-                  className={`flex items-center ${
+                  className={`flex items-center cursor-pointer ${
                     isActive === "/All-Users" ||
                     isActive === "/Active-Users" ||
                     isActive == "/Inactive-Users" || isActive == "/Delete-Users" 
@@ -142,16 +142,16 @@ function SideBar() {
                 </Link>
               </li>
               <li className="flex items-center gap-1">
-                {isActive === "/Inspector" && (
+                {isActive === "/Technician" && (
                   <span className="inline rounded-r h-full text-5xl w-1 me-3 bg-[#c90000]">
                     &nbsp;
                   </span>
                 )}
                 <Link
                   onClick={() => handleLinkClick("Technician")}
-                  to={"/Inspector"}
-                  className={`flex items-center ${
-                    isActive === "/Inspector" ? "bg-[#c90000]" : ""
+                  to={"/Technician"}
+                  className={`flex items-center cursor-pointer ${
+                    isActive === "/Technician" ? "bg-[#c90000]" : ""
                   } py-3 ps-5 text-white rounded group w-[215px]`}
                 >
                   <img src={Inspector} alt="" className="w-[18px]" />
@@ -167,7 +167,7 @@ function SideBar() {
                 <Link
                   onClick={() => handleLinkClick("Pests Types")}
                   to={"/Pests"}
-                  className={`flex items-center ${
+                  className={`flex items-center cursor-pointer ${
                     isActive === "/Pests" ? "bg-[#c90000]" : ""
                   } py-3 ps-5 text-white rounded group w-[215px]`}
                 >
@@ -184,7 +184,7 @@ function SideBar() {
                 <Link
                   onClick={() => handleLinkClick("Treatment Types")}
                   to={"/Treatment"}
-                  className={`flex items-center ${
+                  className={`flex items-center cursor-pointer ${
                     isActive === "/Treatment" ? "bg-[#c90000]" : ""
                   } py-3 ps-5 text-white rounded group w-[215px]`}
                 >
@@ -201,7 +201,7 @@ function SideBar() {
                 <Link
                   onClick={() => handleLinkClick("Chat")}
                   to={"/ChatComp"}
-                  className={`flex items-center ${
+                  className={`flex items-center cursor-pointer ${
                     isActive === "/ChatComp" ? "bg-[#c90000]" : ""
                   } py-3 ps-5 text-white rounded group w-[215px]`}
                 >
@@ -238,7 +238,7 @@ function SideBar() {
                 <Link
                   onClick={() => handleLinkClick("Pending Orders")}
                   to={"/Orders"}
-                  className={`flex items-center ${
+                  className={`flex items-center cursor-pointer ${
                     isActive === "/Orders" ||
                     isActive === "/Orders-History" ||
                     isActive == "/Orders-Detail" ||

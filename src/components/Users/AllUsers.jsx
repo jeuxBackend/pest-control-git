@@ -29,6 +29,7 @@ const AllUsers = () => {
   const [usersPerPage, setUsersPerPage] = useState(10);
   const [loading, setLoading] = useState(false);
   const [sort, setSort] = useState(false);
+  // const [sort, setSort] = useState(false);
 
   const notify = () => toast.success("Status Changed Successfully");
 
@@ -55,7 +56,7 @@ const AllUsers = () => {
   }, []);
   useEffect(() => {
     getAllUsers();
-  }, [openActiveUser]);
+  }, [openActiveUser,openDelUser]);
 
   const changeUserStatus = async (changeStatus) => {
     try {
@@ -77,7 +78,19 @@ const AllUsers = () => {
     }
   };
 
-  // search code start
+  
+  const handleSort = () => {
+    const sortedUsers = [...allUser].sort((a, b) => {
+      if (sort) {
+        return b.name.localeCompare(a.name); 
+      } else {
+        return a.name.localeCompare(b.name); 
+      }
+    });
+    setAllUser(sortedUsers);
+    setSort(!sort);
+  };
+
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -144,30 +157,30 @@ const AllUsers = () => {
               <li>
                 <Link
                   to={"/Active-Users"}
-                  onClick={() => setPageHeading("Active Users")}
+                  onClick={() => setPageHeading("Active Clients")}
                   className="flex justify-center py-2 border shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded text-[#828282] bg-transparent cursor-pointer"
                 >
                   <div className="flex gap-x-2 items-center">
                     <img className="w-[20px]" src={Active} alt="active Icon" />
-                    Active Users
+                    Active Clients
                   </div>
                 </Link>
               </li>
               <li>
                 <Link
-                  onClick={() => setPageHeading("Inactive Users")}
+                  onClick={() => setPageHeading("Inactive Clients")}
                   to={"/Inactive-Users"}
                   className="flex justify-center py-2 border shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded text-[#828282] bg-transparent cursor-pointer"
                 >
                   <div className="flex gap-x-2 items-center">
                     <img className="w-[20px]" src={Block} alt="active Icon" />
-                    Inactive Users
+                    Inactive Clients
                   </div>
                 </Link>
               </li>
               <li>
                 <Link
-                  onClick={() => setPageHeading("Delete Users")}
+                  onClick={() => setPageHeading("Deleted Clients")}
                   to={"/Delete-Users"}
                   className="flex justify-center py-2 border shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded text-[#828282] bg-transparent cursor-pointer"
                 >
@@ -189,7 +202,7 @@ const AllUsers = () => {
                   className="bg-transparent text-black border h-[50px] lg:w-[300px] md:w-[300px] w-[230px] rounded ps-3"
                   placeholder="Search"
                 />
-                <button onClick={()=>setSort(!sort)} className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
+                <button  onClick={handleSort} className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
                   <img src={sort? ztoa:atoz} className="w-[22px]" alt="" />
                 </button>
               </div>
@@ -213,7 +226,7 @@ const AllUsers = () => {
                   <tr>
                     <th className="px-0">
                       <p className="py-3 text-start ps-8 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 me-12 shadow-md">
-                        <span className="">User Details</span>
+                        <span className="">Client Details</span>
                       </p>
                     </th>
                     <th className="px-0">
@@ -283,9 +296,9 @@ const AllUsers = () => {
                                 Active
                               </button>
                                 <button
-                                
+                                onClick={function(){ setUserId({id:data.id,type:"Active"}),setOpenActiveUser(true)}}
                                 className="px-3 py-3 text-[#ff2f16] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
-                                onClick={()=>setOpenDelUser(true)}
+                              
                               >
                                 <img
                                   src={delRed}
@@ -310,7 +323,7 @@ const AllUsers = () => {
                               <button
                                 
                                 className="px-3 py-3 text-[#ff2f16] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
-                                onClick={()=>setOpenDelUser(true)}
+                                onClick={function(){setOpenDelUser(true),setUserId({id:data.id,type:"Active"})}}
                               >
                                 <img
                                   src={delRed}

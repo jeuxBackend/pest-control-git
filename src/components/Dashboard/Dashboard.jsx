@@ -65,7 +65,7 @@ function Dashboard() {
         <div className="overViews flex flex-wrap w-full mt-4">
           <div className="p-2 lg:w-1/3 md:w-1/3 w-full">
             <div className="rounded-xl bg-white border shadow-md px-5 py-10">
-              <p className="text-3xl text-[#c90000] font-semibold">All Users</p>
+              <p className="text-3xl text-[#c90000] font-semibold">All Clients</p>
               <p className="text-4xl mt-3 font-semibold text-[#003a5f]">
                 {dataDashboard.allUsers}
               </p>

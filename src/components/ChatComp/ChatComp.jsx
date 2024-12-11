@@ -53,7 +53,7 @@ function ChatComp() {
   useEffect(() => {
     const q = query(
       collection(db, "messages"),
-      where("chatId", "==", chatId),
+      where("chatId", "==", chatId.toString()),
       orderBy("timestamp", "asc")
     );
 
@@ -66,7 +66,7 @@ function ChatComp() {
     });
 
     return unsubscribe;
-  }, [chatId]);
+  }, [chatId.toString()]);
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -152,49 +152,60 @@ function ChatComp() {
       alert("Please enter a message.");
       return;
     }
-
+  
     try {
+      // Add the new message to the "messages" collection
       await addDoc(collection(db, "messages"), {
         message: newMessage,
         timestamp: new Date().getTime(),
-        user: "Admin",
-        senderID: "1",
-        receiverID: chatId,
+        user: "Admin", // Replace with actual user type
+        senderID: "1", // Replace with actual sender ID
+        receiverID: chatId.toString(),
         messageType: "text",
-        chatId: chatId,
+        chatId: chatId.toString(),
       });
-
+  
       const conversationRef = collection(db, "conversations");
-      const q = query(conversationRef, where("chatId", "==", chatId));
+      const q = query(conversationRef, where("chatId", "==", chatId.toString()));
       const querySnapshot = await getDocs(q);
-
+  
       if (!querySnapshot.empty) {
+        // Conversation exists, update it
         querySnapshot.forEach(async (docSnap) => {
           const conversationDoc = doc(db, "conversations", docSnap.id);
           await updateDoc(conversationDoc, {
             lastMessage: newMessage,
             lastTimestamp: new Date().getTime(),
             seen: true,
+            user_type: role, 
+            profilepic_url: user.profile_pic, 
+            name: user.name, 
           });
         });
       } else {
+        // Conversation doesn't exist, create a new one
         await addDoc(conversationRef, {
-          adminID: "1",
-          senderID: "1",
-          receiverID: chatId,
-          chatId: chatId,
+          adminID: "1", 
+          senderID: "1", 
+          receiverID: chatId.toString(),
+          chatId: chatId.toString(),
           lastMessage: newMessage,
           lastTimestamp: new Date().getTime(),
+          seen: false,
+          user_type: role, 
+          profilepic_url: user.profile_pic, 
+          name: user.name, 
         });
       }
-
-      // sendNotification(firebaseToken, "Hello!", "This is a test notification.");
+  
+      // Clear the message input after sending
       setNewMessage("");
-      handleSubmit()
+      handleSubmit(); // Trigger notification sending
     } catch (error) {
       console.error("Error sending message:", error);
     }
   };
+  
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
@@ -368,7 +379,7 @@ function ChatComp() {
           </div>
         </div>
 
-        {messages.length>0 ? (
+        {chatId ? (
           <div className="w-full lg:w-3/4 h-[88vh] rounded border bg-[#fefefe]">
             <div className="px-2 py-3 border-b-2 border-dashed flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -442,7 +453,7 @@ function ChatComp() {
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  className="text-black w-full h-full border-none outline-none"
+                  className="text-black w-full h-full border-none outline-none bg-transparent"
                 />
                 <img
                   src={sendmsg}

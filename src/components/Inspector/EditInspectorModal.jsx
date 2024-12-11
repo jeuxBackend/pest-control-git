@@ -16,6 +16,7 @@ function EditInspectorModal() {
   } = useMyContext();
   const [profile, setProfile] = useState();
   const [name, setName] = useState("");
+  const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
@@ -44,6 +45,7 @@ function EditInspectorModal() {
   useEffect(() => {
     if (inspectorData) {
       setName(inspectorData.name ? inspectorData.name : "");
+      setUserName(inspectorData.user_name ? inspectorData.user_name : "");
       setEmail(inspectorData.email ? inspectorData.email : "");
 
       if (inspectorData.inspector) {
@@ -178,15 +180,16 @@ function EditInspectorModal() {
                   />
                 </div>
               </div>
-              <div className=" w-[100%]">
+              {/* <div className=" w-[100%]">
                   <p className="mb-1 font-medium">User Name</p>
                   <input
                     type="text"
-                    onChange={(e) => setName(e.target.value)}
+                    value={userName}
+                    onChange={(e) => setUserName(e.target.value)}
                     placeholder="User Name"
                     className="w-full py-3 px-4 rounded-xl border shadow-sm"
                   />
-                </div>
+                </div> */}
               <div className="flex gap-3 lg:gap-8 lg:flex-row flex-col">
                 <div className="lg:w-[50%] w-[100%]">
                   <p className="mb-1 font-medium">Full Name</p>

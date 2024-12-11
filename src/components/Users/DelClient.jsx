@@ -5,9 +5,38 @@ import DeleteImage from "./assets/delete-image.png";
 import axiosInstance from "../../axiosInstance/axioisInstance";
 
 function DelClient() {
-    const { openDeleteInspector, setOpenDeleteInspector, inspectorId, setInspectorId, setToaster,setOpenDelUser } = useMyContext();
+    const { userId,setOpenDelUser } = useMyContext();
 
-    console.log(inspectorId)
+    console.log(userId);
+    const notify =(e)=> toast.success(e)
+
+    const [loading, setLoading]=useState(false)
+
+    const handleSubmit = async ()=>{
+      setLoading(true)
+  
+      try{
+        const response = await axiosInstance.post("admin/delete-inspector",{
+          user_id:userId?.id
+        })
+        if(response.data){
+          notify('Client deleted')
+           console.log(response.data);
+           setOpenDelUser(false)
+        }
+      }
+      catch(error){
+      
+         if(error.response){
+          console.log(error.response);
+         }
+         else{
+          console.log(error);
+         }
+      }finally{
+        setLoading(false)
+      };
+    }
   
    
   
@@ -36,8 +65,8 @@ function DelClient() {
                 >
                   Cancel
                 </button>
-                <button  className="w-[60%] sm:w-[35%] md:w-[40%] py-3 rounded shadow-sm font-semibold bg-[#c90000] text-white">
-                  Delete
+                <button onClick={handleSubmit}  className="w-[60%] sm:w-[35%] md:w-[40%] py-3 rounded shadow-sm font-semibold bg-[#c90000] text-white">
+                  {loading?"Loading...":"Delete"}
                 </button>
               </div>
             {/* </form> */}

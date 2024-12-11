@@ -10,7 +10,7 @@ function PestDetail() {
         setPageHeading,
         setOpenOrderDetail,
         activeOrderId,
-        setActiveOrderId, pestDetails, setPestDetails
+        setActiveOrderId, pestDetails, setPestDetails,pestDescription, pestName
       } = useMyContext();
       const [order, setOrder] = useState({});
       const [orderUserName, setOrderUserName] = useState({});
@@ -33,7 +33,7 @@ function PestDetail() {
                     Pest Name:
                   </p>
                   <p className="text-lg font-semibold">
-                  Colorado potato beetle
+                  {pestName?pestName:""}
                   </p>
                   
                 </div>
@@ -42,8 +42,7 @@ function PestDetail() {
                     Description:
                   </p>
                   <p className="text-lg font-semibold">
-                  When it comes to professional flea control, it’s all about a comprehensive approach. Professionals tackle the problem by treating both your pets and their environments. 
-This includes applying pet-safe treatments and using products to target fleas hiding in carpets, furniture, and bedding. Regular professional cleanings and the use of specialized products can keep those pesky fleas at bay for good.
+                  {pestDescription?pestDescription:""}
 
                   </p>
                   

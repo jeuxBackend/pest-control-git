@@ -3,13 +3,15 @@ import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
 
 function EditPestModal() {
-  const { openEditPest, setOpenEditPest, pestId, setPestId, pestName, setPestToast } =
+  const { openEditPest, setOpenEditPest, pestId, setPestId, pestName, setPestToast,pestDescription, setPestDescription } =
     useMyContext();
     const [name, setName] = useState("");
+    const [description, setDescription] = useState("");
     useEffect(() => {
       console.log("pestName:", pestName);
       setName(pestName);
-  }, [pestName]);
+      setDescription(pestDescription?pestDescription:"");
+  }, [pestName,pestDescription]);
 
 
   const handleSubmit = async (e) => {
@@ -17,7 +19,8 @@ function EditPestModal() {
     try {
         const response = await axiosInstance.post("update-pest-types", {
             id: pestId,
-            title: name
+            title: name,
+            description: description
         });
         if (response.data) {
           setPestToast(5);
@@ -45,7 +48,7 @@ function EditPestModal() {
             onSubmit={handleSubmit}
             className="w-full p-6 flex flex-col gap-3"
           >
-            <div className="flex gap-3 lg:gap-8 lg:flex-row flex-col">
+            <div className="flex gap-3  flex-col">
               <div className="lg:w-[100%] w-[100%]">
                 <p className="mb-1 font-medium">Pest Name</p>
                 <input
@@ -53,6 +56,16 @@ function EditPestModal() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Full Name"
+                  className="w-full py-3 px-4 rounded-xl border shadow-sm"
+                />
+              </div>
+              <div className="lg:w-[100%] w-[100%]">
+                <p className="mb-1 font-medium">Description</p>
+                <textarea
+                  rows={5}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Description"
                   className="w-full py-3 px-4 rounded-xl border shadow-sm"
                 />
               </div>

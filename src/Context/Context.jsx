@@ -79,7 +79,9 @@ export const MyContextProvider = ({ children }) => {
   const [inspectorData, setInspectorData] = useState({});
   const [pestId, setPestId] = useState("");
   const [pestName, setPestName] = useState("");
+  const [pestDescription, setPestDescription] = useState("");
   const [treatmentName, setTreatmentName] = useState("");
+  const [treatmentDescription, setTreatmentDescription] = useState("");
   const [treatmentId, setTreatmentId] = useState("");
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
   const [openActiveUser, setOpenActiveUser] = useState(false);
@@ -93,6 +95,15 @@ export const MyContextProvider = ({ children }) => {
   const [pestDetails, setPestDetails] = useState(false);
   const [treatmentDetails, setTreatmentDetails] = useState(false);
   const [sendMessage, setSendMessage] = useState(false);
+  const [selectChat, setSelectChat] = useState(() => {
+    const savedselectChat = localStorage.getItem("selectChat");
+    return savedselectChat ? JSON.parse(savedselectChat) : "";
+  });
+  useEffect(() => {
+    if (chatId !== null) {
+      localStorage.setItem("selectChat", JSON.stringify(chatId));
+    }
+  }, [chatId]);
 
   return (
     <MyContext.Provider
@@ -164,7 +175,7 @@ export const MyContextProvider = ({ children }) => {
         chatId, setChatID,
         openActiveUser, setOpenActiveUser,
         userId, setUserId,
-        openDelUser, setOpenDelUser,delTechnician, setDelTechnician,pestDetails, setPestDetails,treatmentDetails, setTreatmentDetails,sendMessage, setSendMessage
+        openDelUser, setOpenDelUser,delTechnician, setDelTechnician,pestDetails, setPestDetails,treatmentDetails, setTreatmentDetails,sendMessage, setSendMessage,pestDescription, setPestDescription,treatmentDescription, setTreatmentDescription
       }}
     >
       {children}

@@ -120,7 +120,7 @@ function Orders() {
                 </li>
                 <li>
                   <Link
-                    onClick={() => setPageHeading("Orders History")}
+                    onClick={() => setPageHeading("Completed")}
                     to={"/Orders-History"}
                     className="flex justify-center py-2 font-semibold w-[100px] h-[40px] text-[#000000] cursor-pointer"
                   >

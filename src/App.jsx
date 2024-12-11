@@ -167,7 +167,7 @@ function App() {
           <Route path="/Active-Users" element={<ActiveUsers />} />
           <Route path="/Inactive-Users" element={<BlockUsers />} />
           <Route path="/Delete-Users" element={<DeleteUsers />} />
-          <Route path="/Inspector" element={<Inspector />} />
+          <Route path="/Technician" element={<Inspector />} />
           <Route path="/Orders" element={<Orders />} />
           <Route path="/Orders-History" element={<OrdersHistory />} />
           <Route path="/Orders-Detail" element={<OrdersDetail />} />

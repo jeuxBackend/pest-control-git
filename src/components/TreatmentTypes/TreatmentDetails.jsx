@@ -10,7 +10,7 @@ function TreatmentDetails() {
         setPageHeading,
         setOpenOrderDetail,
         activeOrderId,
-        setActiveOrderId, treatmentDetails, setTreatmentDetails
+        setActiveOrderId, treatmentDetails, setTreatmentDetails,treatmentDescription, setTreatmentDescription,treatmentName
       } = useMyContext();
       const [order, setOrder] = useState({});
       const [orderUserName, setOrderUserName] = useState({});
@@ -30,10 +30,10 @@ function TreatmentDetails() {
               <div className="w-full p-6 flex flex-col gap-3">
                 <div className="">
                   <p className="text-lg opacity-50">
-                    Pest Name:
+                    Treatment Name:
                   </p>
                   <p className="text-lg font-semibold">
-                  Pyrethroids
+                  {treatmentName?treatmentName:""}
                   </p>
                   
                 </div>
@@ -42,11 +42,7 @@ function TreatmentDetails() {
                     Description:
                   </p>
                   <p className="text-lg font-semibold">
-                  A lab-manufactured chemical that can kill
-mosquitoes, houseflies, and
-cockroaches. A manufactured chemical that can kill
-mosquitoes, houseflies, and
-cockroaches.
+                 {treatmentDescription?treatmentDescription:""}
 
                   </p>
                   

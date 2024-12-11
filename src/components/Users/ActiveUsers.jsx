@@ -20,7 +20,7 @@ import atoz from "/atoz.svg"
 import ztoa from "/ztoa.svg"
 
 const ActiveUsers = () => {
-  const { pageHeading, setPageHeading,userId, setUserId,setOpenActiveUser,setOpenDelUser } = useMyContext();
+  const { pageHeading, setPageHeading,userId, setUserId,setOpenActiveUser,setOpenDelUser,openDelUser, openActiveUser } = useMyContext();
   const [activeUser, setActiveUser] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -53,6 +53,9 @@ const ActiveUsers = () => {
   useEffect(() => {
     getActiveUsers();
   }, []);
+  useEffect(() => {
+    getActiveUsers();
+  }, [openDelUser, openActiveUser]);
 
   const changeUserStatus = async (changeStatus) => {
     try {
@@ -75,6 +78,20 @@ const ActiveUsers = () => {
   };
 
   // search code start
+
+  const handleSort = () => {
+    const sortedUsers = [...activeUser].sort((a, b) => {
+      if (sort) {
+        return b.name.localeCompare(a.name); 
+      } else {
+        return a.name.localeCompare(b.name); 
+      }
+    });
+    setActiveUser(sortedUsers);
+    setSort(!sort);
+  };
+
+
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -146,26 +163,26 @@ const ActiveUsers = () => {
                       src={ActiveColorWhite}
                       alt="active Icon"
                     />
-                    Active Users
+                    Active Clients
                   </div>
                 </a>
               </li>
               <li>
                 <Link
                   to={"/Inactive-Users"}
-                  onClick={() => setPageHeading("Inactive Users")}
+                  onClick={() => setPageHeading("Inactive Clients")}
                   className="flex justify-center py-2 border shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded text-[#828282] bg-transparent cursor-pointer"
                 >
                   <div className="flex gap-x-2 items-center">
                     <img className="w-[20px]" src={Block} alt="active Icon" />
-                    Inactive Users
+                    Inactive Clients
                   </div>
                 </Link>
               </li>
               <li>
                 <Link
                   to={"/Delete-Users"}
-                  onClick={() => setPageHeading("Delete Users")}
+                  onClick={() => setPageHeading("Deleted Clients")}
                   className="flex justify-center py-2 border shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded text-[#828282] bg-transparent cursor-pointer"
                 >
                   <div className="flex gap-x-2 items-center">
@@ -186,7 +203,7 @@ const ActiveUsers = () => {
                   className="bg-transparent text-black border h-[50px] lg:w-[300px] md:w-[300px] w-[230px] rounded ps-3"
                   placeholder="Search"
                 />
-                <button onClick={()=>setSort(!sort)} className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
+                <button onClick={handleSort} className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
                   <img src={sort? ztoa:atoz} className="w-[22px]" alt="" />
                 </button>
               </div>
@@ -211,7 +228,7 @@ const ActiveUsers = () => {
                   <tr>
                     <th className="px-0">
                       <p className="py-3 text-start ps-8 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 me-12 shadow-md">
-                        <span className="">User Details</span>
+                        <span className="">Client Details</span>
                       </p>
                     </th>
                     <th className="px-0">
@@ -282,7 +299,7 @@ const ActiveUsers = () => {
                             <button
                              
                               className="px-3 py-3 text-[#ff2f16] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
-                              onClick={()=>setOpenDelUser(true)}
+                              onClick={function(){setOpenDelUser(true),setUserId({id:data.id,type:"Active"})}}
                             >
                               <img
                                 src={delRed}

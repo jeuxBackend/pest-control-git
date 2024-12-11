@@ -27,7 +27,7 @@ function PestsTypes() {
     openEditTreatment,
     openDeleteTreatment,
     treatmentToast,
-    setTreatmentToast,setDelTechnician,delTechnician,treatmentDetails, setTreatmentDetails
+    setTreatmentToast,setDelTechnician,delTechnician,treatmentDetails, setTreatmentDetails,treatmentDescription, setTreatmentDescription
   } = useMyContext();
 
   const [allTreatments, setAllTreatments] = useState([]);
@@ -36,22 +36,44 @@ function PestsTypes() {
   const [filteredOrder, setFilteredOrders] = useState([]);
   const [sort, setSort] = useState(false);
   const getAllTreatments = async () => {
+    if(delTechnician===false){
     try {
       setLoading(true); 
       const response = await axiosInstance.get("get-all-treatment-types");
       if (response.data) {
         console.log(response.data);
-        setAllTreatments(response.data.treatmentTypes);
+        setAllTreatments(response?.data?.treatmentTypes);
       }
     } catch (error) {
       if (error.response) {
         console.log(error.response);
+        setAllTreatments([])
       } else {
         console.log(error);
       }
     } finally {
       setLoading(false); 
     }
+  }if(delTechnician){
+    try {
+      setLoading(true); 
+      const response = await axiosInstance.get("admin/showDeleteTreatment");
+      if (response.data) {
+        console.log(response.data);
+        setAllTreatments(response?.data?.treatment);
+      }
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response);
+        setAllTreatments([])
+      } else {
+        console.log(error);
+      }
+    } finally {
+      setLoading(false); 
+    }
+
+  }
   };
 
   useEffect(() => {
@@ -60,7 +82,7 @@ function PestsTypes() {
   
   useEffect(() => {
     getAllTreatments();
-  }, [openAddTreatment]);
+  }, [openAddTreatment,delTechnician]);
 
   useEffect(() => {
     getAllTreatments();
@@ -99,11 +121,23 @@ function PestsTypes() {
     }
   }, [treatmentToast]);
 
+  const handleSort = () => {
+    const sortedUsers = [...allTreatments].sort((a, b) => {
+      if (sort) {
+        return b.title.localeCompare(a.title); 
+      } else {
+        return a.title.localeCompare(b.title); 
+      }
+    });
+    setAllTreatments(sortedUsers);
+    setSort(!sort);
+  };
+
   
 
   useEffect(() => {
     let filteredOrders = searchQuery && searchQuery.trim() !== "" 
-      ? allTreatments.filter((order) =>
+      ? allTreatments?.filter((order) =>
           order.user.name.toLowerCase().includes(searchQuery.toLowerCase())
         )
       : allTreatments; 
@@ -132,7 +166,7 @@ function PestsTypes() {
             <div className="flex flex-wrap gap-3">
               <button
                 onClick={() => setOpenAddTreatment(true)}
-                className="w-[180px] h-[50px] flex justify-center gap-2 items-center bg-[#003a5f] text-white text-lg font-semibold shadow-sm rounded"
+                className={`w-[180px] h-[50px] flex justify-center gap-2 items-center bg-[#003a5f] text-white text-lg font-semibold shadow-sm rounded ${delTechnician?"hidden":""}`}
               >
                 <img src={Add} className="w-[15px]" alt="" />
                 Add Treatment
@@ -145,7 +179,7 @@ function PestsTypes() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
-                <button onClick={()=>setSort(!sort)} className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
+                <button onClick={handleSort} className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
                 <img src={sort? ztoa:atoz} className="w-[22px]" alt="" />
                 </button>
               </div>
@@ -178,7 +212,7 @@ function PestsTypes() {
                 </thead>
                 <tbody className="text-gray-700">
                   {Array.isArray(allTreatments) && allTreatments.length > 0 ? (
-                    filteredOrder.map((data, index) => (
+                    filteredOrder?.map((data, index) => (
                       <tr key={index} className="">
                         <td className="py-3 border-b border-r">
                           <div className="flex items-center justify-start ps-6 gap-x-3">
@@ -194,6 +228,7 @@ function PestsTypes() {
                                 setOpenEditTreatment(true);
                                 setTreatmentId(data.id);
                                 setTreatmentName(data.title);
+                                setTreatmentDescription(data.description);
                               }}
                             >
                               <img src={Edit} className="w-[30px]" alt="" />
@@ -202,6 +237,7 @@ function PestsTypes() {
                               onClick={function () {
                                 setTreatmentId(data.id);
                                 setOpenDeleteTreatment(true);
+                                
                               }}
                             >
                               <img src={Delete} className="w-[30px]" alt="" />
@@ -210,6 +246,8 @@ function PestsTypes() {
                               onClick={function () {
                            
                                 setTreatmentDetails(true);
+                                setTreatmentName(data.title);
+                                setTreatmentDescription(data.description);
                               }}
                             >
                               <img src={eye} className="w-[30px]" alt="" />

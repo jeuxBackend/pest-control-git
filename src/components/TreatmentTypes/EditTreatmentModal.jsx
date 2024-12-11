@@ -3,11 +3,14 @@ import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
 
 function EditTreatmentModal() {
-  const { openEditTreatment, setOpenEditTreatment, treatmentName, setTreatmentName, treatmentId, setTreatmentId, setTreatmentToast } = useMyContext();
+  const { openEditTreatment, setOpenEditTreatment, treatmentName, setTreatmentName, treatmentId, setTreatmentId, setTreatmentToast,treatmentDescription, setTreatmentDescription } = useMyContext();
   const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   useEffect(() => {
     setName(treatmentName);
-  }, [treatmentName]);
+    setDescription(treatmentDescription?treatmentDescription:"");  
+    
+  }, [treatmentName,treatmentDescription]);
 
 
   const handleSubmit = async (e) => {
@@ -15,7 +18,8 @@ function EditTreatmentModal() {
     try {
         const response = await axiosInstance.post("update-treatment-types", {
             id: treatmentId,
-            title: name
+            title: name,
+            description: description
         });
         if (response.data) {
           setTreatmentToast(5);
@@ -60,9 +64,9 @@ function EditTreatmentModal() {
                 <p className="mb-1 font-medium">Description</p>
                 <textarea
                 
-                  value={name}
-                  // onChange={(e) => setName(e.target.value)}
-                  placeholder="Treat description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Treatment description"
                   rows={5}
                   className="w-full py-3 px-4 rounded-xl border shadow-sm"
                 />
