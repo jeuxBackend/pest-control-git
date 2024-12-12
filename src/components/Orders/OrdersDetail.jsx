@@ -9,7 +9,7 @@ function OrdersDetail() {
   const [orderDetail, setOrderDetail] = useState({});
   const [images, setImagesState] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
 
   const mainImage = images[0];
   const additionalImages = images.slice(1);
@@ -18,8 +18,6 @@ function OrdersDetail() {
     setImages(additionalImages);
   };
 
-
-  
   const getOrderDetail = async (id) => {
     try {
       setLoading(true);
@@ -27,7 +25,7 @@ function OrdersDetail() {
       if (response.data) {
         console.log(response.data);
         setOrderDetail(response.data.report);
-        setName(response.data.report.order.user.name)
+        setName(response.data.report.order.user.name);
 
         // const imageUrls = response.data.report.report_imgs.map(
         //   (img) => img.report_imgs
@@ -53,40 +51,36 @@ function OrdersDetail() {
     // e.preventDefault();
     setLoading(true);
     try {
-        const response = await axiosInstance.post("reportPdf", {
-            order_id: id,
-         
-        });
-        if (response.data) {
-          // console.log(response.data)
-          
-      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const response = await axiosInstance.post("reportPdf", {
+        order_id: id,
+      });
+      if (response.data) {
+        // console.log(response.data)
 
-     
-      const url = window.URL.createObjectURL(blob);
+        const blob = new Blob([response.data], { type: "application/pdf" });
 
-      
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'report.pdf'; 
-      document.body.appendChild(link);
-      link.click();
+        const url = window.URL.createObjectURL(blob);
 
-    
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-        }
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "report.pdf";
+        document.body.appendChild(link);
+        link.click();
+
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      }
     } catch (error) {
-        if (error.response) {
-          // setTreatmentToast(6);
-            console.log(error);
-        } else {
-            console.log(error);
-        }
-    }finally{
-      setLoading(false)
+      if (error.response) {
+        // setTreatmentToast(6);
+        console.log(error);
+      } else {
+        console.log(error);
+      }
+    } finally {
+      setLoading(false);
     }
-}
+  };
 
   return (
     <div className="w-full h-full min-h-screen bg-[#fafafa]">
@@ -104,29 +98,30 @@ function OrdersDetail() {
           <div className="w-full pb-2">
             <div className="border shadow-sm rounded-lg p-2">
               <div className="flex items-center justify-between">
-              <div>
-              <div className="">
-                <span className="text-[#bdbcc1]">Client Name: </span>
-                <span className="font-semibold capitalize">{name}</span>
+                <div>
+                  <div className="">
+                    <span className="text-[#bdbcc1]">Client Name: </span>
+                    <span className="font-semibold capitalize">{name}</span>
+                  </div>
+                  <div className="">
+                    <span className="text-[#bdbcc1]">Date: </span>
+                    <span className="font-semibold">{orderDetail.date}</span>
+                  </div>
+                  <div className="pb-5">
+                    <span className="text-[#bdbcc1]">Location: </span>
+                    <span className="font-semibold">
+                      {orderDetail.location}
+                    </span>
+                  </div>
+                </div>
+                <button
+                  onClick={() => handleSubmit(orderDetail.id)}
+                  className="w-[180px] h-[50px] flex justify-center gap-2 items-center bg-[#003a5f] text-white text-lg font-semibold shadow-sm rounded"
+                >
+                  Share Report
+                </button>
               </div>
-              <div className="">
-                <span className="text-[#bdbcc1]">Date: </span>
-                <span className="font-semibold">{orderDetail.date}</span>
-              </div>
-              <div className="pb-5">
-                <span className="text-[#bdbcc1]">Location: </span>
-                <span className="font-semibold">{orderDetail.location}</span>
-              </div>
-              </div>
-              <button
-                onClick={() => handleSubmit(orderDetail.id)}
-                className="w-[180px] h-[50px] flex justify-center gap-2 items-center bg-[#003a5f] text-white text-lg font-semibold shadow-sm rounded"
-              >
-         
-                Share Report
-              </button>
-              </div>
-             
+
               <div className="photo-gallery lg:flex gap-x-3">
                 {mainImage && (
                   <img
@@ -159,9 +154,7 @@ function OrdersDetail() {
                 <p className="text-black text-xl font-semibold">Description:</p>
                 <p className="text-black">{orderDetail.description}</p>
               </div>
-              <div className="w-full flex items-center justify-center my-4">
-             
-              </div>
+              <div className="w-full flex items-center justify-center my-4"></div>
             </div>
           </div>
         </div>

@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
+import toast from "react-hot-toast";
+
 
 function AddPestModal() {
   const { openAddPest, setOpenAddPest, setPestToast } = useMyContext();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const notifyError = (e)=> toast.error(e)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,12 +22,15 @@ function AddPestModal() {
         console.log(response.data);
         setOpenAddPest(false);
         setName("");
+        setDescription("");
       }
     } catch (error) {
       if (error.response) {
-        setPestToast(2);
+        // setPestToast(2);
+        notifyError(error?.response?.data?.errors?.title)
         console.log(error.response);
       } else {
+        notifyError(error?.response?.data?.errors)
         console.log(error);
       }
     }

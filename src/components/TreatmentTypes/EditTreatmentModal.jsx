@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
+import toast from "react-hot-toast";
 
 function EditTreatmentModal() {
   const { openEditTreatment, setOpenEditTreatment, treatmentName, setTreatmentName, treatmentId, setTreatmentId, setTreatmentToast,treatmentDescription, setTreatmentDescription } = useMyContext();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const notifyError = (e)=> toast.error(e)
+
   useEffect(() => {
     setName(treatmentName);
     setDescription(treatmentDescription?treatmentDescription:"");  
@@ -28,7 +31,9 @@ function EditTreatmentModal() {
         }
     } catch (error) {
         if (error.response) {
-          setTreatmentToast(6);
+          // setTreatmentToast(6);
+          notifyError(error?.response?.data?.errors?.title)
+
             console.log(error.response);
         } else {
             console.log(error);

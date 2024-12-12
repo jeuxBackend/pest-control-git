@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Oval, TailSpin } from "react-loader-spinner";
 import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
+import toast from "react-hot-toast";
 
 function AddInspectorModal() {
   const { openAddInspector, setOpenAddInspector, setToaster } = useMyContext();
@@ -15,6 +16,8 @@ function AddInspectorModal() {
   const [expireDate, setExpireDate] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [imagevoucher, setImageVoucher] = useState(null);
+
+  const notifyError = (e) => toast.error(e);
 
   const handleImageChangeVoucher = (e) => {
     const file = e.target.files[0];
@@ -38,37 +41,46 @@ function AddInspectorModal() {
     if (!imagevoucher) {
       alert("Please upload an image.");
       return;
-    }else{
-    try {
-      setIsLoading(true)
-      const response = await axiosInstance.post("admin/add-inspector", {
-        name: name,
-        user_name: userName,
-        email: email,
-        number: phone,
-        password: password,
-        profile_pic: profile,
-        license_date: licenseDate,
-        expire_date: expireDate,
-      });
-      if (response.data) {
-        setToaster(1);
-        console.log(response.data);
-        setOpenAddInspector(false);
+    } else {
+      try {
+        setIsLoading(true);
+        const response = await axiosInstance.post("admin/add-inspector", {
+          name: name,
+          user_name: userName,
+          email: email,
+          number: phone,
+          password: password,
+          profile_pic: profile,
+          license_date: licenseDate,
+          expire_date: expireDate,
+        });
+        if (response.data) {
+          setToaster(1);
+          console.log(response.data);
+          setOpenAddInspector(false);
+          setName("");
+          setUserName("");
+          setEmail("");
+          setPassword("");
+          setPhone("");
+          setLicenseDate("");
+          setExpireDate("");
+        }
+      } catch (error) {
+        if (error.response) {
+          // setToaster(2);
+          notifyError(error?.response?.data?.errors);
+          console.log(error.response);
+          setImageVoucher(null);
+        } else {
+          console.log(error);
+          notifyError(error?.response?.data?.errors);
+        }
+      } finally {
+        setIsLoading(false);
+        setImageVoucher(null);
+        setProfile(null);
       }
-    } catch (error) {
-      if (error.response) {
-        setToaster(2);
-        console.log(error.response);
-        setImageVoucher(null)
-      } else {
-        console.log(error);
-      }
-    } finally {
-      setIsLoading(false);
-      setImageVoucher(null)
-      setProfile(null)
-    }
     }
   };
 
@@ -82,11 +94,11 @@ function AddInspectorModal() {
           {isLoading ? (
             <div className="flex items-center justify-center h-[40vh] w-[60%] sm:w-[35%] md:w-[40%] py-3 rounded  bg-[#white] text-white">
               <TailSpin
-              height={50}
-              width={50}
-              color="#0066a5"
-              ariaLabel="loading"
-            />
+                height={50}
+                width={50}
+                color="#0066a5"
+                ariaLabel="loading"
+              />
             </div>
           ) : (
             <form
@@ -137,19 +149,21 @@ function AddInspectorModal() {
                 </div>
               </div>
               <div className=" w-[100%]">
-                  <p className="mb-1 font-medium">User Name</p>
-                  <input
-                    type="text"
-                    onChange={(e) => setUserName(e.target.value)}
-                    placeholder="User Name"
-                    className="w-full py-3 px-4 rounded-xl border shadow-sm"
-                  />
-                </div>
+                <p className="mb-1 font-medium">User Name</p>
+                <input
+                  type="text"
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                  placeholder="User Name"
+                  className="w-full py-3 px-4 rounded-xl border shadow-sm"
+                />
+              </div>
               <div className="flex gap-3 lg:gap-8 lg:flex-row flex-col">
                 <div className="lg:w-[50%] w-[100%]">
                   <p className="mb-1 font-medium">Full Name</p>
                   <input
                     type="text"
+                    value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Full Name"
                     className="w-full py-3 px-4 rounded-xl border shadow-sm"
@@ -158,6 +172,7 @@ function AddInspectorModal() {
                 <div className="lg:w-[50%] w-[100%]">
                   <p className="mb-1 font-medium">Email Address</p>
                   <input
+                  value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     type="text"
                     placeholder="Email Address"
@@ -169,6 +184,7 @@ function AddInspectorModal() {
                 <div className="lg:w-[50%] w-[100%]">
                   <p className="mb-1 font-medium">Password</p>
                   <input
+                  value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     type="text"
                     placeholder="Password"
@@ -179,6 +195,7 @@ function AddInspectorModal() {
                   <p className="mb-1 font-medium">Phone Number</p>
                   <input
                     type="text"
+                    value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="Phone Number"
                     className="w-full py-3 px-4 rounded-xl border shadow-sm"
@@ -189,6 +206,7 @@ function AddInspectorModal() {
                 <div className="lg:w-[50%] w-[100%]">
                   <p className="mb-1 font-medium">License Date</p>
                   <input
+                  value={licenseDate}
                     onChange={(e) => setLicenseDate(e.target.value)}
                     type="date"
                     placeholder="License Date"
@@ -198,6 +216,7 @@ function AddInspectorModal() {
                 <div className="lg:w-[50%] w-[100%]">
                   <p className="mb-1 font-medium">Expire Date</p>
                   <input
+                  value={expireDate}
                     onChange={(e) => setExpireDate(e.target.value)}
                     type="date"
                     placeholder="License Expire Date"

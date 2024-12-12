@@ -38,7 +38,11 @@ function ActiveClient() {
               <img src={bg} className="w-[90px] absolute top-2 left-2" alt="" />
            
             <div className="text-center w-full">
-              <p className="text-3xl text-[#003a5f] font-bold">Active Client</p>
+              <p className="text-3xl text-[#003a5f] font-bold"> {
+                  userId?.type === 'block'
+                   ? "Active Client"
+                    : "Inactive Client"
+                } </p>
             </div>
             <div className="flex justify-center px-10 border-b-2 w-full pb-4 border-dashed">
               <p className="text-[#89959a] w-full text-center text-lg font-[500]">

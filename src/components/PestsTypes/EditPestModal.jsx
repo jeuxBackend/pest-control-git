@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
+import toast from "react-hot-toast";
+
 
 function EditPestModal() {
   const { openEditPest, setOpenEditPest, pestId, setPestId, pestName, setPestToast,pestDescription, setPestDescription } =
     useMyContext();
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
+    const notifyError = (e)=> toast.error(e)
+
+
     useEffect(() => {
       console.log("pestName:", pestName);
       setName(pestName);
@@ -29,7 +34,8 @@ function EditPestModal() {
         }
     } catch (error) {
         if (error.response) {
-          setPestToast(6);
+          // setPestToast(6);
+          notifyError(error?.response?.data?.errors?.title)
             console.log(error.response);
         } else {
             console.log(error);

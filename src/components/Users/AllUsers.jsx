@@ -15,13 +15,22 @@ import UserPic3 from "./assets/user-pic3.png";
 import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
 import { TailSpin } from "react-loader-spinner";
-import del from "./assets/del.svg"
-import delRed from "./assets/del-red.svg"
-import atoz from "/atoz.svg"
-import ztoa from "/ztoa.svg"
+import del from "./assets/del.svg";
+import delRed from "./assets/del-red.svg";
+import atoz from "/atoz.svg";
+import ztoa from "/ztoa.svg";
 
 const AllUsers = () => {
-  const { pageHeading, setPageHeading,openActiveUser, setOpenActiveUser,userId, setUserId,openDelUser, setOpenDelUser } = useMyContext();
+  const {
+    pageHeading,
+    setPageHeading,
+    openActiveUser,
+    setOpenActiveUser,
+    userId,
+    setUserId,
+    openDelUser,
+    setOpenDelUser,
+  } = useMyContext();
   const [allUser, setAllUser] = useState([]);
   const [changeStatus, setChangeStatus] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -56,7 +65,7 @@ const AllUsers = () => {
   }, []);
   useEffect(() => {
     getAllUsers();
-  }, [openActiveUser,openDelUser]);
+  }, [openActiveUser, openDelUser]);
 
   const changeUserStatus = async (changeStatus) => {
     try {
@@ -78,19 +87,17 @@ const AllUsers = () => {
     }
   };
 
-  
   const handleSort = () => {
     const sortedUsers = [...allUser].sort((a, b) => {
       if (sort) {
-        return b.name.localeCompare(a.name); 
+        return b.name.localeCompare(a.name);
       } else {
-        return a.name.localeCompare(b.name); 
+        return a.name.localeCompare(b.name);
       }
     });
     setAllUser(sortedUsers);
     setSort(!sort);
   };
-
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -202,8 +209,11 @@ const AllUsers = () => {
                   className="bg-transparent text-black border h-[50px] lg:w-[300px] md:w-[300px] w-[230px] rounded ps-3"
                   placeholder="Search"
                 />
-                <button  onClick={handleSort} className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
-                  <img src={sort? ztoa:atoz} className="w-[22px]" alt="" />
+                <button
+                  onClick={handleSort}
+                  className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center"
+                >
+                  <img src={sort ? ztoa : atoz} className="w-[22px]" alt="" />
                 </button>
               </div>
             </div>
@@ -275,63 +285,88 @@ const AllUsers = () => {
                           <p className="text-black ">{data.email}</p>
                         </td>
                         <td className="py-3 border-b border-r">
-                          <p className="text-black px-8">{data.address ?data.address:<span className="text-[#c90000]">Not Available</span>}</p>
+                          <p className="text-black px-8">
+                            {data.address ? (
+                              data.address
+                            ) : (
+                              <span className="text-[#c90000]">
+                                Not Available
+                              </span>
+                            )}
+                          </p>
                         </td>
                         <td className="py-3 border-b border-r">
-                        <p className="text-black px-8">{data.created_at.split('T')[0]} </p>
-
+                          <p className="text-black px-8">
+                            {data.created_at.split("T")[0]}{" "}
+                          </p>
                         </td>
                         <td className="py-3 px-5 border-b border-r">
                           <div className="flex justify-center">
-                            {data?.status === 1 ? (<div className="flex items-center gap-2">
-                              <button
-                                onClick={function(){ setUserId({id:data.id,type:"block"}),setOpenActiveUser(true)}}
-                                className="px-5 py-2 text-[#003a5f] text-lg font-semibold rounded-full bg-[#d4dee3] flex justify-center items-center gap-3"
-                              >
-                                <img
-                                  src={ActiveColor}
-                                  className="w-[20px]"
-                                  alt=""
-                                />{" "}
-                                Active
-                              </button>
+                            {data?.status === 1 ? (
+                              <div className="flex items-center gap-2">
                                 <button
-                                onClick={function(){ setUserId({id:data.id,type:"Active"}),setOpenActiveUser(true)}}
-                                className="px-3 py-3 text-[#ff2f16] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
-                              
-                              >
-                                <img
-                                  src={delRed}
-                                  className="w-[18px]"
-                                  alt=""
-                                />
-                               
-                              </button>
+                                  onClick={function () {
+                                    setUserId({ id: data.id, type: "block" }),
+                                      setOpenActiveUser(true);
+                                  }}
+                                  className="px-5 py-2 text-[#003a5f] text-lg font-semibold rounded-full bg-[#d4dee3] flex justify-center items-center gap-3"
+                                >
+                                  <img
+                                    src={ActiveColor}
+                                    className="w-[20px]"
+                                    alt=""
+                                  />{" "}
+                                  Active
+                                </button>
+                                <button
+                                  onClick={function () {
+                                    setOpenDelUser(true),
+                                      setUserId({
+                                        id: data.id,
+                                        type: "Active",
+                                      });
+                                  }}
+                                  className="px-3 py-3 text-[#ff2f16] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
+                                >
+                                  <img
+                                    src={delRed}
+                                    className="w-[18px]"
+                                    alt=""
+                                  />
+                                </button>
                               </div>
-                            ) : (<div className="flex items-center gap-2">
-                              <button
-                                onClick={function(){ setUserId({id:data.id,type:"Active"}),setOpenActiveUser(true)}}
-                                className="px-5 py-2 text-[#c90000] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
-                              >
-                                <img
-                                  src={delRed}
-                                  className="w-[18px]"
-                                  alt=""
-                                />{" "}
-                                Block
-                              </button>
-                              <button
-                                
-                                className="px-3 py-3 text-[#ff2f16] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
-                                onClick={function(){setOpenDelUser(true),setUserId({id:data.id,type:"Active"})}}
-                              >
-                                <img
-                                  src={delRed}
-                                  className="w-[18px]"
-                                  alt=""
-                                />
-                               
-                              </button>
+                            ) : (
+                              <div className="flex items-center gap-2">
+                                <button
+                                  onClick={function () {
+                                    setUserId({ id: data.id, type: "Active" }),
+                                      setOpenActiveUser(true);
+                                  }}
+                                  className="px-5 py-2 text-[#c90000] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
+                                >
+                                  <img
+                                    src={delRed}
+                                    className="w-[18px]"
+                                    alt=""
+                                  />{" "}
+                                  Block
+                                </button>
+                                <button
+                                  className="px-3 py-3 text-[#ff2f16] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
+                                  onClick={function () {
+                                    setOpenDelUser(true),
+                                      setUserId({
+                                        id: data.id,
+                                        type: "Active",
+                                      });
+                                  }}
+                                >
+                                  <img
+                                    src={delRed}
+                                    className="w-[18px]"
+                                    alt=""
+                                  />
+                                </button>
                               </div>
                             )}
                           </div>

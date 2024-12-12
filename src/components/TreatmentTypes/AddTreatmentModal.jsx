@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
+import toast from "react-hot-toast";
 
 function AddTreatmentModal() {
   const { openAddTreatment, setOpenAddTreatment, setTreatmentToast } = useMyContext();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const notifyError = (e)=> toast.error(e)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,10 +21,12 @@ function AddTreatmentModal() {
         console.log(response.data);
         setOpenAddTreatment(false);
         setName("");
+        setDescription("");
       }
     } catch (error) {
       if (error.response) {
-        setTreatmentToast(2);
+        // setTreatmentToast(2);
+        notifyError(error?.response?.data?.errors?.title)
         console.log(error.response);
       } else {
         console.log(error);
