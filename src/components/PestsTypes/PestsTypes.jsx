@@ -125,9 +125,9 @@ function PestsTypes() {
   const handleSort = () => {
     const sortedUsers = [...allPests].sort((a, b) => {
       if (sort) {
-        return b.name.localeCompare(a.name); 
+        return b.title.localeCompare(a.title); 
       } else {
-        return a.name.localeCompare(b.name); 
+        return a.title.localeCompare(b.title); 
       }
     });
     setAllPests(sortedUsers);
