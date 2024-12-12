@@ -48,39 +48,33 @@ function OrdersDetail() {
   }, [historyOrderId]);
 
   const handleSubmit = async (id) => {
-    // e.preventDefault();
     setLoading(true);
     try {
-      const response = await axiosInstance.post("reportPdf", {
-        order_id: id,
-      });
-      if (response.data) {
-        // console.log(response.data)
+        const response = await axiosInstance.post(
+            "reportPdf", 
+            { order_id: id },
+            { responseType: 'blob' } // Add this option
+        );
 
-        const blob = new Blob([response.data], { type: "application/pdf" });
+        if (response.data) {
+            const blob = new Blob([response.data], { type: "application/pdf" });
+            const url = window.URL.createObjectURL(blob);
 
-        const url = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "report.pdf";
+            document.body.appendChild(link);
+            link.click();
 
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = "report.pdf";
-        document.body.appendChild(link);
-        link.click();
-
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
-      }
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        }
     } catch (error) {
-      if (error.response) {
-        // setTreatmentToast(6);
-        console.log(error);
-      } else {
-        console.log(error);
-      }
+        console.error("Error downloading the PDF:", error);
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
+};
 
   return (
     <div className="w-full h-full min-h-screen bg-[#fafafa]">
@@ -108,6 +102,12 @@ function OrdersDetail() {
                     <span className="font-semibold">{orderDetail.date}</span>
                   </div>
                   <div className="pb-5">
+                    <span className="text-[#bdbcc1]">Technician: </span>
+                    <span className="font-semibold capitalize">
+                      {orderDetail?.inspector?.name}
+                    </span>
+                  </div>
+                  <div className="pb-5">
                     <span className="text-[#bdbcc1]">Location: </span>
                     <span className="font-semibold">
                       {orderDetail.location}
@@ -115,10 +115,10 @@ function OrdersDetail() {
                   </div>
                 </div>
                 <button
-                  onClick={() => handleSubmit(orderDetail.id)}
+                  onClick={() => handleSubmit(orderDetail?.order_id)}
                   className="w-[180px] h-[50px] flex justify-center gap-2 items-center bg-[#003a5f] text-white text-lg font-semibold shadow-sm rounded"
                 >
-                  Share Report
+                  Download Report
                 </button>
               </div>
 

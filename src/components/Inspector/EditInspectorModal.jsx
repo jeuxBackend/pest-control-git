@@ -238,7 +238,8 @@ function EditInspectorModal() {
                 <div className="lg:w-[50%] w-[100%]">
                   <p className="mb-1 font-medium">License Date</p>
                   <input
-                    type="text"
+                    type="date"
+                    max={new Date().toISOString().split("T")[0]}
                     value={licenseDate}
                     onChange={(e) => setLicenseDate(e.target.value)}
                     placeholder="License Date"
@@ -248,7 +249,8 @@ function EditInspectorModal() {
                 <div className="lg:w-[50%] w-[100%]">
                   <p className="mb-1 font-medium">Expire Date</p>
                   <input
-                    type="text"
+                    type="date"
+                    min={new Date().toISOString().split("T")[0]}
                     value={expireDate}
                     onChange={(e) => setExpireDate(e.target.value)}
                     placeholder="License Expire Date"

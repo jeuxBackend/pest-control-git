@@ -5,19 +5,19 @@ import SearchIcon from "./assets/search-icon.png";
 import CardBg from "./assets/card-bg.png";
 import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
-import { TailSpin } from 'react-loader-spinner';
-
+import { TailSpin } from "react-loader-spinner";
 
 function OrdersHistory() {
-  const { pageHeading, setPageHeading, historyOrderId, setHistoryOrderId } = useMyContext();
+  const { pageHeading, setPageHeading, historyOrderId, setHistoryOrderId } =
+    useMyContext();
   const [allHistoryOrders, setAllHistoryOrders] = useState([]);
-  const [loading, setLoading] = useState(false);  
+  const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredOrder, setFilteredOrders] = useState([]);
 
   const getAllHistoryOrders = async () => {
     try {
-      setLoading(true); 
+      setLoading(true);
       const response = await axiosInstance.get("admin/get-history-order");
       if (response.data) {
         console.log(response.data.order);
@@ -29,9 +29,8 @@ function OrdersHistory() {
       } else {
         console.log(error);
       }
-    }
-    finally {
-      setLoading(false); 
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -41,32 +40,30 @@ function OrdersHistory() {
     if (!milliseconds || isNaN(milliseconds)) {
       return "Invalid time";
     }
-  
+
     const date = new Date(Number(milliseconds));
-    
+
     const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, "0")
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
     const day = date.getDate().toString().padStart(2, "0");
-    
+
     const hours = date.getHours().toString().padStart(2, "0");
     const minutes = date.getMinutes().toString().padStart(2, "0");
     const seconds = date.getSeconds().toString().padStart(2, "0");
-    
+
     return `${year}-${month}-${day} `;
   }
 
-useEffect(() => {
-  let filteredOrders = searchQuery && searchQuery.trim() !== "" 
-    ? allHistoryOrders.filter((order) =>
-        order.user.name.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    : allHistoryOrders; 
-  
-  setFilteredOrders(filteredOrders);
-}, [searchQuery, allHistoryOrders]); 
+  useEffect(() => {
+    let filteredOrders =
+      searchQuery && searchQuery.trim() !== ""
+        ? allHistoryOrders.filter((order) =>
+            order.user.name.toLowerCase().includes(searchQuery.toLowerCase())
+          )
+        : allHistoryOrders;
 
-  
-  
+    setFilteredOrders(filteredOrders);
+  }, [searchQuery, allHistoryOrders]);
 
   return (
     <div className="w-full h-full min-h-screen bg-[#fafafa]">
@@ -120,73 +117,94 @@ useEffect(() => {
         </div>
         {loading ? (
           <div className="flex justify-center items-center h-64">
-            <TailSpin height={50} width={50} color="#0066a5" ariaLabel="loading" />
+            <TailSpin
+              height={50}
+              width={50}
+              color="#0066a5"
+              ariaLabel="loading"
+            />
           </div>
         ) : (
-        <div className="orders-data mt-8">
-          {/* order cards start */}
-          <div className="flex flex-wrap">
-            {Array.isArray(allHistoryOrders) && allHistoryOrders.length > 0 ? (
-              filteredOrder.map((data, index) => (
-                <div className="lg:w-1/3 md:w-1/2 w-full p-2">
-                  <div
-                    className="border shadow-sm rounded-lg p-2 bg-cover"
-                    style={{ backgroundImage: `url(${CardBg})` }}
-                  >
-                    <div className="py-2">
-                      <span className="text-[#bdbcc1]">Client Name: </span>
-                      <span className="font-[500] text-[15px] capitalize">
-                        {data.user.name}
-                      </span>
-                    </div>
-                    <div className="py-2">
-                      <span className="text-[#bdbcc1]">Start Date: </span>
-                      <span className="font-[500] text-[15px]">
-                        {convertMillisecondsToDate(data.starting_date)}
-                      </span>
-                    </div>
-                    <div className="py-2">
-                      <span className="text-[#bdbcc1]">End Date: </span>
-                      <span className="font-[500] text-[15px]">
-                        {convertMillisecondsToDate(data.ending_date)}
-                      </span>
-                    </div>
-                    <div className="py-2">
-                      <span className="text-[#bdbcc1]">Location: </span>
-                      <span className="font-[500] text-[15px]">
-                        {data.order_location.map((locationData, locIndex) => (
+          <div className="orders-data mt-8">
+            {/* order cards start */}
+            <div className="flex flex-wrap">
+              {Array.isArray(allHistoryOrders) &&
+              allHistoryOrders.length > 0 ? (
+                filteredOrder.map((data, index) => (
+                  <div className="lg:w-1/3 md:w-1/2 w-full p-2">
+                    <div
+                      className="border shadow-sm rounded-lg p-2 bg-cover"
+                      style={{ backgroundImage: `url(${CardBg})` }}
+                    >
+                      <div className="py-2">
+                        <span className="text-[#bdbcc1]">Client Name: </span>
+                        <span className="font-[500] text-[15px] capitalize">
+                          {data.user.name}
+                        </span>
+                      </div>
+                      <div className="py-2">
+                        <span className="text-[#bdbcc1]">Start Date: </span>
+                        <span className="font-[500] text-[15px]">
+                          {convertMillisecondsToDate(data.starting_date)}
+                        </span>
+                      </div>
+                      <div className="py-2">
+                        <span className="text-[#bdbcc1]">End Date: </span>
+                        <span className="font-[500] text-[15px]">
+                          {convertMillisecondsToDate(data.ending_date)}
+                        </span>
+                      </div>
+                      <div className="py-2 hidden">
+                        <span className="text-[#bdbcc1]">Location: </span>
+                        <span className="font-[500] text-[15px]">
+                          {/* {data.order_location.map((locationData, locIndex) => (
                           <span key={locIndex} className="font-semibold">
                             {locationData.location}
                             {locIndex < data.order_location.length - 1 && ", "}
                           </span>
-                        ))}
-                      </span>
-                    </div>
-                    <div className="">
-                      <ul className="flex justify-center w-full my-2">
-                        <li>
-                          <Link
-                            onClick={function(){ setPageHeading("Inspection Report");
-                              setHistoryOrderId(data.id);
-                            }}
-                            to={"/Orders-Detail"}
-                            className="flex justify-center py-2 font-semibold rounded w-[250px] h-[45px] bg-[#c90000] text-[#ffff] cursor-pointer"
-                          >
-                            <div className="flex gap-x-2 items-center">
-                              View Report
+                        ))} */}
+
+                          {data.order_location.map((locationData, locIndex) => (
+                            <div
+                              key={locIndex}
+                              className="font-semibold text-[#0000001e]"
+                            >
+                              {data.order_location.length > 1 && (
+                                <span>{`Location ${locIndex + 1}: `}</span>
+                              )}
+                              <span className="text-[#000000] font-semibold">
+                                {locationData.location}
+                              </span>
                             </div>
-                          </Link>
-                        </li>
-                      </ul>
+                          ))}
+                        </span>
+                      </div>
+                      <div className="">
+                        <ul className="flex justify-center w-full my-2">
+                          <li>
+                            <Link
+                              onClick={function () {
+                                setPageHeading("Inspection Report");
+                                setHistoryOrderId(data.id);
+                              }}
+                              to={"/Orders-Detail"}
+                              className="flex justify-center py-2 font-semibold rounded w-[250px] h-[45px] bg-[#c90000] text-[#ffff] cursor-pointer"
+                            >
+                              <div className="flex gap-x-2 items-center">
+                                View Report
+                              </div>
+                            </Link>
+                          </li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))
-            ) : (
-              <p>No Order found.</p>
-            )}
+                ))
+              ) : (
+                <p>No Order found.</p>
+              )}
+            </div>
           </div>
-        </div>
         )}
       </div>
     </div>

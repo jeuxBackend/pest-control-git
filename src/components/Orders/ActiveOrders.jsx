@@ -183,7 +183,7 @@ function Orders() {
                           {convertMillisecondsToDate(data.ending_date)}
                         </span>
                       </div>
-                      <div className="py-2 px-2">
+                      <div className="py-2 px-2 hidden">
                         <span className="text-[#bdbcc1]">Locations: </span>
                         <span className="ms-1">
                           {/* {data.order_location.map((locationData, locIndex) => (

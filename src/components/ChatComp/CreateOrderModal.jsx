@@ -296,6 +296,7 @@ function CreateOrederModal({handleSendOrderMessage}) {
 
                 <input
                   type="date"
+                  max={new Date().toISOString().split("T")[0]}
                   onChange={(e) => setStartDate(e.target.value)}
                   required
                   placeholder="Enter Start Date"
@@ -306,6 +307,7 @@ function CreateOrederModal({handleSendOrderMessage}) {
                 <p className="mb-1 font-medium">End Date</p>
                 <input
                   type="date"
+                  min={new Date().toISOString().split("T")[0]}
                   onChange={(e) => setEndDate(e.target.value)}
                   required
                   placeholder="Enter Time"
@@ -366,9 +368,9 @@ function CreateOrederModal({handleSendOrderMessage}) {
             </div>
             <div className="flex gap-3 lg:gap-8 lg:flex-row flex-col">
               <div className="lg:w-[100%] w-[100%]">
-                <p className="mb-1 font-medium">Number</p>
+                <p className="mb-1 font-medium">Phone Number</p>
                 <input
-                  type="number"
+                  type="text"
                   onChange={(e) => setNumber(e.target.value)}
                   required
                   placeholder="Enter Number"
@@ -396,10 +398,11 @@ function CreateOrederModal({handleSendOrderMessage}) {
                     <div className="flex justify-between">
                       <p className="mb-1 font-medium">Location</p>
                       <div
-                        className="h-[20px] w-[20px] bg-[#003a5f] rounded flex justify-center items-center me-1 cursor-pointer"
+                        className="bg-[#003a5f] rounded flex justify-center items-center me-1 mb-2 py-2 px-3 cursor-pointer"
                         onClick={handleAddLocation}
                       >
-                        <img src={Add} className="w-[12px]" alt="" />
+                        <span className="text-[12px] text-white font-medium">Add Location</span>
+                        {/* <img src={Add} className="w-[12px]" alt="" /> */}
                       </div>
                     </div>
                     <input
