@@ -163,10 +163,10 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route element={<MainModule />}>
           <Route path="/Dashboard" element={<Dashboard />} />
-          <Route path="/All-Users" element={<AllUsers />} />
-          <Route path="/Active-Users" element={<ActiveUsers />} />
-          <Route path="/Inactive-Users" element={<BlockUsers />} />
-          <Route path="/Delete-Users" element={<DeleteUsers />} />
+          <Route path="/All-Clients" element={<AllUsers />} />
+          <Route path="/Active-Clients" element={<ActiveUsers />} />
+          <Route path="/Inactive-Clients" element={<BlockUsers />} />
+          <Route path="/Delete-Clients" element={<DeleteUsers />} />
           <Route path="/Technician" element={<Inspector />} />
           <Route path="/Orders" element={<Orders />} />
           <Route path="/Orders-History" element={<OrdersHistory />} />

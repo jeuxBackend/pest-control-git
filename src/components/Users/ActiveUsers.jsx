@@ -169,7 +169,7 @@ const ActiveUsers = () => {
               </li>
               <li>
                 <Link
-                  to={"/Inactive-Users"}
+                  to={"/Inactive-Clients"}
                   onClick={() => setPageHeading("Inactive Clients")}
                   className="flex justify-center py-2 border shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded text-[#828282] bg-transparent cursor-pointer"
                 >
@@ -181,7 +181,7 @@ const ActiveUsers = () => {
               </li>
               <li>
                 <Link
-                  to={"/Delete-Users"}
+                  to={"/Delete-Clients"}
                   onClick={() => setPageHeading("Deleted Clients")}
                   className="flex justify-center py-2 border shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded text-[#828282] bg-transparent cursor-pointer"
                 >
@@ -221,7 +221,7 @@ const ActiveUsers = () => {
             />
           </div>
         ) : (
-          <div className="All-users-data mt-8">
+          <div className="All-Clients-data mt-8">
             <div className="relative overflow-x-auto">
               <table className="w-full min-w-[800px] bg-transparent text-center shadow-sm overflow-hidden">
                 <thead className="text-sm">

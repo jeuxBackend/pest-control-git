@@ -106,33 +106,33 @@ function SideBar() {
                 </Link>
               </li>
               <li className="flex items-center gap-1">
-                {isActive === "/All-Users" && (
+                {isActive === "/All-Clients" && (
                   <span className="inline rounded-r h-full text-5xl w-1 me-3 bg-[#c90000]">
                     &nbsp;
                   </span>
                 )}
-                {isActive === "/Active-Users" && (
+                {isActive === "/Active-Clients" && (
                   <span className="inline rounded-r h-full text-5xl w-1 me-3 bg-[#c90000]">
                     &nbsp;
                   </span>
                 )}
-                {isActive === "/Inactive-Users" && (
+                {isActive === "/Inactive-Clients" && (
                   <span className="inline rounded-r h-full text-5xl w-1 me-3 bg-[#c90000]">
                     &nbsp;
                   </span>
                 )}
-                {isActive === "/Delete-Users" && (
+                {isActive === "/Delete-Clients" && (
                   <span className="inline rounded-r h-full text-5xl w-1 me-3 bg-[#c90000]">
                     &nbsp;
                   </span>
                 )}
                 <Link
                   onClick={() => handleLinkClick("All Clients")}
-                  to={"/All-Users"}
+                  to={"/All-Clients"}
                   className={`flex items-center cursor-pointer ${
-                    isActive === "/All-Users" ||
-                    isActive === "/Active-Users" ||
-                    isActive == "/Inactive-Users" || isActive == "/Delete-Users" 
+                    isActive === "/All-Clients" ||
+                    isActive === "/Active-Clients" ||
+                    isActive == "/Inactive-Clients" || isActive == "/Delete-Clients" 
                       ? "bg-[#c90000]"
                       : ""
                   } py-3 ps-5 text-white rounded group w-[215px]`}

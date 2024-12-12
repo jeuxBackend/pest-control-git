@@ -152,7 +152,7 @@ const DeleteUsers = () => {
             <ul className="flex flex-wrap gap-3">
               <li>
                 <Link
-                  to={"/Active-Users"}
+                  to={"/Active-Clients"}
                   onClick={() => setPageHeading("Active Clients")}
                   className="flex justify-center py-2 border shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded text-[#828282] bg-transparent cursor-pointer"
                 >
@@ -163,7 +163,7 @@ const DeleteUsers = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/Inactive-Users" onClick={() => setPageHeading("Inactive Clients")}className="flex justify-center py-2 border text-[#828282] shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded  cursor-pointer">
+                <Link to="/Inactive-Clients" onClick={() => setPageHeading("Inactive Clients")}className="flex justify-center py-2 border text-[#828282] shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded  cursor-pointer">
                   <div className="flex gap-x-2 items-center">
                     <img
                       className="w-[20px]"
@@ -215,7 +215,7 @@ const DeleteUsers = () => {
             />
           </div>
         ) : (
-          <div className="All-users-data mt-8">
+          <div className="All-Clients-data mt-8">
             <div className="relative overflow-x-auto">
               <table className="w-full min-w-[800px] bg-transparent text-center shadow-sm overflow-hidden">
                 <thead className="text-sm">
