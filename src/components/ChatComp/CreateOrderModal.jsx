@@ -6,7 +6,7 @@ import { MdDeleteForever } from "react-icons/md";
 import { Oval } from "react-loader-spinner";
 import toast, { Toaster } from "react-hot-toast";
 
-function CreateOrederModal() {
+function CreateOrederModal({handleSendOrderMessage}) {
   const { openCreateOrder, setOpenCreateOrder,chatId, setChatID } = useMyContext();
   const [allInspectors, setAllInspectors] = useState([]);
   const [allPests, setAllPests] = useState([]);
@@ -67,6 +67,7 @@ function CreateOrederModal() {
       if (response.data) {
         console.log(response)
         setOpenCreateOrder(false)
+        handleSendOrderMessage("Your Order Created Successfully by Admin")
       }
     } catch (error) {
       if (error.response) {

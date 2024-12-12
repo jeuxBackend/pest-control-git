@@ -25,6 +25,7 @@ import axiosInstance from "../../axiosInstance/axioisInstance";
 import { SignJWT } from "jose";
 import { Buffer } from "buffer";
 import { FaRegSquarePlus } from "react-icons/fa6";
+import CreateOrederModal from "./CreateOrderModal";
 
 function ChatComp() {
   const [userType, setUserType] = useState("user");
@@ -32,7 +33,7 @@ function ChatComp() {
   const [openSend, setOpenSend] = useState(false);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const { setOpenCreateOrder, adminID, chatId, setChatID,sendMessage, setSendMessage } = useMyContext();
+  const { setOpenCreateOrder, adminID, chatId, setChatID,sendMessage, setSendMessage, openCreateOrder } = useMyContext();
   const [conversations, setConversations] = useState([]);
   const [firebaseToken, setFirebaseToken] = useState("");
   const [title, setTitle] = useState("");
@@ -191,7 +192,7 @@ function ChatComp() {
           chatId: chatId.toString(),
           lastMessage: newMessage,
           lastTimestamp: new Date().getTime(),
-          seen: false,
+          seen: true,
           user_type: role, 
           profilepic_url: user.profile_pic, 
           name: user.name, 
@@ -205,6 +206,59 @@ function ChatComp() {
       console.error("Error sending message:", error);
     }
   };
+
+  const handleSendOrderMessage=async(msg)=>{
+    try{
+      await addDoc(collection(db, "messages"), {
+        message: msg,
+        timestamp: new Date().getTime(),
+        user: "Admin", // Replace with actual user type
+        senderID: "1", // Replace with actual sender ID
+        receiverID: chatId.toString(),
+        messageType: "order",
+        chatId: chatId.toString(),
+      });
+
+      const conversationRef = collection(db, "conversations");
+      const q = query(conversationRef, where("chatId", "==", chatId.toString()));
+      const querySnapshot = await getDocs(q);
+  
+      if (!querySnapshot.empty) {
+        // Conversation exists, update it
+        querySnapshot.forEach(async (docSnap) => {
+          const conversationDoc = doc(db, "conversations", docSnap.id);
+          await updateDoc(conversationDoc, {
+            lastMessage: msg,
+            lastTimestamp: new Date().getTime(),
+            seen: true,
+            user_type: role, 
+            profilepic_url: user.profile_pic, 
+            name: user.name, 
+          });
+        });
+      } else {
+        // Conversation doesn't exist, create a new one
+        await addDoc(conversationRef, {
+          adminID: "1", 
+          senderID: "1", 
+          receiverID: chatId.toString(),
+          chatId: chatId.toString(),
+          lastMessage: msg,
+          lastTimestamp: new Date().getTime(),
+          seen: true,
+          user_type: role, 
+          profilepic_url: user.profile_pic, 
+          name: user.name, 
+        });
+      }
+
+      handleSubmit();
+    }catch(error){
+      console.error("Error sending message:", error);
+
+    }
+
+  }
   
 
   const handleKeyPress = (e) => {
@@ -276,10 +330,15 @@ function ChatComp() {
 
 
   return (
+    <>
+          <div className={`${openCreateOrder === true ? "" : "hidden"}`}>
+        <CreateOrederModal handleSendOrderMessage={handleSendOrderMessage}/>
+      </div>
+
     <div className="w-full  h-[] bg-[#fafafa] overflow-hidden">
       <div className="chatModule-div relative lg:ml-[260px] px-3 top-[20px] flex">
         <div
-          className={`absolute h-[88vh] lg:h-[86.8vh] bg-white top-0 transition-all duration-300 ${
+          className={`absolute h-[88vh] lg:h-[86.8vh] 2xl:h-[93vh] bg-white top-0 transition-all duration-300 ${
             openChats ? "left-0 h-full" : "-left-[140%]"
           } lg:static lg:left-auto lg:w-1/4`}
         >
@@ -380,7 +439,7 @@ function ChatComp() {
         </div>
 
         {chatId ? (
-          <div className="w-full lg:w-3/4 h-[88vh] rounded border bg-[#fefefe]">
+          <div className="w-full lg:w-3/4 h-[88vh] lg:h-[86.8vh] 2xl:h-[90vh] rounded border bg-[#fefefe]">
             <div className="px-2 py-3 border-b-2 border-dashed flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <IoReorderThreeOutline
@@ -405,7 +464,7 @@ function ChatComp() {
               </div>
             </div>
 
-            <div className="overflow-auto chat w-full h-[75%] overflow-chat p-3">
+            <div className="overflow-auto chat w-full h-[75%] 2xl:h-[78%] overflow-chat p-3">
               {messages.map((msg) => {
                 const messageTime = convertMillisecondsToTime(msg.timestamp);
 
@@ -433,7 +492,9 @@ function ChatComp() {
                             className="max-w-[300px] max-h-[200px] rounded object-cover"
                           />
                         </a>
-                      ) : null}
+                      ) :  msg.messageType === "order" ? (
+                       <div><p className="w-full text-center bg-[#003a5f] text-white py-1 text-[1.1rem] mb-2 rounded-md">Booking Report</p>
+                        <p className="text-[1.1rem]">{msg.message}</p></div>):null}
 
                       <p className="text-[10px] mt-1 text-[#707070] text-right">
                         {messageTime}
@@ -471,7 +532,7 @@ function ChatComp() {
           </div>
         ) }
       </div>
-    </div>
+    </div></>
   );
 }
 

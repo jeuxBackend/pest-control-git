@@ -113,9 +113,9 @@ function App() {
       <div className={`${openDeleteInspector === true ? "" : "hidden"}`}>
         <DeleteInspectorModal />
       </div>
-      <div className={`${openCreateOrder === true ? "" : "hidden"}`}>
+      {/* <div className={`${openCreateOrder === true ? "" : "hidden"}`}>
         <CreateOrderModal />
-      </div>
+      </div> */}
 
       <div className={`${openOrderDetail === true ? "" : "hidden"}`}>
         <OrederDetailModal />
