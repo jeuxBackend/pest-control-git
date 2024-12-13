@@ -26,6 +26,7 @@ import { SignJWT } from "jose";
 import { Buffer } from "buffer";
 import { FaRegSquarePlus } from "react-icons/fa6";
 import CreateOrederModal from "./CreateOrderModal";
+import { CiImageOn } from "react-icons/ci";
 
 function ChatComp() {
   const [userType, setUserType] = useState("user");
@@ -75,20 +76,32 @@ function ChatComp() {
   }, [messages]);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(
-      collection(db, "conversations"),
-      (snapshot) => {
-        const conversationList = snapshot.docs.map((doc) => ({
+    const unsubscribe = onSnapshot(collection(db, "conversations"), (snapshot) => {
+      const conversationList = snapshot.docs
+        .map((doc) => ({
           id: doc.id,
           ...doc.data(),
-        }));
-        setConversations(conversationList);
-        setFilteredConversations(conversationList); 
-      }
-    );
+        }))
+        .sort((a, b) => b.lastTimestamp - a.lastTimestamp); 
+      
+      setConversations(conversationList);
+      setFilteredConversations(conversationList); 
+    });
+  
     return unsubscribe;
   }, []);
-
+  
+  const isImageLink = (text) => {
+    // Check if the text is a valid image link
+    const imageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
+    try {
+      const url = new URL(text); // Validate as URL
+      const extension = url.pathname.split(".").pop().toLowerCase();
+      return imageExtensions.includes(extension);
+    } catch {
+      return false;
+    }
+  }
   
   const getUser = async (id) => {
     try {
@@ -237,7 +250,7 @@ function ChatComp() {
             lastTimestamp: new Date().getTime(),
             seen: true,
             user_type: role, 
-            profilepic_url: user.profile_pic, 
+            profile: user.profile_pic, 
             name: user.name, 
           });
         });
@@ -404,52 +417,57 @@ function ChatComp() {
               </div>
 
             <div className="">
-              { filteredConversations?.filter((conversation) => conversation.user_type === userType).length >0? filteredConversations
-                ?.filter((conversation) => conversation.user_type === userType)
-                .map((conversation) => (
-                  <div
-                    onClick={() => handleConversationClick(conversation)}
-                    key={conversation.id}
-                    className="p-3 border-b cursor-pointer hover:bg-slate-200 transition-all flex items-center justify-between"
-                  >
-                    <div className="flex items-center gap-2">
-                      <img
-                        src={conversation.profile}
-                        alt=""
-                        className="w-12 h-12 rounded-full"
-                      />
-                      <div>
-                        <h2 className="text-lg font-semibold">
-                          {conversation.name}
-                        </h2>
-                        <p
-                          className={`text-sm ${
-                            conversation.seen === true
-                              ? "text-gray-600"
-                              : "text-[#c90000]"
-                          }`}
-                        >
-                          {conversation.lastMessage?.length > 30
-                            ? `${conversation.lastMessage.slice(0, 30)}...`
-                            : conversation.lastMessage}
-                        </p>
-                        <p className="text-xs text-gray-400">
-                          {convertMillisecondsToTime(
-                            conversation.lastTimestamp
-                          )}
-                        </p>
-                      </div>
-                    </div>
-                    <div
-                      className={`${
-                        conversation.seen === true ? "hidden" : "block"
-                      }`}
-                    >
-                      <FaCircle className="text-[0.8rem] text-[#c90000]" />
-                    </div>
-                  </div>
-                )):<p className="mt-4">No Conversation Started Yet!</p>}
-            </div>
+            {filteredConversations?.filter((conversation) => conversation.user_type === userType).length > 0 ? (
+  filteredConversations
+    ?.filter((conversation) => conversation.user_type === userType)
+    .map((conversation) => (
+      <div
+        onClick={() => handleConversationClick(conversation)}
+        key={conversation.id}
+        className="p-3 border-b cursor-pointer hover:bg-slate-200 transition-all flex items-center justify-between"
+      >
+        <div className="flex items-center gap-2">
+          <img
+            src={conversation.profile}
+            alt=""
+            className="w-12 h-12 rounded-full"
+          />
+          <div>
+            <h2 className="text-lg font-semibold">{conversation.name}</h2>
+            {/* Check if lastMessage is an image link */}
+            {isImageLink(conversation.lastMessage) ? (
+              <p className="text-md text-gray-600 flex items-center gap-0.5"><CiImageOn/> Image</p>
+            ) : (
+              <p
+                className={`text-sm ${
+                  conversation.seen === true
+                    ? "text-gray-600"
+                    : "text-[#c90000]"
+                }`}
+              >
+                {conversation.lastMessage?.length > 30
+                  ? `${conversation.lastMessage.slice(0, 30)}...`
+                  : conversation.lastMessage}
+              </p>
+            )}
+            <p className="text-xs text-gray-400">
+              {convertMillisecondsToTime(conversation.lastTimestamp)}
+            </p>
+          </div>
+        </div>
+        <div
+          className={`${
+            conversation.seen === true ? "hidden" : "block"
+          }`}
+        >
+          <FaCircle className="text-[0.8rem] text-[#c90000]" />
+        </div>
+      </div>
+    ))
+) : (
+  <p className="mt-4">No Conversation Started Yet!</p>
+)}
+ </div>
           </div>
         </div>
 
