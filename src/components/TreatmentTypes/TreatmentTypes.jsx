@@ -34,6 +34,8 @@ function PestsTypes() {
   const [loading, setLoading] = useState(false);  
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredOrder, setFilteredOrders] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+  
   const [sort, setSort] = useState(false);
   const getAllTreatments = async () => {
     if(delTechnician===false){
@@ -135,16 +137,24 @@ function PestsTypes() {
 
   
 
-  useEffect(() => {
-    let filteredOrders = searchQuery && searchQuery.trim() !== "" 
-      ? allTreatments?.filter((order) =>
-          order.user.name.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-      : allTreatments; 
+  // useEffect(() => {
+  //   let filteredOrders = searchQuery && searchQuery.trim() !== "" 
+  //     ? allTreatments?.filter((order) =>
+  //         order.user.name.toLowerCase().includes(searchQuery.toLowerCase())
+  //       )
+  //     : allTreatments; 
     
-    setFilteredOrders(filteredOrders);
-  }, [searchQuery, allTreatments]); 
+  //   setFilteredOrders(filteredOrders);
+  // }, [searchQuery, allTreatments]); 
   
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredUsers = allTreatments.filter((item) => {
+    const lowerCaseSearchTerm = searchTerm.toLowerCase();
+    return item.title?.toLowerCase().includes(lowerCaseSearchTerm);
+  });
 
   
 
@@ -176,8 +186,9 @@ function PestsTypes() {
                   type="text"
                   className="bg-transparent text-black border h-[50px] lg:w-[300px] md:w-[300px] w-[230px] rounded ps-3"
                   placeholder="Search"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                  // onChange={(e) => setSearchQuery(e.target.value)}
                 />
                 <button onClick={handleSort} className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
                 <img src={sort? ztoa:atoz} className="w-[22px]" alt="" />
@@ -212,7 +223,7 @@ function PestsTypes() {
                 </thead>
                 <tbody className="text-gray-700">
                   {Array.isArray(allTreatments) && allTreatments.length > 0 ? (
-                    filteredOrder?.map((data, index) => (
+                    filteredUsers?.map((data, index) => (
                       <tr key={index} className="">
                         <td className="py-3 border-b border-r">
                           <div className="flex items-center justify-start ps-6 gap-x-3">

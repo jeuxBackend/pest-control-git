@@ -283,7 +283,6 @@ function PestsTypes() {
                             </button>
                             <button
                               onClick={function () {setPestDetails(true), setPestName(data.title), setPestDescription(data.description)
-                               
                               }}
                             >
                               <img src={eye} className="w-[30px]" alt="" />
