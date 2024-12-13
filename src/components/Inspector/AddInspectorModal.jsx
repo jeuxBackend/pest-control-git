@@ -74,7 +74,7 @@ function AddInspectorModal() {
           setImageVoucher(null);
         } else {
           console.log(error);
-          notifyError(error?.response?.data?.errors);
+          notifyError("Network error");
         }
       } finally {
         setIsLoading(false);

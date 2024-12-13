@@ -25,8 +25,8 @@ function Orders() {
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredOrder, setFilteredOrders] = useState([]);
-  const notify = () => toast.success("Inspector Assigned Successfully");
-  const notifyError = () => toast.error("Inspector Not Assigned");
+  const notify = () => toast.success("Technician Assigned Successfully");
+  const notifyError = () => toast.error("Technician Not Assigned");
 
   const getAllPendingOrders = async () => {
     try {
