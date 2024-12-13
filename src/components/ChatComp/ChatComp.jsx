@@ -40,6 +40,8 @@ function ChatComp() {
   const [body, setBody] = useState("");
   const [tokenAuth, setToken] = useState("");
   const [role, setRole] = useState("");
+  const [searchQuery, setSearchQuery] = useState(""); 
+  const [filteredConversations, setFilteredConversations] = useState([]);
 
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem("userData");
@@ -76,9 +78,12 @@ function ChatComp() {
     const unsubscribe = onSnapshot(
       collection(db, "conversations"),
       (snapshot) => {
-        setConversations(
-          snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-        );
+        const conversationList = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setConversations(conversationList);
+        setFilteredConversations(conversationList); 
       }
     );
     return unsubscribe;
@@ -309,6 +314,16 @@ function ChatComp() {
     };
     fetchUsers();
   }, []);
+  useEffect(() => {
+    if (searchQuery.trim()) {
+      const filtered = conversations.filter((conversation) =>
+        conversation.name?.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredConversations(filtered);
+    } else {
+      setFilteredConversations(conversations);
+    }
+  }, [searchQuery, conversations]);
 
   const handleConversationClick = async (conversation) => {
     try {
@@ -380,8 +395,8 @@ function ChatComp() {
                   type="text"
                   className="bg-transparent text-black border h-[45px] lg:w-[300px] md:w-[300px] w-[230px] rounded ps-3"
                   placeholder="Search chat by name..."
-                  // value={searchQuery}
-                  // onChange={(e) => setSearchQuery(e.target.value)}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
                 <button onClick={()=>setSendMessage(true)} className="h-[45px] w-[50px] bg-[#c90000] rounded flex justify-center items-center ">
                 <FaRegSquarePlus className="text-white text-[1.4rem]" />
@@ -389,8 +404,8 @@ function ChatComp() {
               </div>
 
             <div className="">
-              { conversations.filter((conversation) => conversation.user_type === userType).length >0? conversations
-                .filter((conversation) => conversation.user_type === userType)
+              { filteredConversations?.filter((conversation) => conversation.user_type === userType).length >0? filteredConversations
+                ?.filter((conversation) => conversation.user_type === userType)
                 .map((conversation) => (
                   <div
                     onClick={() => handleConversationClick(conversation)}
