@@ -203,7 +203,7 @@ function PestsTypes() {
                         <span className="">Treatment Type</span>
                       </p>
                     </th>
-                    <th className="px-0">
+                    <th className={`px-0 ${delTechnician?"hidden":""}`}>
                       <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md">
                         Action
                       </p>
@@ -221,7 +221,7 @@ function PestsTypes() {
                             </p>
                           </div>
                         </td>
-                        <td className="py-3 border-b border-r lg:px-10">
+                        <td className={`${delTechnician?"hidden":""} py-3 border-b border-r lg:px-10`}>
                           <div className="flex gap-x-3 justify-center">
                             <button
                               onClick={function () {

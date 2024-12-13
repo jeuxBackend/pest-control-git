@@ -240,11 +240,11 @@ const DeleteUsers = () => {
                         Date
                       </p>
                     </th>
-                    <th className="px-0">
+                    {/* <th className="px-0">
                       <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md">
                         Status
                       </p>
-                    </th>
+                    </th> */}
                   </tr>
                 </thead>
                 <tbody className="text-gray-700">
@@ -277,7 +277,7 @@ const DeleteUsers = () => {
                         <p className="text-black px-8">{data?.created_at.split('T')[0]} </p>
 
                         </td>
-                        <td className="py-3 px-5 border-b border-r">
+                        {/* <td className="py-3 px-5 border-b border-r">
                           <div className="flex justify-center">
                             <button
                               // onClick={() => changeUserStatus(data.id)}
@@ -291,7 +291,7 @@ const DeleteUsers = () => {
                               Deleted
                             </button>
                           </div>
-                        </td>
+                        </td> */}
                       </tr>
                     );
                   })}

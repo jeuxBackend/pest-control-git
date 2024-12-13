@@ -9,7 +9,7 @@ function OrederDetailModal() {
     setPageHeading,
     setOpenOrderDetail,
     activeOrderId,
-    setActiveOrderId, 
+    setActiveOrderId,
   } = useMyContext();
   const [order, setOrder] = useState({});
   const [orderUserName, setOrderUserName] = useState({});
@@ -24,7 +24,7 @@ function OrederDetailModal() {
         setOrder(response?.data?.order);
         setOrderUserName(response?.data?.order?.user);
         setOrderLocation(response?.data?.order?.order_location);
-        setPest(response?.data?.order?.pest_type?.title)
+        setPest(response?.data?.order?.pest_type?.title);
       }
     } catch (error) {
       if (error.response) {
@@ -80,27 +80,52 @@ function OrederDetailModal() {
                 <span className="ms-1">
                   {orderLocation && orderLocation.length > 0 ? (
                     orderLocation.map((locationData, locIndex) => (
-                      <span key={locIndex} className="font-semibold">
-                        {locationData?.location}
-                        {locIndex < orderLocation?.length - 1 && ", "}
+                      <div
+                      key={locIndex}
+                      className="font-semibold text-[#0000001e]"
+                    >
+                      {order.order_location.length > 1 && (
+                        <span>{`Location ${locIndex + 1}: `}</span>
+                      )}
+                      <span className="text-[#000000] font-semibold">
+                        {locationData.location}
                       </span>
+                    </div>
                     ))
                   ) : (
                     <span>No locations available</span>
                   )}
+
+                  {/* {order.order_location.map((locationData, locIndex) => (
+                    <div
+                      key={locIndex}
+                      className="font-semibold text-[#0000001e]"
+                    >
+                      {order.order_location.length > 1 && (
+                        <span>{`Location ${locIndex + 1}: `}</span>
+                      )}
+                      <span className="text-[#000000] font-semibold">
+                        {locationData.location}
+                      </span>
+                    </div>
+                  ))} */}
                 </span>
               </div>
             </div>
             <div className="  pb-3 border-b-2 border-dashed">
-                <span className="text-[#00000067] font-semibold">Technician Name: </span>
-                <span className="font-semibold">Brooklyn Simmons</span>
-              </div>
+              <span className="text-[#00000067] font-semibold">
+                Technician Name:{" "}
+              </span>
+              <span className="font-semibold">
+                {order?.inspector?.user?.name}
+              </span>
+            </div>
 
             <div className="flex justify-between pb-3">
               <div className="">
                 <span className="text-black font-semibold">Description: </span>
                 <span className="text-[#00000067]">
-                  {order ? order.description : ""} 
+                  {order ? order.description : ""}
                 </span>
               </div>
             </div>
@@ -112,7 +137,6 @@ function OrederDetailModal() {
               >
                 Cancel
               </button>
-             
             </div>
           </div>
         </div>

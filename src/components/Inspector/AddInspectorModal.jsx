@@ -172,7 +172,7 @@ function AddInspectorModal() {
                 <div className="lg:w-[50%] w-[100%]">
                   <p className="mb-1 font-medium">Email Address</p>
                   <input
-                  value={email}
+                    value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     type="text"
                     placeholder="Email Address"
@@ -184,7 +184,7 @@ function AddInspectorModal() {
                 <div className="lg:w-[50%] w-[100%]">
                   <p className="mb-1 font-medium">Password</p>
                   <input
-                  value={password}
+                    value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     type="text"
                     placeholder="Password"
@@ -206,7 +206,8 @@ function AddInspectorModal() {
                 <div className="lg:w-[50%] w-[100%]">
                   <p className="mb-1 font-medium">License Date</p>
                   <input
-                  value={licenseDate}
+                    max={new Date().toISOString().split("T")[0]}
+                    value={licenseDate}
                     onChange={(e) => setLicenseDate(e.target.value)}
                     type="date"
                     placeholder="License Date"
@@ -216,7 +217,8 @@ function AddInspectorModal() {
                 <div className="lg:w-[50%] w-[100%]">
                   <p className="mb-1 font-medium">Expire Date</p>
                   <input
-                  value={expireDate}
+                    value={expireDate}
+                    min={new Date().toISOString().split("T")[0]} 
                     onChange={(e) => setExpireDate(e.target.value)}
                     type="date"
                     placeholder="License Expire Date"

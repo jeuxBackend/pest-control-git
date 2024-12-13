@@ -66,32 +66,30 @@ function Orders() {
     if (!milliseconds || isNaN(milliseconds)) {
       return "Invalid time";
     }
-  
+
     const date = new Date(Number(milliseconds));
-    
+
     const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, "0")
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
     const day = date.getDate().toString().padStart(2, "0");
-    
+
     const hours = date.getHours().toString().padStart(2, "0");
     const minutes = date.getMinutes().toString().padStart(2, "0");
     const seconds = date.getSeconds().toString().padStart(2, "0");
-    
+
     return `${year}-${month}-${day} `;
   }
 
   useEffect(() => {
-    let filteredOrders = searchQuery && searchQuery.trim() !== "" 
-      ? allPendingOrders.filter((order) =>
-          order.user.name.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-      : allPendingOrders; 
-    
+    let filteredOrders =
+      searchQuery && searchQuery.trim() !== ""
+        ? allPendingOrders.filter((order) =>
+            order.user.name.toLowerCase().includes(searchQuery.toLowerCase())
+          )
+        : allPendingOrders;
+
     setFilteredOrders(filteredOrders);
-  }, [searchQuery, allPendingOrders]); 
-  
-
-
+  }, [searchQuery, allPendingOrders]);
 
   return (
     <div className="w-full h-full min-h-screen bg-[#fafafa]">
@@ -135,7 +133,7 @@ function Orders() {
                   className="bg-transparent text-black border h-[50px] lg:w-[300px] md:w-[300px] w-[230px] rounded ps-3"
                   placeholder="Search"
                   value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
                 <button className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
                   <img src={SearchIcon} className="w-[22px]" alt="" />
@@ -178,18 +176,32 @@ function Orders() {
                       <div className="py-2 px-2">
                         <span className="text-[#bdbcc1]">End Date: </span>
                         <span className="font-semibold">
-                        {convertMillisecondsToDate(data.ending_date)}
+                          {convertMillisecondsToDate(data.ending_date)}
                         </span>
                       </div>
                       <div className="py-2 px-2">
                         <span className="text-[#bdbcc1]">Location: </span>
                         <span className="ms-1">
-                          {data.order_location.map((locationData, locIndex) => (
+                          {/* {data.order_location.map((locationData, locIndex) => (
                             <span key={locIndex} className="font-semibold">
                               {locationData.location}
                               {locIndex < data.order_location.length - 1 &&
                                 ", "}
                             </span>
+                          ))} */}
+
+                          {data.order_location.map((locationData, locIndex) => (
+                            <div
+                              key={locIndex}
+                              className="font-semibold text-[#0000001e]"
+                            >
+                              {data.order_location.length > 1 && (
+                                <span>{`Location ${locIndex + 1}: `}</span>
+                              )}
+                              <span className="text-[#000000] font-semibold">
+                                {locationData.location}
+                              </span>
+                            </div>
                           ))}
                         </span>
                         {/* <div>
