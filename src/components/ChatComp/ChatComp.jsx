@@ -197,7 +197,7 @@ function ChatComp() {
             lastTimestamp: new Date().getTime(),
             seen: true,
             user_type: role, 
-            profilepic_url: user.profile_pic, 
+            profile: user.profile_pic, 
             name: user.name, 
           });
         });
@@ -212,7 +212,7 @@ function ChatComp() {
           lastTimestamp: new Date().getTime(),
           seen: true,
           user_type: role, 
-          profilepic_url: user.profile_pic, 
+          profile: user.profile_pic, 
           name: user.name, 
         });
       }
