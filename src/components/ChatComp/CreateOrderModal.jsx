@@ -297,6 +297,7 @@ function CreateOrederModal({handleSendOrderMessage}) {
                 <input
                   type="date"
                   max={new Date().toISOString().split("T")[0]}
+                  min={new Date().toISOString().split("T")[0]}
                   onChange={(e) => setStartDate(e.target.value)}
                   required
                   placeholder="Enter Start Date"
