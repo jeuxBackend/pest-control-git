@@ -139,19 +139,19 @@ function OrdersHistory() {
                       <div className="py-2">
                         <span className="text-[#bdbcc1]">Client Name: </span>
                         <span className="font-[500] text-[15px] capitalize">
-                          {data.user.name}
+                          {data?.user?.name}
                         </span>
                       </div>
                       <div className="py-2">
                         <span className="text-[#bdbcc1]">Start Date: </span>
                         <span className="font-[500] text-[15px]">
-                          {convertMillisecondsToDate(data.starting_date)}
+                          {convertMillisecondsToDate(data?.starting_date)}
                         </span>
                       </div>
                       <div className="py-2">
                         <span className="text-[#bdbcc1]">End Date: </span>
                         <span className="font-[500] text-[15px]">
-                          {convertMillisecondsToDate(data.ending_date)}
+                          {convertMillisecondsToDate(data?.ending_date)}
                         </span>
                       </div>
                       <div className="py-2 hidden">
@@ -169,11 +169,11 @@ function OrdersHistory() {
                               key={locIndex}
                               className="font-semibold text-[#0000001e]"
                             >
-                              {data.order_location.length > 1 && (
+                              {data?.order_location.length > 1 && (
                                 <span>{`Location ${locIndex + 1}: `}</span>
                               )}
                               <span className="text-[#000000] font-semibold">
-                                {locationData.location}
+                                {locationData?.location}
                               </span>
                             </div>
                           ))}

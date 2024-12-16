@@ -25,7 +25,7 @@ function OrdersDetail() {
       if (response.data) {
         console.log(response.data);
         setOrderDetail(response.data.report);
-        setName(response.data.report.order.user.name);
+        setName(response?.data?.report?.order?.user.name);
 
         // const imageUrls = response.data.report.report_imgs.map(
         //   (img) => img.report_imgs
@@ -99,7 +99,7 @@ function OrdersDetail() {
                   </div>
                   <div className="">
                     <span className="text-[#bdbcc1]">Date: </span>
-                    <span className="font-semibold">{orderDetail.date}</span>
+                    <span className="font-semibold">{orderDetail?.date}</span>
                   </div>
                   <div className="pb-5">
                     <span className="text-[#bdbcc1]">Technician: </span>
@@ -110,7 +110,7 @@ function OrdersDetail() {
                   <div className="pb-5">
                     <span className="text-[#bdbcc1]">Location: </span>
                     <span className="font-semibold">
-                      {orderDetail.location}
+                      {orderDetail?.location}
                     </span>
                   </div>
                 </div>

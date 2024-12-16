@@ -214,7 +214,7 @@ function PestsTypes() {
                         <span className="">Treatment Type</span>
                       </p>
                     </th>
-                    <th className={`px-0 ${delTechnician?"hidden":""}`}>
+                    <th className={`px-0 `}>
                       <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md">
                         Action
                       </p>
@@ -232,9 +232,10 @@ function PestsTypes() {
                             </p>
                           </div>
                         </td>
-                        <td className={`${delTechnician?"hidden":""} py-3 border-b border-r lg:px-10`}>
+                        <td className={`py-3 border-b border-r lg:px-10`}>
                           <div className="flex gap-x-3 justify-center">
                             <button
+                            className={`${delTechnician?"hidden":""}`}
                               onClick={function () {
                                 setOpenEditTreatment(true);
                                 setTreatmentId(data.id);
@@ -245,6 +246,7 @@ function PestsTypes() {
                               <img src={Edit} className="w-[30px]" alt="" />
                             </button>
                             <button
+                            className={`${delTechnician?"hidden":""}`}
                               onClick={function () {
                                 setTreatmentId(data.id);
                                 setOpenDeleteTreatment(true);

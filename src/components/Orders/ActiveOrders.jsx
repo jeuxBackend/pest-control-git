@@ -169,18 +169,18 @@ function Orders() {
                     >
                       <div className="py-2 px-2">
                         <span className="text-[#bdbcc1]">Client Name: </span>
-                        <span className="font-semibold">{data.user.name}</span>
+                        <span className="font-semibold">{data?.user?.name}</span>
                       </div>
                       <div className="py-2 px-2">
                         <span className="text-[#bdbcc1]">Start Date: </span>
                         <span className="font-semibold">
-                          {convertMillisecondsToDate(data.starting_date)}
+                          {convertMillisecondsToDate(data?.starting_date)}
                         </span>
                       </div>
                       <div className="py-2 px-2">
                         <span className="text-[#bdbcc1]">End Date: </span>
                         <span className="font-semibold">
-                          {convertMillisecondsToDate(data.ending_date)}
+                          {convertMillisecondsToDate(data?.ending_date)}
                         </span>
                       </div>
                       <div className="py-2 px-2 hidden">
@@ -198,11 +198,11 @@ function Orders() {
                               key={locIndex}
                               className="font-semibold text-[#0000001e]"
                             >
-                              {data.order_location.length > 1 && (
+                              {data?.order_location.length > 1 && (
                                 <span>{`Location ${locIndex + 1}: `}</span>
                               )}
                               <span className="text-[#000000] font-semibold">
-                                {locationData.location}
+                                {locationData?.location}
                               </span>
                             </div>
                           ))}
