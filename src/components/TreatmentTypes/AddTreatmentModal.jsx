@@ -30,6 +30,8 @@ function AddTreatmentModal() {
         console.log(error.response);
       } else {
         console.log(error);
+        notifyError("Network Error")
+
       }
     }
   };

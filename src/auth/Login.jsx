@@ -6,6 +6,7 @@ import Bg from "./assets/bg.png";
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../axiosInstance/axioisInstance";
 import { useMyContext } from "../Context/Context";
+import toast, { Toaster } from "react-hot-toast";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -15,7 +16,7 @@ const Login = () => {
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
-
+const notifyError= (e)=> toast.error(e)
 
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
@@ -34,6 +35,7 @@ const Login = () => {
     } catch (error) {
       if (error.response) {
         console.log(error.response);
+        notifyError(error.response.data.message);
       } else {
         console.log(error);
       }
@@ -55,6 +57,7 @@ const Login = () => {
       className="min-h-screen flex lg:flex-row-reverse md:flex-col flex-col items-center h-screen w-full min-w-screen bg-cover"
       style={{ backgroundImage: `url(${Bg})` }}
     >
+      <Toaster/>
       <div className="lg:w-[60%] lg:block md:hidden hidden">
         <img
           src={loginSideImage}

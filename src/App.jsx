@@ -38,6 +38,7 @@ import DelClient from "./components/Users/DelClient";
 import PestDetail from "./components/PestsTypes/PestDetail";
 import TreatmentDetails from "./components/TreatmentTypes/TreatmentDetails";
 import AddMessage from "./components/ChatComp/AddMessage";
+import ActivityTracker from "./ActivityTracker/ActivityTracker";
 
 function App() {
   const {
@@ -101,6 +102,7 @@ function App() {
 
   return (
     <>
+    <ActivityTracker/>
       <div className={`${openLogout === true ? "" : "hidden"}`}>
         <LogoutModal />
       </div>

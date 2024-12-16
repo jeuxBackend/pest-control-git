@@ -158,7 +158,7 @@ function Orders() {
               {Array.isArray(allPendingOrders) &&
               allPendingOrders.length > 0 ? (
                 filteredOrder.map((data, index) => (
-                  <div key={index} className="lg:w-1/3 md:w-1/2 w-full p-2">
+                  <div key={index} className={`lg:w-1/3 md:w-1/2 w-full p-2 ${data?.user === null || data?.user === undefined ? "hidden" : "" }`}>
                     <div
                       className="border shadow-sm rounded-lg p-2 bg-cover"
                       style={{ backgroundImage: `url(${CardBg})` }}

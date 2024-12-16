@@ -31,6 +31,12 @@ function OrdersDetail() {
         //   (img) => img.report_imgs
         // );
         setImagesState(response.data.report.report_imgs);
+
+        const orderData = {
+          orderDetail: response.data.report,
+          images: response.data.report.report_imgs,
+        };
+        localStorage.setItem(`orderDetail_${id}`, JSON.stringify(orderData));
       }
     } catch (error) {
       if (error.response) {
@@ -43,8 +49,20 @@ function OrdersDetail() {
     }
   };
 
+  const getStoredOrderDetail = (id) => {
+    const storedData = localStorage.getItem(`orderDetail_${id}`);
+    if (storedData) {
+      const parsedData = JSON.parse(storedData);
+      setOrderDetail(parsedData.orderDetail);
+      setImagesState(parsedData.images);
+      setName(parsedData.orderDetail?.order?.user?.name);
+    } else {
+      getOrderDetail(id); 
+    }
+  };
+
   useEffect(() => {
-    getOrderDetail(historyOrderId);
+    getStoredOrderDetail(historyOrderId);
   }, [historyOrderId]);
 
   const handleSubmit = async (id) => {
@@ -53,7 +71,7 @@ function OrdersDetail() {
         const response = await axiosInstance.post(
             "reportPdf", 
             { order_id: id },
-            { responseType: 'blob' } // Add this option
+            { responseType: 'blob' } 
         );
 
         if (response.data) {
@@ -164,3 +182,5 @@ function OrdersDetail() {
 }
 
 export default OrdersDetail;
+
+

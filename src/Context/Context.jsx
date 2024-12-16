@@ -74,7 +74,15 @@ export const MyContextProvider = ({ children }) => {
   const [orderId, setOrderId] = useState(null);
   const [userId, setUserId] = useState({id: null, type: 'block'});
   const [activeOrderId, setActiveOrderId] = useState(null);
-  const [historyOrderId, setHistoryOrderId] = useState(null);
+  const [historyOrderId, setHistoryOrderId] = useState(() => {
+    const savedhistoryOrderId = localStorage.getItem("historyOrderID");
+    return savedhistoryOrderId ? JSON.parse(savedhistoryOrderId) : "";
+  });
+  useEffect(() => {
+    if (historyOrderId !== null) {
+      localStorage.setItem("historyOrderID", JSON.stringify(historyOrderId));
+    }
+  }, [historyOrderId]);
   const [inspectorIdForAssign, setInspectorIdForAssign] = useState(null);
   const [inspectorData, setInspectorData] = useState({});
   const [pestId, setPestId] = useState("");
