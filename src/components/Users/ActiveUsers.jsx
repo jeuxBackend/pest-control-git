@@ -291,10 +291,10 @@ const ActiveUsers = () => {
                             >
                               <img
                                 src={BlockColor}
-                                className="w-[18px]"
+                                className="w-[18px] mt-1"
                                 alt=""
                               />{" "}
-                              Block
+                              Inactive
                             </button>
                             <button
                              

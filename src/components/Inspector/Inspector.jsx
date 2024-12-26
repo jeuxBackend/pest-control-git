@@ -269,7 +269,7 @@ function Inspector() {
                   <tr>
                     <th className="px-0">
                       <p className="py-3 text-start ps-8 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 me-12 shadow-md">
-                        <span className="">Technician Name</span>
+                        <span className="">Technician User Name</span>
                       </p>
                     </th>
                     <th className="px-0">
@@ -304,7 +304,7 @@ function Inspector() {
                             </div>
                             <div>
                               <p className="text-lg text-black font-semibold">
-                                {data.name}
+                                {data.user_name}
                               </p>
                             </div>
                           </div>

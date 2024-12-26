@@ -170,7 +170,7 @@ function OrdersDetail() {
               </div>
               <div className="">
                 <p className="text-black text-xl font-semibold">Description:</p>
-                <p className="text-black">{orderDetail.description}</p>
+                <p className="text-black break-all">{orderDetail.description}</p>
               </div>
               <div className="w-full flex items-center justify-center my-4"></div>
             </div>

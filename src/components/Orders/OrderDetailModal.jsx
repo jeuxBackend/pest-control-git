@@ -124,7 +124,7 @@ function OrederDetailModal() {
             <div className="flex justify-between pb-3">
               <div className="">
                 <span className="text-black font-semibold">Description: </span>
-                <span className="text-[#00000067]">
+                <span className="text-[#00000067] break-all">
                   {order ? order.description : ""}
                 </span>
               </div>

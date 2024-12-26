@@ -19,14 +19,17 @@ function Orders() {
     setActiveOrderId,
     activeOrderToast,
     setActiveOrderToast,
+    openOrderDetail,
   } = useMyContext();
   const [allActiveOrders, setAllActiveOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredOrder, setFilteredOrders] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+
 
   const notify = () => toast.success("Order Confirmed Successfully");
-  const notifyError = () => toast.error("Order Not Confirmed");
+  const notifyError = () => toast.error("Please First Create Report");
 
   const getAllActiveOrders = async () => {
     try {
@@ -51,7 +54,7 @@ function Orders() {
   }, []);
   useEffect(() => {
     getAllActiveOrders();
-  }, [openConfirmModal]);
+  }, [openConfirmModal, openOrderDetail]);
 
   useEffect(() => {
     if (activeOrderToast === 1) {
@@ -82,16 +85,28 @@ function Orders() {
     return `${year}-${month}-${day} `;
   }
 
-  useEffect(() => {
-    let filteredOrders =
-      searchQuery && searchQuery.trim() !== ""
-        ? allActiveOrders.filter((order) =>
-            order.user.name.toLowerCase().includes(searchQuery.toLowerCase())
-          )
-        : allActiveOrders;
+  // useEffect(() => {
+  //   let filteredOrders =
+  //     searchQuery && searchQuery.trim() !== ""
+  //       ? allActiveOrders.filter((order) =>
+  //           order.user.name.toLowerCase().includes(searchQuery.toLowerCase())
+  //         )
+  //       : allActiveOrders;
 
-    setFilteredOrders(filteredOrders);
-  }, [searchQuery, allActiveOrders]);
+  //   setFilteredOrders(filteredOrders);
+  // }, [searchQuery, allActiveOrders]);
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredOrders = Array.isArray(allActiveOrders)
+    ? allActiveOrders.filter((item) => {
+        const lowerCaseSearchTerm = searchTerm.toLowerCase();
+
+        return item.user?.name?.toLowerCase().includes(lowerCaseSearchTerm);
+      })
+    : [];
 
   return (
     <div className="w-full h-full min-h-screen bg-[#fafafa]">
@@ -137,8 +152,10 @@ function Orders() {
                   type="text"
                   className="bg-transparent text-black border h-[50px] lg:w-[300px] md:w-[300px] w-[230px] rounded ps-3"
                   placeholder="Search"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  // value={searchQuery}
+                  // onChange={(e) => setSearchQuery(e.target.value)}
+                  value={searchTerm}
+                  onChange={handleSearchChange}
                 />
                 <button className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
                   <img src={SearchIcon} className="w-[22px]" alt="" />
@@ -161,15 +178,24 @@ function Orders() {
             {/* order cards start */}
             <div className="flex flex-wrap">
               {Array.isArray(allActiveOrders) && allActiveOrders.length > 0 ? (
-                filteredOrder.map((data, index) => (
-                  <div key={index} className={`lg:w-1/3 md:w-1/2 w-full p-2 ${data?.user === null || data?.user === undefined ? "hidden" : "" }`}>
+                filteredOrders.map((data, index) => (
+                  <div
+                    key={index}
+                    className={`lg:w-1/3 md:w-1/2 w-full p-2 ${
+                      data?.user === null || data?.user === undefined
+                        ? "hidden"
+                        : ""
+                    }`}
+                  >
                     <div
                       className="border shadow-sm rounded-lg p-2 bg-cover"
                       style={{ backgroundImage: `url(${CardBg})` }}
                     >
                       <div className="py-2 px-2">
                         <span className="text-[#bdbcc1]">Client Name: </span>
-                        <span className="font-semibold">{data?.user?.name}</span>
+                        <span className="font-semibold">
+                          {data?.user?.name}
+                        </span>
                       </div>
                       <div className="py-2 px-2">
                         <span className="text-[#bdbcc1]">Start Date: </span>
@@ -213,13 +239,13 @@ function Orders() {
                           onClick={function () {
                             setOpenOrderDetail(true), setActiveOrderId(data.id);
                           }}
-                          className="flex justify-center items-center py-2 font-semibold rounded w-[135px] h-[45px] bg-[#003a5f] text-[#ffff] cursor-pointer"
+                          className="flex justify-center items-center py-2 font-semibold rounded w-[270px] h-[45px] bg-[#003a5f] text-[#ffff] cursor-pointer"
                         >
                           <span className="flex  items-center">
                             View Detail
                           </span>
                         </button>
-                        <button
+                        {/* <button
                           onClick={function () {
                             setOpenConfirmModal(true),
                               setActiveOrderId(data.id);
@@ -229,7 +255,7 @@ function Orders() {
                           <span className="flex  items-center">
                             Complete Order
                           </span>
-                        </button>
+                        </button> */}
                       </div>
                     </div>
                   </div>

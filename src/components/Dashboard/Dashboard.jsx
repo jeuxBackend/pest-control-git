@@ -87,7 +87,7 @@ function Dashboard() {
                 Completed Order
               </p>
               <p className="text-4xl mt-3 font-semibold text-[#003a5f]">
-                {dataDashboard.totalOrdera}
+                {dataDashboard.completeOrder}
               </p>
             </div>
           </div>
@@ -97,7 +97,7 @@ function Dashboard() {
                 Total Active Order
               </p>       
               <p className="text-4xl mt-3 font-semibold text-[#003a5f]">
-                {dataDashboard.activeOrdera}
+                {dataDashboard.activeOrder}
               </p>
             </div>
           </div>

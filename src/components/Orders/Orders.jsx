@@ -20,22 +20,24 @@ function Orders() {
     setInspectorIdForAssign,
     orderToast,
     setOrderToast,
+    openAssignInspector,
   } = useMyContext();
   const [allPendingOrders, setAllPendingOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredOrder, setFilteredOrders] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+
   const notify = () => toast.success("Technician Assigned Successfully");
   const notifyError = () => toast.error("Technician Not Assigned");
 
   const getAllPendingOrders = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-
       const response = await axiosInstance.get("admin/get-pending-order");
       if (response.data) {
         console.log(response.data.order);
-        setAllPendingOrders(response.data.order);
+        setAllPendingOrders(response?.data?.order);
       }
     } catch (error) {
       if (error.response) {
@@ -50,6 +52,9 @@ function Orders() {
   useEffect(() => {
     getAllPendingOrders();
   }, []);
+  useEffect(() => {
+    getAllPendingOrders();
+  }, [openAssignInspector]);
 
   useEffect(() => {
     if (orderToast === 1) {
@@ -80,16 +85,28 @@ function Orders() {
     return `${year}-${month}-${day} `;
   }
 
-  useEffect(() => {
-    let filteredOrders =
-      searchQuery && searchQuery.trim() !== ""
-        ? allPendingOrders.filter((order) =>
-            order.user.name.toLowerCase().includes(searchQuery.toLowerCase())
-          )
-        : allPendingOrders;
+  // useEffect(() => {
+  //   let filteredOrders =
+  //     searchQuery && searchQuery.trim() !== ""
+  //       ? allPendingOrders?.filter((order) =>
+  //           order.user.name.toLowerCase().includes(searchQuery.toLowerCase())
+  //         )
+  //       : allPendingOrders;
 
-    setFilteredOrders(filteredOrders);
-  }, [searchQuery, allPendingOrders]);
+  //   setFilteredOrders(filteredOrders);
+  // }, [searchQuery, allPendingOrders]);
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredOrders = Array.isArray(allPendingOrders)
+    ? allPendingOrders.filter((item) => {
+        const lowerCaseSearchTerm = searchTerm.toLowerCase();
+
+        return item.user?.name?.toLowerCase().includes(lowerCaseSearchTerm);
+      })
+    : [];
 
   return (
     <div className="w-full h-full min-h-screen bg-[#fafafa]">
@@ -132,8 +149,8 @@ function Orders() {
                   type="text"
                   className="bg-transparent text-black border h-[50px] lg:w-[300px] md:w-[300px] w-[230px] rounded ps-3"
                   placeholder="Search"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  value={searchTerm}
+                  onChange={handleSearchChange}
                 />
                 <button className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
                   <img src={SearchIcon} className="w-[22px]" alt="" />
@@ -157,8 +174,15 @@ function Orders() {
             <div className="flex flex-wrap">
               {Array.isArray(allPendingOrders) &&
               allPendingOrders.length > 0 ? (
-                filteredOrder.map((data, index) => (
-                  <div key={index} className={`lg:w-1/3 md:w-1/2 w-full p-2 ${data?.user === null || data?.user === undefined ? "hidden" : "" }`}>
+                filteredOrders.map((data, index) => (
+                  <div
+                    key={index}
+                    className={`lg:w-1/3 md:w-1/2 w-full p-2 ${
+                      data?.user === null || data?.user === undefined
+                        ? "hidden"
+                        : ""
+                    }`}
+                  >
                     <div
                       className="border shadow-sm rounded-lg p-2 bg-cover"
                       style={{ backgroundImage: `url(${CardBg})` }}

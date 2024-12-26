@@ -14,6 +14,7 @@ function OrdersHistory() {
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredOrder, setFilteredOrders] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const getAllHistoryOrders = async () => {
     try {
@@ -54,16 +55,28 @@ function OrdersHistory() {
     return `${year}-${month}-${day} `;
   }
 
-  useEffect(() => {
-    let filteredOrders =
-      searchQuery && searchQuery.trim() !== ""
-        ? allHistoryOrders.filter((order) =>
-            order.user.name.toLowerCase().includes(searchQuery.toLowerCase())
-          )
-        : allHistoryOrders;
+  // useEffect(() => {
+  //   let filteredOrders =
+  //     searchQuery && searchQuery.trim() !== ""
+  //       ? allHistoryOrders.filter((order) =>
+  //           order.user.name.toLowerCase().includes(searchQuery.toLowerCase())
+  //         )
+  //       : allHistoryOrders;
 
-    setFilteredOrders(filteredOrders);
-  }, [searchQuery, allHistoryOrders]);
+  //   setFilteredOrders(filteredOrders);
+  // }, [searchQuery, allHistoryOrders]);
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredOrders = Array.isArray(allHistoryOrders)
+    ? allHistoryOrders.filter((item) => {
+        const lowerCaseSearchTerm = searchTerm.toLowerCase();
+
+        return item.user?.name?.toLowerCase().includes(lowerCaseSearchTerm);
+      })
+    : [];
 
   return (
     <div className="w-full h-full min-h-screen bg-[#fafafa]">
@@ -105,8 +118,8 @@ function OrdersHistory() {
                   type="text"
                   className="bg-transparent text-black border h-[50px] lg:w-[300px] md:w-[300px] w-[230px] rounded ps-3"
                   placeholder="Search"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  value={searchTerm}
+                  onChange={handleSearchChange}
                 />
                 <button className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
                   <img src={SearchIcon} className="w-[22px]" alt="" />
@@ -130,8 +143,14 @@ function OrdersHistory() {
             <div className="flex flex-wrap">
               {Array.isArray(allHistoryOrders) &&
               allHistoryOrders.length > 0 ? (
-                filteredOrder.map((data, index) => (
-                  <div className={`lg:w-1/3 md:w-1/2 w-full p-2 ${data?.user === null || data?.user === undefined ? "hidden" : "" }`}>
+                filteredOrders.map((data, index) => (
+                  <div
+                    className={`lg:w-1/3 md:w-1/2 w-full p-2 ${
+                      data?.user === null || data?.user === undefined
+                        ? "hidden"
+                        : ""
+                    }`}
+                  >
                     <div
                       className="border shadow-sm rounded-lg p-2 bg-cover"
                       style={{ backgroundImage: `url(${CardBg})` }}

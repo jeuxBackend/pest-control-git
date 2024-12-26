@@ -345,11 +345,11 @@ const AllUsers = () => {
                                   className="px-5 py-2 text-[#c90000] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
                                 >
                                   <img
-                                    src={delRed}
-                                    className="w-[18px]"
+                                    src={BlockColor}
+                                    className="w-[18px] mt-1"
                                     alt=""
                                   />{" "}
-                                  Block
+                                  Inactive
                                 </button>
                                 <button
                                   className="px-3 py-3 text-[#ff2f16] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"

@@ -8,47 +8,40 @@ import axiosInstance from "../axiosInstance/axioisInstance";
 import { useMyContext } from "../Context/Context";
 import toast, { Toaster } from "react-hot-toast";
 
-const Login = () => {
+const ForgetPassword = () => {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const { adminID, setAdminID } = useMyContext();
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const togglePasswordVisibility = () => {
-    setIsPasswordVisible(!isPasswordVisible);
-  };
+
   const notifyError = (e) => toast.error(e);
 
   const navigate = useNavigate();
-  const handleSubmit = async (e) => {
+
+
+const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axiosInstance.post("admin/login", {
+      const response = await axiosInstance.post("forgot", {
         email: email,
-        password: password,
       });
-      if (response.data && response.data.token) {
-        console.log(response.data);
-        localStorage.setItem("PestToken", response.data.token);
-        setAdminID(response.data.user.id);
-        navigate("/Dashboard");
+  
+      if (response.data && response.data.status === "success") {
+        
+        toast.success(response.data.message); 
+        navigate("/"); 
+      } else {
+        toast.error("Something went wrong, please try again.");
       }
     } catch (error) {
+      
       if (error.response) {
-        console.log(error.response);
-        notifyError(error.response.data.message);
+        console.error(error.response);
+        toast.error(error.response.data.message || "An error occurred.");
       } else {
-        console.log(error);
+        console.error(error);
+        toast.error("Network error. Please try again.");
       }
     }
   };
-
-  useEffect(() => {
-    const token = localStorage.getItem("PestToken");
-
-    if (token) {
-      navigate("/Dashboard");
-    }
-  }, [navigate]);
+  
 
   return (
     <div
@@ -69,8 +62,7 @@ const Login = () => {
             <img src={Logo} alt="logo" className="h-[80px] mt-2" />
           </div>
           <div className="text-start mt-2">
-            <p className="text-4xl text-[#003a5f] font-bold">Welcome back!</p>
-            {/* <p className="text-[#003a5f] text-lg font-[500] mt-4">Access the admin portal to design and deliver certificates with ease.</p> */}
+            <p className="text-4xl text-[#003a5f] font-bold">Forget Password</p>
           </div>
           <form onSubmit={handleSubmit}>
             <div className="relative mb-4 mt-3 text-start">
@@ -86,37 +78,14 @@ const Login = () => {
                 aria-label="Email Address"
               />
             </div>
-            <div className="relative mb-4 text-start">
-              <label htmlFor="" className="text-[#003a5f] font-[600] text-lg">
-                Password
-              </label>
-              <input
-                required
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Password"
-                type={isPasswordVisible ? "text" : "password"}
-                className="w-full ps-4 py-3 mt-2 rounded-lg bg-[#ffff] text-[#003a5f] border border-[#003b5f57] placeholder-gray-500"
-                aria-label="Password"
-              />
-              <div
-                className="text-[#003a5f] absolute right-4 top-[51px] pt-1 cursor-pointer"
-                onClick={togglePasswordVisibility}
-              >
-                {isPasswordVisible ? <IoEyeOffOutline /> : <IoEyeOutline />}
-              </div>
-            </div>
-            <p className="text-[#003a5f] text-lg w-100 text-end">
-              <Link to={"/ForgetPassword"}>Forget password?</Link>
-            </p>
+
             <div className="w-full text-center">
-              {/* <Link to="/Dashboard"> */}
               <button
                 type="submit"
                 className="bg-[#c90000] w-[75%] py-3 text-lg text-white font-bold rounded-lg mt-3  text-center"
               >
-                Login
+                Send
               </button>
-              {/* </Link> */}
             </div>
           </form>
         </div>
@@ -125,4 +94,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgetPassword;

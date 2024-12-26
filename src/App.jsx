@@ -31,7 +31,7 @@ import EditTreatmentModal from "./components/TreatmentTypes/EditTreatmentModal";
 import DeleteTreatmentModal from "./components/TreatmentTypes/DeleteTreatmentModal";
 import ConfirmOrderModal from "./components/Orders/ConfirmOrderModal";
 import { getToken } from "firebase/messaging";
-import { messaging,db,collection,addDoc } from "./Firebase/firebase";
+import { messaging, db, collection, addDoc } from "./Firebase/firebase";
 import DeleteUsers from "./components/Users/DeleteUsers";
 import ActiveClient from "./components/Users/ActiveClient";
 import DelClient from "./components/Users/DelClient";
@@ -39,6 +39,7 @@ import PestDetail from "./components/PestsTypes/PestDetail";
 import TreatmentDetails from "./components/TreatmentTypes/TreatmentDetails";
 import AddMessage from "./components/ChatComp/AddMessage";
 import ActivityTracker from "./ActivityTracker/ActivityTracker";
+import ForgetPassword from "./auth/ForgetPassword";
 
 function App() {
   const {
@@ -58,21 +59,31 @@ function App() {
     openConfirmModal,
     setOpenActiveUser,
     openActiveUser,
-    openDelUser, setOpenDelUser,pestDetails, setPestDetails,treatmentDetails, setTreatmentDetails,sendMessage, setSendMessage
+    openDelUser,
+    setOpenDelUser,
+    pestDetails,
+    setPestDetails,
+    treatmentDetails,
+    setTreatmentDetails,
+    sendMessage,
+    setSendMessage,
   } = useMyContext();
 
-  const vapidKey='BNhmSaO-9liiuqa4vTmG2OHdOo-dQ3p4vyDyxIeSooW91Xql-7u1WcLskdLZrCqbyfbkBScerH3s1C3BFyeLNP4'
+  const vapidKey =
+    "BNhmSaO-9liiuqa4vTmG2OHdOo-dQ3p4vyDyxIeSooW91Xql-7u1WcLskdLZrCqbyfbkBScerH3s1C3BFyeLNP4";
 
   async function requestPermission() {
     const permission = await Notification.requestPermission();
-  
+
     if (permission === "granted") {
       try {
         const token = await getToken(messaging, {
           vapidKey: vapidKey,
-          serviceWorkerRegistration: await navigator.serviceWorker.register('/firebase-messaging-sw.js'),
+          serviceWorkerRegistration: await navigator.serviceWorker.register(
+            "/firebase-messaging-sw.js"
+          ),
         });
-  
+
         console.log("Token generated: ", token);
       } catch (error) {
         console.error("Error getting token:", error);
@@ -96,13 +107,9 @@ function App() {
     requestPermission();
   }, []);
 
-  
-
-
-
   return (
     <>
-    <ActivityTracker/>
+      <ActivityTracker />
       <div className={`${openLogout === true ? "" : "hidden"}`}>
         <LogoutModal />
       </div>
@@ -147,22 +154,24 @@ function App() {
         <ConfirmOrderModal />
       </div>
       <div className={`${openActiveUser === true ? "" : "hidden"}`}>
-        <ActiveClient/>
+        <ActiveClient />
       </div>
       <div className={`${openDelUser === true ? "" : "hidden"}`}>
-        <DelClient/>
+        <DelClient />
       </div>
       <div className={`${pestDetails === true ? "" : "hidden"}`}>
-        <PestDetail/>
+        <PestDetail />
       </div>
       <div className={`${treatmentDetails === true ? "" : "hidden"}`}>
-        <TreatmentDetails/>
+        <TreatmentDetails />
       </div>
       <div className={`${sendMessage === true ? "" : "hidden"}`}>
-        <AddMessage/>
+        <AddMessage />
       </div>
+
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/ForgetPassword" element={<ForgetPassword />} />
         <Route element={<MainModule />}>
           <Route path="/Dashboard" element={<Dashboard />} />
           <Route path="/All-Clients" element={<AllUsers />} />
