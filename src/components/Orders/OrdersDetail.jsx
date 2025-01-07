@@ -3,9 +3,10 @@ import { Link } from "react-router-dom";
 import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
 import { TailSpin } from "react-loader-spinner";
+import BackArrow from "./assets/back-arrow.png";
 
 function OrdersDetail() {
-  const { setImages, historyOrderId, setHistoryOrderId } = useMyContext();
+  const { setImages, historyOrderId, setHistoryOrderId, setPageHeading } = useMyContext();
   const [orderDetail, setOrderDetail] = useState({});
   const [images, setImagesState] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -57,7 +58,7 @@ function OrdersDetail() {
       setImagesState(parsedData.images);
       setName(parsedData.orderDetail?.order?.user?.name);
     } else {
-      getOrderDetail(id); 
+      getOrderDetail(id);
     }
   };
 
@@ -68,31 +69,31 @@ function OrdersDetail() {
   const handleSubmit = async (id) => {
     setLoading(true);
     try {
-        const response = await axiosInstance.post(
-            "reportPdf", 
-            { order_id: id },
-            { responseType: 'blob' } 
-        );
+      const response = await axiosInstance.post(
+        "reportPdf",
+        { order_id: id },
+        { responseType: "blob" }
+      );
 
-        if (response.data) {
-            const blob = new Blob([response.data], { type: "application/pdf" });
-            const url = window.URL.createObjectURL(blob);
+      if (response.data) {
+        const blob = new Blob([response.data], { type: "application/pdf" });
+        const url = window.URL.createObjectURL(blob);
 
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = "report.pdf";
-            document.body.appendChild(link);
-            link.click();
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "report.pdf";
+        document.body.appendChild(link);
+        link.click();
 
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(url);
-        }
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      }
     } catch (error) {
-        console.error("Error downloading the PDF:", error);
+      console.error("Error downloading the PDF:", error);
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
-};
+  };
 
   return (
     <div className="w-full h-full min-h-screen bg-[#fafafa]">
@@ -107,6 +108,20 @@ function OrdersDetail() {
         </div>
       ) : (
         <div className="AllUsers-div relative lg:ml-[260px] px-3 top-[20px]">
+          <div className="users-nav w-full flex flex-wrap justify-between mb-5">
+            <div className="active-block-brns xl:w-[40%] lg:w-[100%] mt-2">
+              <ul className="flex flex-wrap gap-3">
+                <div className="flex items-center gap-x-6 bg-white h-[50px] border shadow-sm rounded-lg px-2">
+                  <li>
+                    <Link onClick={() => setPageHeading("Completed")} to={"/Orders-History"} className="flex items-center justify-center gap-x-3 py-2 font-semibold rounded bg-[#c90000]  w-[100px] h-[40px] text-[#ffff] cursor-pointer">
+                      <img src={BackArrow} className="h-[18px]" alt="" />
+                      <div className="flex gap-x-2 items-center">Back</div>
+                    </Link>
+                  </li>
+                </div>
+              </ul>
+            </div>
+          </div>
           <div className="w-full pb-2">
             <div className="border shadow-sm rounded-lg p-2">
               <div className="flex items-center justify-between">
@@ -170,7 +185,9 @@ function OrdersDetail() {
               </div>
               <div className="">
                 <p className="text-black text-xl font-semibold">Description:</p>
-                <p className="text-black break-all">{orderDetail.description}</p>
+                <p className="text-black break-all">
+                  {orderDetail.description}
+                </p>
               </div>
               <div className="w-full flex items-center justify-center my-4"></div>
             </div>
@@ -182,5 +199,3 @@ function OrdersDetail() {
 }
 
 export default OrdersDetail;
-
-

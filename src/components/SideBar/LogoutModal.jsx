@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useMyContext } from "../../Context/Context";
 import DeleteImage from "./assets/logout-image.png";
 
-function AddUser() {
+function Logout() {
   const { pageHeading, setPageHeading } = useMyContext();
   const { openLogout, setOpenLogout } = useMyContext();
   const navigate = useNavigate()
@@ -41,7 +41,6 @@ function AddUser() {
               >
                 <div
                
-                
                 to={"/"}>Logout</div>
               </button>
             </div>
@@ -52,4 +51,4 @@ function AddUser() {
   );
 }
 
-export default AddUser;
+export default Logout;

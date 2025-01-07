@@ -12,10 +12,11 @@ import UserPic from "./assets/user-pic.png";
 import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
 import { TailSpin } from "react-loader-spinner";
-import delWhite from "./assets/del-white.svg"
-import delRed from "./assets/del-red.svg"
-import atoz from "/atoz.svg"
-import ztoa from "/ztoa.svg"
+import delWhite from "./assets/del-white.svg";
+import delRed from "./assets/del-red.svg";
+import atoz from "/atoz.svg";
+import ztoa from "/ztoa.svg";
+import { RiArrowUpDownFill } from "react-icons/ri";
 
 const DeleteUsers = () => {
   const { pageHeading, setPageHeading } = useMyContext();
@@ -32,8 +33,8 @@ const DeleteUsers = () => {
   const getDelUsers = async () => {
     try {
       setLoading(true);
-      const response = await axiosInstance.post("admin/showDeleteUser",{
-        role: "user"
+      const response = await axiosInstance.post("admin/showDeleteUser", {
+        role: "user",
       });
       if (response.data) {
         console.log(response.data);
@@ -77,16 +78,14 @@ const DeleteUsers = () => {
   const handleSort = () => {
     const sortedUsers = [...blockUser].sort((a, b) => {
       if (sort) {
-        return b.name.localeCompare(a.name); 
+        return b.name.localeCompare(a.name);
       } else {
-        return a.name.localeCompare(b.name); 
+        return a.name.localeCompare(b.name);
       }
     });
     setBlockUser(sortedUsers);
     setSort(!sort);
   };
-
-
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -154,7 +153,7 @@ const DeleteUsers = () => {
                 <Link
                   to={"/Active-Clients"}
                   onClick={() => setPageHeading("Active Clients")}
-                  className="flex justify-center py-2 border shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded text-[#828282] bg-transparent cursor-pointer"
+                  className="flex justify-center py-2 border shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded text-[#000000] bg-transparent cursor-pointer"
                 >
                   <div className="flex gap-x-2 items-center">
                     <img className="w-[20px]" src={Active} alt="active Icon" />
@@ -163,7 +162,11 @@ const DeleteUsers = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/Inactive-Clients" onClick={() => setPageHeading("Inactive Clients")}className="flex justify-center py-2 border text-[#828282] shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded  cursor-pointer">
+                <Link
+                  to="/Inactive-Clients"
+                  onClick={() => setPageHeading("Inactive Clients")}
+                  className="flex justify-center py-2 border text-[#000000] shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded  cursor-pointer"
+                >
                   <div className="flex gap-x-2 items-center">
                     <img
                       className="w-[20px]"
@@ -198,8 +201,8 @@ const DeleteUsers = () => {
                   className="bg-transparent text-black border h-[50px] lg:w-[300px] md:w-[300px] w-[230px] rounded ps-3"
                   placeholder="Search"
                 />
-                <button onClick={handleSort} className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
-                  <img src={sort? ztoa:atoz} className="w-[22px]" alt="" />
+                <button className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
+                  <img src={SearchIcon} className="w-[22px]" alt="" />
                 </button>
               </div>
             </div>
@@ -220,11 +223,17 @@ const DeleteUsers = () => {
               <table className="w-full min-w-[800px] bg-transparent text-center shadow-sm overflow-hidden">
                 <thead className="text-sm">
                   <tr>
-                    <th className="px-0">
-                      <p className="py-3 text-start ps-8 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 me-12 shadow-md">
-                        <span className="">Client Details</span>
-                      </p>
-                    </th>
+                     <th className="px-0">
+                                         <p className="py-3 text-start ps-8 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 me-12 shadow-md flex items-center gap-x-2">
+                                           <button
+                                             onClick={handleSort}
+                                             className="flex justify-center items-center"
+                                           >
+                                             <RiArrowUpDownFill className="text-[#8a8e9c] text-[30px] font-bold" />
+                                           </button>
+                                           <span className="">Client Details</span>
+                                         </p>
+                                       </th>
                     <th className="px-0">
                       <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 shadow-md mx-6">
                         Email
@@ -237,7 +246,7 @@ const DeleteUsers = () => {
                     </th>
                     <th className="px-0">
                       <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md">
-                        Date
+                        Delete Date
                       </p>
                     </th>
                     {/* <th className="px-0">
@@ -274,8 +283,9 @@ const DeleteUsers = () => {
                           <p className="text-black px-8">{data?.address}</p>
                         </td>
                         <td className="py-3 border-b border-r">
-                        <p className="text-black px-8">{data?.created_at.split('T')[0]} </p>
-
+                          <p className="text-black px-8">
+                            {data?.updated_at.split("T")[0]}{" "}
+                          </p>
                         </td>
                         {/* <td className="py-3 px-5 border-b border-r">
                           <div className="flex justify-center">

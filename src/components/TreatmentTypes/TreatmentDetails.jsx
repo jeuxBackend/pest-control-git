@@ -32,7 +32,7 @@ function TreatmentDetails() {
                   <p className="text-lg opacity-50">
                     Treatment Name:
                   </p>
-                  <p className="text-lg font-semibold">
+                  <p className="text-lg font-semibold break-all">
                   {treatmentName?treatmentName:""}
                   </p>
                   

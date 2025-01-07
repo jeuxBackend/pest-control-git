@@ -6,6 +6,7 @@ import Delete from "./assets/delete-btn.png";
 import Add from "./assets/add-icon.png";
 import LeftArrow from "./assets/left-arrow.png";
 import RightArrow from "./assets/right-arrow.png";
+import ActiveColorWhite from "./assets/active-color-white.png";
 import UserPic from "./assets/user-pic.png";
 import UserPic2 from "./assets/user-pic2.png";
 import UserPic3 from "./assets/user-pic3.png";
@@ -24,7 +25,7 @@ import delWhite from "./assets/del-white.svg";
 import { RiArrowUpDownFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 
-function Inspector() {
+function ActiveInspector() {
   const {
     setOpenAddInspector,
     setOpenEditInspector,
@@ -43,7 +44,7 @@ function Inspector() {
     openInspectorStatusModal,
     setOpenInspectorStatusModal,
   } = useMyContext();
-  const [allInspectors, setAllInspectors] = useState([]);
+  const [activeInspectors, setActiveInspectors] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage, setUsersPerPage] = useState(10);
@@ -82,14 +83,17 @@ function Inspector() {
     }
   }, [toaster]);
 
-  const getAllInspectors = async () => {
+  const getActiveInspectors = async () => {
     // if (delTechnician === false) {
     try {
       setLoading(true);
       const response = await axiosInstance.get("admin/get-all-inspector");
       if (response.data) {
-        console.log(response.data);
-        setAllInspectors(response.data.inspector);
+        const filteredInspectors = response.data.inspector.filter(
+          (inspector) => inspector.status === 1
+        );
+        console.log(filteredInspectors);
+        setActiveInspectors(filteredInspectors);
       }
     } catch (error) {
       if (error.response) {
@@ -109,12 +113,12 @@ function Inspector() {
     //     });
     //     if (response.data) {
     //       console.log(response.data);
-    //       setAllInspectors(response.data.user);
+    //       setActiveInspectors(response.data.user);
     //     }
     //   } catch (error) {
     //     if (error.response) {
     //       console.log(error.response);
-    //       setAllInspectors([]);
+    //       setActiveInspectors([]);
     //     } else {
     //       console.log(error);
     //     }
@@ -124,16 +128,16 @@ function Inspector() {
     // }
   };
   useEffect(() => {
-    getAllInspectors();
+    getActiveInspectors();
   }, []);
   useEffect(() => {
-    getAllInspectors();
+    getActiveInspectors();
   }, [openAddInspector, delTechnician]);
   useEffect(() => {
-    getAllInspectors();
+    getActiveInspectors();
   }, [openEditInspector]);
   useEffect(() => {
-    getAllInspectors();
+    getActiveInspectors();
   }, [openDeleteInspector, openInspectorStatusModal]);
 
   const getInspectorData = async (id) => {
@@ -155,14 +159,14 @@ function Inspector() {
 
   // search code start
   const handleSort = () => {
-    const sortedUsers = [...allInspectors].sort((a, b) => {
+    const sortedUsers = [...activeInspectors].sort((a, b) => {
       if (sort) {
         return b.name.localeCompare(a.name);
       } else {
         return a.name.localeCompare(b.name);
       }
     });
-    setAllInspectors(sortedUsers);
+    setActiveInspectors(sortedUsers);
     setSort(!sort);
   };
 
@@ -170,7 +174,7 @@ function Inspector() {
     setSearchTerm(event.target.value);
   };
 
-  const filteredUsers = allInspectors.filter((item) => {
+  const filteredUsers = activeInspectors.filter((item) => {
     const lowerCaseSearchTerm = searchTerm.toLowerCase();
 
     return (
@@ -187,8 +191,8 @@ function Inspector() {
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
-  const totalPages = Math.ceil(allInspectors.length / usersPerPage);
-  const totalUsers = allInspectors.length;
+  const totalPages = Math.ceil(activeInspectors.length / usersPerPage);
+  const totalUsers = activeInspectors.length;
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -276,10 +280,14 @@ function Inspector() {
                 <Link
                   to={"/Active-Technician"}
                   onClick={() => setPageHeading("Active Technicians")}
-                  className="flex justify-center py-2 border shadow-sm font-semibold w-[195px] h-[50px] text-lg rounded text-[#000000] bg-transparent cursor-pointer"
+                  className="flex justify-center py-2 border border-[#003a5f] bg-[#003a5f] shadow-sm font-semibold w-[195px] h-[50px] text-lg rounded text-[#ffff] cursor-pointer"
                 >
                   <div className="flex gap-x-2 items-center text-lg font-500">
-                    <img className="w-[20px]" src={Active} alt="active Icon" />
+                    <img
+                      className="w-[20px]"
+                      src={ActiveColorWhite}
+                      alt="active Icon"
+                    />
                     Active Technician
                   </div>
                 </Link>
@@ -406,48 +414,35 @@ function Inspector() {
                             delTechnician ? "hidden" : ""
                           }`}
                         >
-                          <div className="flex justify-center">
-                            {data?.status === 1 ? (
-                              <div className="flex items-center gap-2">
-                                <button
-                                  onClick={function () {
-                                    setInspectorId({
-                                      id: data.id,
-                                      type: "Active",
-                                    }),
-                                      setOpenInspectorStatusModal(true);
-                                  }}
-                                  className="px-5 py-2 text-[#003a5f] text-lg font-semibold rounded-full bg-[#d4dee3] flex justify-center items-center gap-3"
-                                >
-                                  <img
-                                    src={ActiveColor}
-                                    className="w-[20px]"
-                                    alt=""
-                                  />{" "}
-                                  Active
-                                </button>
-                              </div>
-                            ) : (
-                              <div className="flex items-center gap-2">
-                                <button
-                                  onClick={function () {
-                                    setInspectorId({
-                                      id: data.id,
-                                      type: "block",
-                                    }),
-                                      setOpenInspectorStatusModal(true);
-                                  }}
-                                  className="px-5 py-2 text-[#c90000] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
-                                >
-                                  <img
-                                    src={BlockColor}
-                                    className="w-[18px] mt-1"
-                                    alt=""
-                                  />{" "}
-                                  Inactive
-                                </button>
-                              </div>
-                            )}
+                          <div className="flex justify-center gap-2">
+                            {/* <button
+                              onClick={function () {
+                                setInspectorId({ id: data.id, type: "Active" }),
+                                  setOpenInspectorStatusModal(true);
+                              }}
+                              className="px-5 py-2 text-[#c90000] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
+                            >
+                              <img
+                                src={BlockColor}
+                                className="w-[18px] mt-1"
+                                alt=""
+                              />{" "}
+                              Inactive
+                            </button> */}
+                            <button
+                              onClick={function () {
+                                setInspectorId({ id: data.id, type: "Active" }),
+                                  setOpenInspectorStatusModal(true);
+                              }}
+                              className="px-8 py-2 text-[#003a5f] text-lg font-semibold rounded-full bg-[#d4dee3] flex justify-center items-center gap-3"
+                            >
+                              <img
+                                src={ActiveColor}
+                                className="w-[20px]"
+                                alt=""
+                              />
+                              Active
+                            </button>
                           </div>
                         </td>
 
@@ -562,4 +557,4 @@ function Inspector() {
   );
 }
 
-export default Inspector;
+export default ActiveInspector;

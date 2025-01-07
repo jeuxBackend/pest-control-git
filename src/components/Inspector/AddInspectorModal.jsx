@@ -158,7 +158,7 @@ function AddInspectorModal() {
                   onChange={(e) => setUserName(e.target.value)}
                   placeholder="User Name"
                   className="w-full py-3 px-4 rounded-xl border shadow-sm"
-                  required
+                  
                 />
               </div>
               <div className="flex gap-3 lg:gap-8 lg:flex-row flex-col">
@@ -170,7 +170,7 @@ function AddInspectorModal() {
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Full Name"
                     className="w-full py-3 px-4 rounded-xl border shadow-sm"
-                    required
+                    
                   />
                 </div>
                 <div className="lg:w-[50%] w-[100%]">
@@ -178,10 +178,10 @@ function AddInspectorModal() {
                   <input
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    type="text"
+                    type="email"
                     placeholder="Email Address"
                     className="w-full py-3 px-4 rounded-xl border shadow-sm"
-                    required
+                    
                   />
                 </div>
               </div>
@@ -194,7 +194,7 @@ function AddInspectorModal() {
                     type="text"
                     placeholder="Password"
                     className="w-full py-3 px-4 rounded-xl border shadow-sm"
-                    required
+                
                   />
                 </div>
                 <div className="lg:w-[50%] w-[100%]">
@@ -205,7 +205,7 @@ function AddInspectorModal() {
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="Phone Number"
                     className="w-full py-3 px-4 rounded-xl border shadow-sm"
-                    required
+                    
                   />
                 </div>
               </div>
@@ -219,7 +219,7 @@ function AddInspectorModal() {
                     type="date"
                     placeholder="License Date"
                     className="w-full py-3 px-4 rounded-xl border shadow-sm"
-                    required
+                    
                   />
                 </div>
                 <div className="lg:w-[50%] w-[100%]">
@@ -231,7 +231,7 @@ function AddInspectorModal() {
                     type="date"
                     placeholder="License Expire Date"
                     className="w-full py-3 px-4 rounded-xl border shadow-sm"
-                    required
+                    
                   />
                 </div>
               </div>

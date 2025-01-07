@@ -6,10 +6,10 @@ import Delete from "./assets/delete-btn.png";
 import Add from "./assets/add-icon.png";
 import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
-
-import { TailSpin } from 'react-loader-spinner';
-import atoz from "/atoz.svg"
-import ztoa from "/ztoa.svg"
+import { RiArrowUpDownFill } from "react-icons/ri";
+import { TailSpin } from "react-loader-spinner";
+import atoz from "/atoz.svg";
+import ztoa from "/ztoa.svg";
 import del from "./assets/del.svg";
 import delWhite from "./assets/del-white.svg";
 import eye from "./assets/eye.svg";
@@ -27,64 +27,70 @@ function PestsTypes() {
     openEditTreatment,
     openDeleteTreatment,
     treatmentToast,
-    setTreatmentToast,setDelTechnician,delTechnician,treatmentDetails, setTreatmentDetails,treatmentDescription, setTreatmentDescription
+    setTreatmentToast,
+    setDelTechnician,
+    delTechnician,
+    treatmentDetails,
+    setTreatmentDetails,
+    treatmentDescription,
+    setTreatmentDescription,
   } = useMyContext();
 
   const [allTreatments, setAllTreatments] = useState([]);
-  const [loading, setLoading] = useState(false);  
+  const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredOrder, setFilteredOrders] = useState([]);
-    const [searchTerm, setSearchTerm] = useState("");
-  
+  const [searchTerm, setSearchTerm] = useState("");
+
   const [sort, setSort] = useState(false);
   const getAllTreatments = async () => {
-    if(delTechnician===false){
-    try {
-      setLoading(true); 
-      const response = await axiosInstance.get("get-all-treatment-types");
-      if (response.data) {
-        console.log(response.data);
-        setAllTreatments(response?.data?.treatmentTypes);
+    if (delTechnician === false) {
+      try {
+        setLoading(true);
+        const response = await axiosInstance.get("get-all-treatment-types");
+        if (response.data) {
+          console.log(response.data);
+          setAllTreatments(response?.data?.treatmentTypes);
+        }
+      } catch (error) {
+        if (error.response) {
+          console.log(error.response);
+          setAllTreatments([]);
+        } else {
+          console.log(error);
+        }
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      if (error.response) {
-        console.log(error.response);
-        setAllTreatments([])
-      } else {
-        console.log(error);
-      }
-    } finally {
-      setLoading(false); 
     }
-  }if(delTechnician){
-    try {
-      setLoading(true); 
-      const response = await axiosInstance.get("admin/showDeleteTreatment");
-      if (response.data) {
-        console.log(response.data);
-        setAllTreatments(response?.data?.treatment);
+    if (delTechnician) {
+      try {
+        setLoading(true);
+        const response = await axiosInstance.get("admin/showDeleteTreatment");
+        if (response.data) {
+          console.log(response.data);
+          setAllTreatments(response?.data?.treatment);
+        }
+      } catch (error) {
+        if (error.response) {
+          console.log(error.response);
+          setAllTreatments([]);
+        } else {
+          console.log(error);
+        }
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      if (error.response) {
-        console.log(error.response);
-        setAllTreatments([])
-      } else {
-        console.log(error);
-      }
-    } finally {
-      setLoading(false); 
     }
-
-  }
   };
 
   useEffect(() => {
     getAllTreatments();
   }, []);
-  
+
   useEffect(() => {
     getAllTreatments();
-  }, [openAddTreatment,delTechnician]);
+  }, [openAddTreatment, delTechnician]);
 
   useEffect(() => {
     getAllTreatments();
@@ -126,27 +132,25 @@ function PestsTypes() {
   const handleSort = () => {
     const sortedUsers = [...allTreatments].sort((a, b) => {
       if (sort) {
-        return b.title.localeCompare(a.title); 
+        return b.title.localeCompare(a.title);
       } else {
-        return a.title.localeCompare(b.title); 
+        return a.title.localeCompare(b.title);
       }
     });
     setAllTreatments(sortedUsers);
     setSort(!sort);
   };
 
-  
-
   // useEffect(() => {
-  //   let filteredOrders = searchQuery && searchQuery.trim() !== "" 
+  //   let filteredOrders = searchQuery && searchQuery.trim() !== ""
   //     ? allTreatments?.filter((order) =>
   //         order.user.name.toLowerCase().includes(searchQuery.toLowerCase())
   //       )
-  //     : allTreatments; 
-    
+  //     : allTreatments;
+
   //   setFilteredOrders(filteredOrders);
-  // }, [searchQuery, allTreatments]); 
-  
+  // }, [searchQuery, allTreatments]);
+
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
@@ -156,27 +160,33 @@ function PestsTypes() {
     return item.title?.toLowerCase().includes(lowerCaseSearchTerm);
   });
 
-  
-
   return (
     <div className="w-full h-full min-h-screen bg-[#fafafa]">
       <Toaster />
       <div className="AllUsers-div relative lg:ml-[260px] px-3 top-[20px]">
         <div className="users-nav w-full flex flex-wrap justify-between">
           <div className="active-block-brns xl:w-[40%] lg:w-[100%] mt-2">
-          <button
-                onClick={() => setDelTechnician(true)}
-                className={`w-[130px] h-[50px] flex justify-center gap-2 items-center border  text-lg font-semibold shadow-sm rounded ${delTechnician?"bg-[#C90000] text-white":"text-[#828282]"}`}
-              >
-                <img src={delTechnician?delWhite:del} className="w-[15px]" alt="" />
-                Delete
-              </button>
+            <button
+              onClick={() => setDelTechnician(true)}
+              className={`w-[130px] h-[50px] flex justify-center gap-2 items-center border  text-lg font-semibold shadow-sm rounded ${
+                delTechnician ? "bg-[#C90000] text-white" : "text-[#000000]"
+              }`}
+            >
+              <img
+                src={delTechnician ? delWhite : del}
+                className="w-[15px]"
+                alt=""
+              />
+              Delete
+            </button>
           </div>
           <div className="user-add-search-div xl:w-[60%] lg:w-[100%] mt-2 flex justify-end">
             <div className="flex flex-wrap gap-3">
               <button
                 onClick={() => setOpenAddTreatment(true)}
-                className={`w-[180px] h-[50px] flex justify-center gap-2 items-center bg-[#003a5f] text-white text-lg font-semibold shadow-sm rounded ${delTechnician?"hidden":""}`}
+                className={`w-[180px] h-[50px] flex justify-center gap-2 items-center bg-[#003a5f] text-white text-lg font-semibold shadow-sm rounded ${
+                  delTechnician ? "hidden" : ""
+                }`}
               >
                 <img src={Add} className="w-[15px]" alt="" />
                 Add Treatment
@@ -190,8 +200,8 @@ function PestsTypes() {
                   onChange={handleSearchChange}
                   // onChange={(e) => setSearchQuery(e.target.value)}
                 />
-                <button onClick={handleSort} className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
-                <img src={sort? ztoa:atoz} className="w-[22px]" alt="" />
+                <button className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
+                  <img src={SearchIcon} className="w-[22px]" alt="" />
                 </button>
               </div>
             </div>
@@ -201,7 +211,12 @@ function PestsTypes() {
         {/* Loader code start */}
         {loading ? (
           <div className="flex justify-center items-center h-64">
-            <TailSpin height={50} width={50} color="#0066a5" ariaLabel="loading" />
+            <TailSpin
+              height={50}
+              width={50}
+              color="#0066a5"
+              ariaLabel="loading"
+            />
           </div>
         ) : (
           <div className="All-users-data mt-8">
@@ -210,8 +225,23 @@ function PestsTypes() {
                 <thead className="text-sm">
                   <tr>
                     <th className="px-0">
-                      <p className="py-3 text-start ps-8 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 me-12 shadow-md">
+                      <p className="py-3 text-start ps-8 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 me-12 shadow-md flex items-center gap-x-2">
+                        <button
+                          onClick={handleSort}
+                          className="flex justify-center items-center"
+                        >
+                          <RiArrowUpDownFill className="text-[#8b8e9c] text-[30px] font-bold" />
+                        </button>
                         <span className="">Treatment Type</span>
+                      </p>
+                    </th>
+                    <th
+                      className={`px-0 ${delTechnician ? "visible" : "hidden"}`}
+                    >
+                      <p
+                        className={`py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md`}
+                      >
+                        <span className="">Delete Date</span>
                       </p>
                     </th>
                     <th className={`px-0 `}>
@@ -232,10 +262,21 @@ function PestsTypes() {
                             </p>
                           </div>
                         </td>
+                        <td
+                          className={`py-3 border-b border-r lg:px-10 ${
+                            delTechnician ? "visible" : "hidden"
+                          }`}
+                        >
+                          <div className="flex items-center justify-center ps-6 gap-x-3">
+                            <p className="text-lg text-black font-semibold">
+                              {data.updated_at.split("T")[0]}
+                            </p>
+                          </div>
+                        </td>
                         <td className={`py-3 border-b border-r lg:px-10`}>
                           <div className="flex gap-x-3 justify-center">
                             <button
-                            className={`${delTechnician?"hidden":""}`}
+                              className={`${delTechnician ? "hidden" : ""}`}
                               onClick={function () {
                                 setOpenEditTreatment(true);
                                 setTreatmentId(data.id);
@@ -246,18 +287,16 @@ function PestsTypes() {
                               <img src={Edit} className="w-[30px]" alt="" />
                             </button>
                             <button
-                            className={`${delTechnician?"hidden":""}`}
+                              className={`${delTechnician ? "hidden" : ""}`}
                               onClick={function () {
                                 setTreatmentId(data.id);
                                 setOpenDeleteTreatment(true);
-                                
                               }}
                             >
                               <img src={Delete} className="w-[30px]" alt="" />
                             </button>
                             <button
                               onClick={function () {
-                           
                                 setTreatmentDetails(true);
                                 setTreatmentName(data.title);
                                 setTreatmentDescription(data.description);

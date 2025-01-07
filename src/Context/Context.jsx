@@ -72,7 +72,7 @@ export const MyContextProvider = ({ children }) => {
   const [openAddTreatment, setOpenAddTreatment] = useState(false);
   const [inspectorId, setInspectorId] = useState(null);
   const [orderId, setOrderId] = useState(null);
-  const [userId, setUserId] = useState({id: null, type: 'block'});
+  const [userId, setUserId] = useState({ id: null, type: "block" });
   const [activeOrderId, setActiveOrderId] = useState(null);
   const [historyOrderId, setHistoryOrderId] = useState(() => {
     const savedhistoryOrderId = localStorage.getItem("historyOrderID");
@@ -102,6 +102,8 @@ export const MyContextProvider = ({ children }) => {
   const [delTechnician, setDelTechnician] = useState(false);
   const [pestDetails, setPestDetails] = useState(false);
   const [treatmentDetails, setTreatmentDetails] = useState(false);
+  const [openInspectorStatusModal, setOpenInspectorStatusModal] =
+    useState(false);
   const [sendMessage, setSendMessage] = useState(false);
   const [selectChat, setSelectChat] = useState(() => {
     const savedselectChat = localStorage.getItem("selectChat");
@@ -180,10 +182,28 @@ export const MyContextProvider = ({ children }) => {
         setActiveOrderToast,
         adminID,
         setAdminID,
-        chatId, setChatID,
-        openActiveUser, setOpenActiveUser,
-        userId, setUserId,
-        openDelUser, setOpenDelUser,delTechnician, setDelTechnician,pestDetails, setPestDetails,treatmentDetails, setTreatmentDetails,sendMessage, setSendMessage,pestDescription, setPestDescription,treatmentDescription, setTreatmentDescription
+        chatId,
+        setChatID,
+        openActiveUser,
+        setOpenActiveUser,
+        userId,
+        setUserId,
+        openDelUser,
+        setOpenDelUser,
+        delTechnician,
+        setDelTechnician,
+        pestDetails,
+        setPestDetails,
+        treatmentDetails,
+        setTreatmentDetails,
+        sendMessage,
+        setSendMessage,
+        pestDescription,
+        setPestDescription,
+        treatmentDescription,
+        setTreatmentDescription,
+        openInspectorStatusModal,
+        setOpenInspectorStatusModal,
       }}
     >
       {children}

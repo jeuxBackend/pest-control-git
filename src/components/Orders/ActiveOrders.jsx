@@ -141,7 +141,7 @@ function Orders() {
                   >
                     <div className="flex gap-x-2 items-center">Completed</div>
                   </Link>
-                </li>
+                </li> 
               </div>
             </ul>
           </div>

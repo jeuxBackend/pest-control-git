@@ -4,52 +4,41 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import ActiveColor from "./assets/active-color.png";
 import Active from "./assets/active.png";
-import BlockColor from "./assets/block-color.png";
-import Block from "./assets/block.png";
+import BlockColorWhite from "./assets/block.png";
 import SearchIcon from "./assets/search-icon.png";
 import LeftArrow from "./assets/left-arrow.png";
 import RightArrow from "./assets/right-arrow.png";
 import UserPic from "./assets/user-pic.png";
-import UserPic2 from "./assets/user-pic2.png";
-import UserPic3 from "./assets/user-pic3.png";
 import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
 import { TailSpin } from "react-loader-spinner";
-import del from "./assets/del.svg";
+import delWhite from "./assets/del-white.svg";
 import delRed from "./assets/del-red.svg";
 import atoz from "/atoz.svg";
 import ztoa from "/ztoa.svg";
 import { RiArrowUpDownFill } from "react-icons/ri";
 
-const AllUsers = () => {
-  const {
-    pageHeading,
-    setPageHeading,
-    openActiveUser,
-    setOpenActiveUser,
-    userId,
-    setUserId,
-    openDelUser,
-    setOpenDelUser,
-  } = useMyContext();
-  const [allUser, setAllUser] = useState([]);
-  const [changeStatus, setChangeStatus] = useState([]);
+const DeleteInspector = () => {
+  const { pageHeading, setPageHeading } = useMyContext();
+  const [blockUser, setBlockUser] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage, setUsersPerPage] = useState(10);
+
   const [loading, setLoading] = useState(false);
   const [sort, setSort] = useState(false);
-  // const [sort, setSort] = useState(false);
-
   const notify = () => toast.success("Status Changed Successfully");
+  const notifyError = () => toast.error("Status Not Changed");
 
-  const getAllUsers = async () => {
+  const getDelUsers = async () => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get("admin/get-all-user");
+      const response = await axiosInstance.post("admin/showDeleteUser", {
+        role: "inspector",
+      });
       if (response.data) {
         console.log(response.data);
-        setAllUser(response.data.users);
+        setBlockUser(response?.data?.user);
       }
     } catch (error) {
       if (error.response) {
@@ -62,11 +51,8 @@ const AllUsers = () => {
     }
   };
   useEffect(() => {
-    getAllUsers();
+    getDelUsers();
   }, []);
-  useEffect(() => {
-    getAllUsers();
-  }, [openActiveUser, openDelUser]);
 
   const changeUserStatus = async (changeStatus) => {
     try {
@@ -75,12 +61,12 @@ const AllUsers = () => {
       });
       if (response.data) {
         notify();
-
         console.log(response.data);
-        getAllUsers();
+        // getBlockUsers();
       }
     } catch (error) {
       if (error.response) {
+        notifyError();
         console.log(error.response);
       } else {
         console.log(error);
@@ -88,15 +74,16 @@ const AllUsers = () => {
     }
   };
 
+  // search code start
   const handleSort = () => {
-    const sortedUsers = [...allUser].sort((a, b) => {
+    const sortedUsers = [...blockUser].sort((a, b) => {
       if (sort) {
         return b.name.localeCompare(a.name);
       } else {
         return a.name.localeCompare(b.name);
       }
     });
-    setAllUser(sortedUsers);
+    setBlockUser(sortedUsers);
     setSort(!sort);
   };
 
@@ -104,8 +91,8 @@ const AllUsers = () => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredUsers = allUser.filter((item) => {
-    const lowerCaseSearchTerm = searchTerm.toLowerCase();
+  const filteredUsers = blockUser?.filter((item) => {
+    const lowerCaseSearchTerm = searchTerm?.toLowerCase();
     return (
       item.name?.toLowerCase().includes(lowerCaseSearchTerm) ||
       item.email?.toLowerCase().includes(lowerCaseSearchTerm) ||
@@ -119,9 +106,9 @@ const AllUsers = () => {
 
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
-  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
-  const totalPages = Math.ceil(allUser.length / usersPerPage);
-  const totalUsers = allUser.length;
+  const currentUsers = filteredUsers?.slice(indexOfFirstUser, indexOfLastUser);
+  const totalPages = Math.ceil(blockUser?.length / usersPerPage);
+  const totalUsers = blockUser?.length;
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -149,7 +136,7 @@ const AllUsers = () => {
   const generateOptions = () => {
     const options = [];
     for (let i = 10; i <= totalUsers; i += 10) {
-      options.push(i);
+      options?.push(i);
     }
     return options;
   };
@@ -157,14 +144,14 @@ const AllUsers = () => {
   // pagination end
 
   return (
-    <div className="w-full h-full min-h-screen bg-[#fafafa] pb-10">
+    <div className="w-full h-full min-h-screen bg-[#fafafa]">
       <div className="AllUsers-div relative  lg:ml-[260px] px-3 top-[20px]">
         <div className="users-nav w-full flex flex-wrap justify-between">
           <div className="active-block-brns xl:w-[60%] lg:w-[100%] mt-2">
             <ul className="flex flex-wrap gap-3">
               <li>
                 <Link
-                  to={"/Active-Clients"}
+                  to={"/Active-Technician"}
                   onClick={() => setPageHeading("Active Clients")}
                   className="flex justify-center py-2 border shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded text-[#000000] bg-transparent cursor-pointer"
                 >
@@ -176,27 +163,31 @@ const AllUsers = () => {
               </li>
               <li>
                 <Link
+                  to="/Inactive-Technician"
                   onClick={() => setPageHeading("Inactive Clients")}
-                  to={"/Inactive-Clients"}
-                  className="flex justify-center py-2 border shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded text-[#000000] bg-transparent cursor-pointer"
+                  className="flex justify-center py-2 border text-[#000000] shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded  cursor-pointer"
                 >
                   <div className="flex gap-x-2 items-center">
-                    <img className="w-[20px]" src={Block} alt="active Icon" />
+                    <img
+                      className="w-[20px]"
+                      src={BlockColorWhite}
+                      alt="active Icon"
+                    />
                     Inactive Clients
                   </div>
                 </Link>
               </li>
               <li>
-                <Link
-                  onClick={() => setPageHeading("Deleted Clients")}
-                  to={"/Delete-Clients"}
-                  className="flex justify-center py-2 border shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded text-[#000000] bg-transparent cursor-pointer"
-                >
+                <a className="flex justify-center py-2 border border-[#c90000] bg-[#c90000] shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded text-[#ffff] cursor-pointer">
                   <div className="flex gap-x-2 items-center">
-                    <img className="w-[20px]" src={del} alt="active Icon" />
+                    <img
+                      className="w-[20px]"
+                      src={delWhite}
+                      alt="active Icon"
+                    />
                     Delete
                   </div>
-                </Link>
+                </a>
               </li>
             </ul>
           </div>
@@ -238,9 +229,9 @@ const AllUsers = () => {
                           onClick={handleSort}
                           className="flex justify-center items-center"
                         >
-                          <RiArrowUpDownFill className="text-[#8a8e9c] text-[30px] font-bold" />
+                          <RiArrowUpDownFill className="text-[#8b8e9c] text-[30px] font-bold" />
                         </button>
-                        <span className="">Client Details</span>
+                        <span className="">Technician User Name</span>
                       </p>
                     </th>
                     <th className="px-0">
@@ -250,131 +241,69 @@ const AllUsers = () => {
                     </th>
                     <th className="px-0">
                       <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md">
-                        Location
+                        Password
                       </p>
                     </th>
                     <th className="px-0">
                       <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md">
-                        Created Date
+                        Delete Date
                       </p>
                     </th>
-                    <th className="px-0">
+                    {/* <th className="px-0">
                       <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md">
                         Status
                       </p>
-                    </th>
+                    </th> */}
                   </tr>
                 </thead>
                 <tbody className="text-gray-700">
-                  {currentUsers?.map((data, index) => {
+                  {filteredUsers?.map((data, index) => {
                     return (
                       <tr key={index} className="">
                         <td className="py-3 border-b border-r">
                           <div className="flex items-center justify-start ps-6 gap-x-3">
                             <div className="w-[50px] h-[50px] rounded-full bg-white border overflow-hidden">
                               <img
-                                src={data.profile_pic}
+                                src={data?.profile_pic}
                                 alt="user"
                                 className="w-full h-full object-cover"
                               />
                             </div>
                             <div>
                               <p className="text-lg text-black font-semibold">
-                                {data.name}
+                                {data?.user_name}
                               </p>
                             </div>
                           </div>
                         </td>
                         <td className="py-3 border-b border-r">
-                          <p className="text-black ">{data.email}</p>
+                          <p className="text-black px-8">{data?.email}</p>
                         </td>
                         <td className="py-3 border-b border-r">
                           <p className="text-black px-8">
-                            {data.address ? (
-                              data.address
-                            ) : (
-                              <span className="text-[#c90000]">
-                                Not Available
-                              </span>
-                            )}
+                            {data?.show_password}
                           </p>
                         </td>
                         <td className="py-3 border-b border-r">
                           <p className="text-black px-8">
-                            {data.created_at.split("T")[0]}{" "}
+                            {data?.updated_at.split("T")[0]}{" "}
                           </p>
                         </td>
-                        <td className="py-3 px-5 border-b border-r">
+                        {/* <td className="py-3 px-5 border-b border-r">
                           <div className="flex justify-center">
-                            {data?.status === 1 ? (
-                              <div className="flex items-center gap-2">
-                                <button
-                                  onClick={function () {
-                                    setUserId({ id: data.id, type: "Active" }),
-                                      setOpenActiveUser(true);
-                                  }}
-                                  className="px-5 py-2 text-[#003a5f] text-lg font-semibold rounded-full bg-[#d4dee3] flex justify-center items-center gap-3"
-                                >
-                                  <img
-                                    src={ActiveColor}
-                                    className="w-[20px]"
-                                    alt=""
-                                  />{" "}
-                                  Active
-                                </button>
-                                <button
-                                  onClick={function () {
-                                    setOpenDelUser(true),
-                                      setUserId({
-                                        id: data.id,
-                                        type: "Active",
-                                      });
-                                  }}
-                                  className="px-3 py-3 text-[#ff2f16] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
-                                >
-                                  <img
-                                    src={delRed}
-                                    className="w-[18px]"
-                                    alt=""
-                                  />
-                                </button>
-                              </div>
-                            ) : (
-                              <div className="flex items-center gap-2">
-                                <button
-                                  onClick={function () {
-                                    setUserId({ id: data.id, type: "block" }),
-                                      setOpenActiveUser(true);
-                                  }}
-                                  className="px-5 py-2 text-[#c90000] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
-                                >
-                                  <img
-                                    src={BlockColor}
-                                    className="w-[18px] mt-1"
-                                    alt=""
-                                  />{" "}
-                                  Inactive
-                                </button>
-                                <button
-                                  className="px-3 py-3 text-[#ff2f16] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
-                                  onClick={function () {
-                                    setOpenDelUser(true),
-                                      setUserId({
-                                        id: data.id,
-                                        type: "Active",
-                                      });
-                                  }}
-                                >
-                                  <img
-                                    src={delRed}
-                                    className="w-[18px]"
-                                    alt=""
-                                  />
-                                </button>
-                              </div>
-                            )}
+                            <button
+                              // onClick={() => changeUserStatus(data.id)}
+                              className="px-8 py-2 text-[#C90000] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
+                            >
+                              <img
+                                src={delRed}
+                                className="w-[20px]"
+                                alt=""
+                              />
+                              Deleted
+                            </button>
                           </div>
-                        </td>
+                        </td> */}
                       </tr>
                     );
                   })}
@@ -386,7 +315,7 @@ const AllUsers = () => {
         {/* pagination code start */}
         <div className="flex justify-between items-center">
           <div className="text-[#00000062]">
-            Showing {currentUsers.length} of {totalUsers}
+            Showing {currentUsers?.length} of {totalUsers}
           </div>
           {/* Pagination Controls */}
           <div className="flex justify-center items-center mt-4">
@@ -448,10 +377,9 @@ const AllUsers = () => {
         </div>
         {/* pagination code end */}
       </div>
-
       <Toaster />
     </div>
   );
 };
 
-export default AllUsers;
+export default DeleteInspector;

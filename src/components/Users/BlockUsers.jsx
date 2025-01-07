@@ -3,6 +3,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import ActiveColor from "./assets/active-color.png";
+import BlockColor from "./assets/block-color.png";
 import Active from "./assets/active.png";
 import BlockColorWhite from "./assets/block-color-white.png";
 import SearchIcon from "./assets/search-icon.png";
@@ -12,14 +13,24 @@ import UserPic from "./assets/user-pic.png";
 import { useMyContext } from "../../Context/Context";
 import axiosInstance from "../../axiosInstance/axioisInstance";
 import { TailSpin } from "react-loader-spinner";
-import del from "./assets/del.svg"
-import delRed from "./assets/del-red.svg"
-import atoz from "/atoz.svg"
-import ztoa from "/ztoa.svg"
+import del from "./assets/del.svg";
+import delRed from "./assets/del-red.svg";
+import atoz from "/atoz.svg";
+import ztoa from "/ztoa.svg";
 import ActiveUsers from "./ActiveUsers";
+import { RiArrowUpDownFill } from "react-icons/ri";
 
 const BlockUsers = () => {
-  const { pageHeading, setPageHeading,userId, setUserId,setOpenActiveUser,setOpenDelUser,openDelUser, openActiveUser } = useMyContext();
+  const {
+    pageHeading,
+    setPageHeading,
+    userId,
+    setUserId,
+    setOpenActiveUser,
+    setOpenDelUser,
+    openDelUser,
+    openActiveUser,
+  } = useMyContext();
   const [blockUser, setBlockUser] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -29,7 +40,6 @@ const BlockUsers = () => {
 
   const notify = () => toast.success("Status Changed Successfully");
   const notifyError = () => toast.error("Status Not Changed");
-
 
   const getBlockUsers = async () => {
     try {
@@ -80,16 +90,14 @@ const BlockUsers = () => {
   const handleSort = () => {
     const sortedUsers = [...blockUser].sort((a, b) => {
       if (sort) {
-        return b.name.localeCompare(a.name); 
+        return b.name.localeCompare(a.name);
       } else {
-        return a.name.localeCompare(b.name); 
+        return a.name.localeCompare(b.name);
       }
     });
     setBlockUser(sortedUsers);
     setSort(!sort);
   };
-
-
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -157,7 +165,7 @@ const BlockUsers = () => {
                 <Link
                   to={"/Active-Clients"}
                   onClick={() => setPageHeading("Active Clients")}
-                  className="flex justify-center py-2 border shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded text-[#828282] bg-transparent cursor-pointer"
+                  className="flex justify-center py-2 border shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded text-[#000000] bg-transparent cursor-pointer"
                 >
                   <div className="flex gap-x-2 items-center">
                     <img className="w-[20px]" src={Active} alt="active Icon" />
@@ -181,7 +189,7 @@ const BlockUsers = () => {
                 <Link
                   to={"/Delete-Clients"}
                   onClick={() => setPageHeading("Deleted Clients")}
-                  className="flex justify-center py-2 border shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded text-[#828282] bg-transparent cursor-pointer"
+                  className="flex justify-center py-2 border shadow-sm font-semibold w-[180px] h-[50px] text-lg rounded text-[#000000] bg-transparent cursor-pointer"
                 >
                   <div className="flex gap-x-2 items-center">
                     <img className="w-[20px]" src={del} alt="active Icon" />
@@ -201,8 +209,8 @@ const BlockUsers = () => {
                   className="bg-transparent text-black border h-[50px] lg:w-[300px] md:w-[300px] w-[230px] rounded ps-3"
                   placeholder="Search"
                 />
-               <button onClick={handleSort} className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
-                  <img src={sort? ztoa:atoz} className="w-[22px]" alt="" />
+               <button className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
+                  <img src={SearchIcon} className="w-[22px]" alt="" />
                 </button>
               </div>
             </div>
@@ -224,7 +232,13 @@ const BlockUsers = () => {
                 <thead className="text-sm">
                   <tr>
                     <th className="px-0">
-                      <p className="py-3 text-start ps-8 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 me-12 shadow-md">
+                      <p className="py-3 text-start ps-8 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 me-12 shadow-md flex items-center gap-x-2">
+                        <button
+                          onClick={handleSort}
+                          className="flex justify-center items-center"
+                        >
+                          <RiArrowUpDownFill className="text-[#8a8e9c] text-[30px] font-bold" />
+                        </button>
                         <span className="">Client Details</span>
                       </p>
                     </th>
@@ -240,7 +254,7 @@ const BlockUsers = () => {
                     </th>
                     <th className="px-0">
                       <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md">
-                        Date
+                        Created Date
                       </p>
                     </th>
                     <th className="px-0">
@@ -274,15 +288,24 @@ const BlockUsers = () => {
                           <p className="text-black px-8">{data.email}</p>
                         </td>
                         <td className="py-3 border-b border-r">
-                          <p className="text-black px-8">{data.address ?data.address:<span className="text-red-500">Not Available</span>}</p>
+                          <p className="text-black px-8">
+                            {data.address ? (
+                              data.address
+                            ) : (
+                              <span className="text-red-500">
+                                Not Available
+                              </span>
+                            )}
+                          </p>
                         </td>
                         <td className="py-3 border-b border-r">
-                        <p className="text-black px-8">{data.created_at.split('T')[0]} </p>
-
+                          <p className="text-black px-8">
+                            {data.created_at.split("T")[0]}{" "}
+                          </p>
                         </td>
                         <td className="py-3 px-5 border-b border-r">
                           <div className="flex justify-center gap-2">
-                            <button
+                            {/* <button
                            onClick={function(){ setUserId({id:data.id,type:"block"}),setOpenActiveUser(true)}}
                               className="px-8 py-2 text-[#003a5f] text-lg font-semibold rounded-full bg-[#d4dee3] flex justify-center items-center gap-3"
                             >
@@ -292,18 +315,29 @@ const BlockUsers = () => {
                                 alt=""
                               />
                               Active
-                            </button>
+                            </button> */}
                             <button
-                             
-                              className="px-3 py-3 text-[#C90000] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
-                              onClick={function(){setOpenDelUser(true),setUserId({id:data.id,type:"Active"})}}
+                              onClick={function () {
+                                setUserId({ id: data.id, type: "block" }),
+                                  setOpenActiveUser(true);
+                              }}
+                              className="px-5 py-2 text-[#c90000] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
                             >
                               <img
-                                src={delRed}
-                                className="w-[20px]"
+                                src={BlockColor}
+                                className="w-[18px] mt-1"
                                 alt=""
-                              />
-                             
+                              />{" "}
+                              Inactive
+                            </button>
+                            <button
+                              className="px-3 py-3 text-[#C90000] text-lg font-semibold rounded-full bg-[#fededc] flex justify-center items-center gap-3"
+                              onClick={function () {
+                                setOpenDelUser(true),
+                                  setUserId({ id: data.id, type: "Active" });
+                              }}
+                            >
+                              <img src={delRed} className="w-[20px]" alt="" />
                             </button>
                           </div>
                         </td>

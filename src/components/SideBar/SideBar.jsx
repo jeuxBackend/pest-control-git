@@ -151,7 +151,9 @@ function SideBar() {
                   onClick={() => handleLinkClick("Technician")}
                   to={"/Technician"}
                   className={`flex items-center cursor-pointer ${
-                    isActive === "/Technician" ? "bg-[#c90000]" : ""
+                    isActive === "/Technician" ||
+                    isActive === "/Active-Technician" ||
+                    isActive == "/Inactive-Technician" || isActive == "/DeleteTechnician"  ? "bg-[#c90000]" : ""
                   } py-3 ps-5 text-white rounded group w-[215px]`}
                 >
                   <img src={Inspector} alt="" className="w-[18px]" />

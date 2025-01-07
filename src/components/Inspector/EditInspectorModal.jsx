@@ -188,7 +188,7 @@ function EditInspectorModal() {
                     // onChange={(e) => setUserName(e.target.value)}
                     readOnly
                     placeholder="User Name"
-                    className="w-full py-3 px-4 rounded-xl border shadow-sm"
+                    className="w-full py-3 px-4 rounded-xl border shadow-sm bg-gray-200"
                   />
                 </div>
               <div className="flex gap-3 lg:gap-8 lg:flex-row flex-col">
@@ -205,11 +205,11 @@ function EditInspectorModal() {
                 <div className="lg:w-[50%] w-[100%]">
                   <p className="mb-1 font-medium">Email Address</p>
                   <input
-                    type="text"
-                    value={email}
+                    type="email"
+                    value={email} readOnly
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Email Address"
-                    className="w-full py-3 px-4 rounded-xl border shadow-sm"
+                    className="w-full py-3 px-4 rounded-xl border shadow-sm bg-gray-200"
                   />
                 </div>
               </div>

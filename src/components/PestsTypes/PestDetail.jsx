@@ -41,9 +41,8 @@ function PestDetail() {
                   <p className="text-lg opacity-50">
                     Description:
                   </p>
-                  <p className="text-lg font-semibold">
+                  <p className="text-lg font-semibold break-all">
                   {pestDescription?pestDescription:""}
-
                   </p>
                   
                 </div>

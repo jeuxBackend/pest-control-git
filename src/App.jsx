@@ -40,6 +40,10 @@ import TreatmentDetails from "./components/TreatmentTypes/TreatmentDetails";
 import AddMessage from "./components/ChatComp/AddMessage";
 import ActivityTracker from "./ActivityTracker/ActivityTracker";
 import ForgetPassword from "./auth/ForgetPassword";
+import InspaectorStatusModal from "./components/Inspector/InspectorStatusModal";
+import ActiveInspector from "./components/Inspector/ActiveInspector";
+import BlockInspector from "./components/Inspector/BlockInspector";
+import DeleteInspector from "./components/Inspector/DeleteInspector";
 
 function App() {
   const {
@@ -67,6 +71,7 @@ function App() {
     setTreatmentDetails,
     sendMessage,
     setSendMessage,
+    openInspectorStatusModal,
   } = useMyContext();
 
   const vapidKey =
@@ -168,7 +173,10 @@ function App() {
       <div className={`${sendMessage === true ? "" : "hidden"}`}>
         <AddMessage />
       </div>
-
+      <div className={`${openInspectorStatusModal === true ? "" : "hidden"}`}>
+        <InspaectorStatusModal />
+      </div>
+       
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/ForgetPassword" element={<ForgetPassword />} />
@@ -187,6 +195,9 @@ function App() {
           <Route path="/Active-Orders" element={<ActiveOrders />} />
           <Route path="/Pests" element={<PestsTypes />} />
           <Route path="/Treatment" element={<TreatmentTypes />} />
+          <Route path="/Active-Technician" element={<ActiveInspector />} />
+          <Route path="/Inactive-Technician" element={<BlockInspector />} />
+          <Route path="/DeleteTechnician" element={<DeleteInspector />} />
         </Route>
       </Routes>
     </>

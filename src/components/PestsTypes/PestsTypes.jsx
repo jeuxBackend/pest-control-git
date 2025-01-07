@@ -13,8 +13,9 @@ import RightArrow from "./assets/right-arrow.png";
 import del from "./assets/del.svg";
 import delWhite from "./assets/del-white.svg";
 import eye from "./assets/eye.svg";
-import atoz from "/atoz.svg"
-import ztoa from "/ztoa.svg"
+import atoz from "/atoz.svg";
+import ztoa from "/ztoa.svg";
+import { RiArrowUpDownFill } from "react-icons/ri";
 
 function PestsTypes() {
   const {
@@ -28,7 +29,11 @@ function PestsTypes() {
     setPestName,
     pestToast,
     setPestToast,
-    setDelTechnician,delTechnician,setPestDetails,pestDescription, setPestDescription
+    setDelTechnician,
+    delTechnician,
+    setPestDetails,
+    pestDescription,
+    setPestDescription,
   } = useMyContext();
   const [allPests, setAllPests] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -46,51 +51,51 @@ function PestsTypes() {
   const notifyEditError = () => toast.error("Pest Not Updated");
 
   const getAllPests = async () => {
-    if(delTechnician===false){
-    try {
-      setLoading(true);
-      const response = await axiosInstance.get("get-all-pest-types");
-      if (response.data) {
-        console.log(response.data);
-        setAllPests(response.data.pestTypes);
+    if (delTechnician === false) {
+      try {
+        setLoading(true);
+        const response = await axiosInstance.get("get-all-pest-types");
+        if (response.data) {
+          console.log(response.data);
+          setAllPests(response.data.pestTypes);
+        }
+      } catch (error) {
+        if (error.response) {
+          console.log(error.response);
+          setAllPests([]);
+        } else {
+          console.log(error);
+        }
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      if (error.response) {
-        console.log(error.response);
-        setAllPests([])
-      } else {
-        console.log(error);
-      }
-    } finally {
-      setLoading(false);
     }
-  }if(delTechnician){
-    try {
-      setLoading(true);
-      const response = await axiosInstance.get("admin/showDeletePestType");
-      if (response.data) {
-        console.log(response.data);
-        setAllPests(response.data.pestType);
+    if (delTechnician) {
+      try {
+        setLoading(true);
+        const response = await axiosInstance.get("admin/showDeletePestType");
+        if (response.data) {
+          console.log(response.data);
+          setAllPests(response.data.pestType);
+        }
+      } catch (error) {
+        if (error.response) {
+          console.log(error.response);
+          setAllPests([]);
+        } else {
+          console.log(error);
+        }
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      if (error.response) {
-        console.log(error.response);
-        setAllPests([])
-      } else {
-        console.log(error);
-      }
-    } finally {
-      setLoading(false);
     }
-
-  }
   };
   useEffect(() => {
     getAllPests();
   }, []);
   useEffect(() => {
     getAllPests();
-  }, [openAddPest,delTechnician]);
+  }, [openAddPest, delTechnician]);
   useEffect(() => {
     getAllPests();
   }, [openEditPest]);
@@ -125,9 +130,9 @@ function PestsTypes() {
   const handleSort = () => {
     const sortedUsers = [...allPests].sort((a, b) => {
       if (sort) {
-        return b.title.localeCompare(a.title); 
+        return b.title.localeCompare(a.title);
       } else {
-        return a.title.localeCompare(b.title); 
+        return a.title.localeCompare(b.title);
       }
     });
     setAllPests(sortedUsers);
@@ -192,19 +197,27 @@ function PestsTypes() {
       <div className="allPestss-div relative  lg:ml-[260px] px-3 top-[20px]">
         <div className="users-nav w-full flex flex-wrap justify-between">
           <div className="active-block-brns xl:w-[40%] lg:w-[100%] mt-2">
-          <button
-                onClick={() => setDelTechnician(true)}
-                className={`w-[130px] h-[50px] flex justify-center gap-2 items-center border  text-lg font-semibold shadow-sm rounded ${delTechnician?"bg-[#C90000] text-white":"text-[#828282]"}`}
-              >
-                <img src={delTechnician?delWhite:del} className="w-[15px]" alt="" />
-                Delete
-              </button>
+            <button
+              onClick={() => setDelTechnician(true)}
+              className={`w-[130px] h-[50px] flex justify-center gap-2 items-center border  text-lg font-semibold shadow-sm rounded ${
+                delTechnician ? "bg-[#C90000] text-white" : "text-[#000000]"
+              }`}
+            >
+              <img
+                src={delTechnician ? delWhite : del}
+                className="w-[15px]"
+                alt=""
+              />
+              Delete
+            </button>
           </div>
           <div className="user-add-search-div xl:w-[60%] lg:w-[100%] mt-2 flex justify-end">
             <div className="flex flex-wrap gap-3">
               <button
                 onClick={() => setOpenAddPest(true)}
-                className={`w-[180px] h-[50px] flex justify-center gap-2 items-center bg-[#003a5f] text-white text-lg font-semibold shadow-sm rounded ${delTechnician?"hidden":""}`}
+                className={`w-[180px] h-[50px] flex justify-center gap-2 items-center bg-[#003a5f] text-white text-lg font-semibold shadow-sm rounded ${
+                  delTechnician ? "hidden" : ""
+                }`}
               >
                 <img src={Add} className="w-[15px]" alt="" />
                 Add Pest
@@ -217,8 +230,8 @@ function PestsTypes() {
                   className="bg-transparent text-black border h-[50px] lg:w-[300px] md:w-[300px] w-[230px] rounded ps-3"
                   placeholder="Search"
                 />
-               <button onClick={handleSort} className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
-                <img src={sort? ztoa:atoz} className="w-[22px]" alt="" />
+                <button className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
+                  <img src={SearchIcon} className="w-[22px]" alt="" />
                 </button>
               </div>
             </div>
@@ -240,8 +253,23 @@ function PestsTypes() {
                 <thead className="text-sm">
                   <tr>
                     <th className="px-0">
-                      <p className="py-3 text-start ps-8 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 me-12 shadow-md">
+                      <p className="py-3 text-start ps-8 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 me-12 shadow-md flex items-center gap-x-2">
+                        <button
+                          onClick={handleSort}
+                          className="flex justify-center items-center"
+                        >
+                          <RiArrowUpDownFill className="text-[#8b8e9c] text-[30px] font-bold" />
+                        </button>
                         <span className="">Pest Type</span>
+                      </p>
+                    </th>
+                    <th
+                      className={`px-0 ${delTechnician ? "visible" : "hidden"}`}
+                    >
+                      <p
+                        className={`py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md`}
+                      >
+                        <span className="">Delete Date</span>
                       </p>
                     </th>
                     <th className={`px-0 `}>
@@ -264,19 +292,32 @@ function PestsTypes() {
                             </p>
                           </div>
                         </td>
-                        <td className={`py-3 border-b border-r lg:px-10 `}>
+                        <td
+                          className={`py-3 border-b border-r lg:px-10 ${
+                            delTechnician ? "visible" : "hidden"
+                          }`}
+                        >
+                          <div className="flex items-center justify-center ps-6 gap-x-3">
+                            <p className="text-lg text-black font-semibold">
+                              {data.updated_at.split("T")[0]}
+                            </p>
+                          </div>
+                        </td>
+                        <td className={`py-3 border-b border-r`}>
                           <div className="flex gap-x-3 justify-center">
                             <button
-                            className={`${delTechnician?"hidden":""}`}
+                              className={`${delTechnician ? "hidden" : ""}`}
                               onClick={function () {
                                 setOpenEditPest(true);
-                                setPestId(data.id), setPestName(data.title), setPestDescription(data.description)
+                                setPestId(data.id),
+                                  setPestName(data.title),
+                                  setPestDescription(data.description);
                               }}
                             >
                               <img src={Edit} className="w-[30px]" alt="" />
                             </button>
                             <button
-                            className={`${delTechnician?"hidden":""}`}
+                              className={`${delTechnician ? "hidden" : ""}`}
                               onClick={function () {
                                 setPestId(data.id), setOpenDeletePest(true);
                               }}
@@ -284,7 +325,10 @@ function PestsTypes() {
                               <img src={Delete} className="w-[30px]" alt="" />
                             </button>
                             <button
-                              onClick={function () {setPestDetails(true), setPestName(data.title), setPestDescription(data.description)
+                              onClick={function () {
+                                setPestDetails(true),
+                                  setPestName(data.title),
+                                  setPestDescription(data.description);
                               }}
                             >
                               <img src={eye} className="w-[30px]" alt="" />
