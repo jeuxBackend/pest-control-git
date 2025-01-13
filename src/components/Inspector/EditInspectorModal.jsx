@@ -226,12 +226,27 @@ function EditInspectorModal() {
                 </div>
                 <div className="lg:w-[50%] w-[100%]">
                   <p className="mb-1 font-medium">Phone Number</p>
-                  <input
+                  {/* <input
                     type="text"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="Phone Number"
                     className="w-full py-3 px-4 rounded-xl border shadow-sm"
+                  /> */}
+                    <input
+                    type="text"
+                    className="p-3 w-full rounded-lg border shadow-sm"
+                    placeholder="Phone Number"
+                    inputMode="text"
+                    pattern="[0-9!@#$%^&()_+=-\s]*"
+                    required
+                    value={phone}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (/^[0-9!@#$%^&()_+=-\s]*$/.test(value)) {
+                        setPhone(value);
+                      }
+                    }}
                   />
                 </div>
               </div>
