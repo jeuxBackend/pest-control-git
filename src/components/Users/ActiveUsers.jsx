@@ -211,7 +211,7 @@ const ActiveUsers = () => {
                   className="bg-transparent text-black border h-[50px] lg:w-[300px] md:w-[300px] w-[230px] rounded ps-3"
                   placeholder="Search"
                 />
-               <button className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
+                <button className="h-[50px] w-[50px] bg-[#c90000] rounded flex justify-center items-center">
                   <img src={SearchIcon} className="w-[22px]" alt="" />
                 </button>
               </div>
@@ -246,18 +246,36 @@ const ActiveUsers = () => {
                       </p>
                     </th>
                     <th className="px-0">
-                      <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 shadow-md mx-3">
-                        Email
+                      <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md flex justify-center items-center gap-x-2">
+                        <button
+                          onClick={handleSort}
+                          className="flex justify-center items-center"
+                        >
+                          <RiArrowUpDownFill className="text-[#8a8e9c] text-[30px] font-bold" />
+                        </button>
+                        <span className="">Email</span>
                       </p>
                     </th>
                     <th className="px-0">
-                      <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-3 shadow-md">
-                        Location
+                      <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md flex justify-center items-center gap-x-2">
+                        <button
+                          onClick={handleSort}
+                          className="flex justify-center items-center"
+                        >
+                          <RiArrowUpDownFill className="text-[#8a8e9c] text-[30px] font-bold" />
+                        </button>
+                        <span className="">Location</span>
                       </p>
                     </th>
                     <th className="px-0">
-                      <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-3 shadow-md">
-                        Created Date
+                      <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md flex justify-center items-center gap-x-2">
+                        <button
+                          onClick={handleSort}
+                          className="flex justify-center items-center"
+                        >
+                          <RiArrowUpDownFill className="text-[#8a8e9c] text-[30px] font-bold" />
+                        </button>
+                        <span className="">Created Date</span>
                       </p>
                     </th>
                     <th className="px-0">
