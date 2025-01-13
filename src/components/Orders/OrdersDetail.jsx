@@ -108,20 +108,6 @@ function OrdersDetail() {
         </div>
       ) : (
         <div className="AllUsers-div relative lg:ml-[260px] px-3 top-[20px]">
-          <div className="users-nav w-full flex flex-wrap justify-between mb-5">
-            <div className="active-block-brns xl:w-[40%] lg:w-[100%] mt-2">
-              <ul className="flex flex-wrap gap-3">
-                <div className="flex items-center gap-x-6 bg-white h-[50px] border shadow-sm rounded-lg px-2">
-                  <li>
-                    <Link onClick={() => setPageHeading("Completed")} to={"/Orders-History"} className="flex items-center justify-center gap-x-3 py-2 font-semibold rounded bg-[#c90000]  w-[100px] h-[40px] text-[#ffff] cursor-pointer">
-                      <img src={BackArrow} className="h-[18px]" alt="" />
-                      <div className="flex gap-x-2 items-center">Back</div>
-                    </Link>
-                  </li>
-                </div>
-              </ul>
-            </div>
-          </div>
           <div className="w-full pb-2">
             <div className="border shadow-sm rounded-lg p-2">
               <div className="flex items-center justify-between">

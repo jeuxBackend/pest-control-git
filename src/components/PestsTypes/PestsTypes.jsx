@@ -266,9 +266,13 @@ function PestsTypes() {
                     <th
                       className={`px-0 ${delTechnician ? "visible" : "hidden"}`}
                     >
-                      <p
-                        className={`py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md`}
-                      >
+                      <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md flex justify-center items-center gap-x-2">
+                        <button
+                          onClick={handleSort}
+                          className="flex justify-center items-center"
+                        >
+                          <RiArrowUpDownFill className="text-[#8a8e9c] text-[30px] font-bold" />
+                        </button>
                         <span className="">Delete Date</span>
                       </p>
                     </th>
