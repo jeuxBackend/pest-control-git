@@ -73,14 +73,12 @@ function AddInspectorModal() {
           // setToaster(2);
           notifyError(error?.response?.data?.errors);
           console.log(error.response);
-        
         } else {
           console.log(error);
           notifyError("Network error");
         }
       } finally {
         setIsLoading(false);
-    
       }
     }
   };
@@ -146,7 +144,6 @@ function AddInspectorModal() {
                     onChange={handleImageChangeVoucher}
                     className="hidden"
                     id="fileInputVoucher"
-                  
                   />
                 </div>
               </div>
@@ -158,7 +155,6 @@ function AddInspectorModal() {
                   onChange={(e) => setUserName(e.target.value)}
                   placeholder="User Name"
                   className="w-full py-3 px-4 rounded-xl border shadow-sm"
-                  
                 />
               </div>
               <div className="flex gap-3 lg:gap-8 lg:flex-row flex-col">
@@ -170,7 +166,6 @@ function AddInspectorModal() {
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Full Name"
                     className="w-full py-3 px-4 rounded-xl border shadow-sm"
-                    
                   />
                 </div>
                 <div className="lg:w-[50%] w-[100%]">
@@ -181,7 +176,7 @@ function AddInspectorModal() {
                     type="email"
                     placeholder="Email Address"
                     className="w-full py-3 px-4 rounded-xl border shadow-sm"
-                    
+                    required
                   />
                 </div>
               </div>
@@ -194,18 +189,25 @@ function AddInspectorModal() {
                     type="text"
                     placeholder="Password"
                     className="w-full py-3 px-4 rounded-xl border shadow-sm"
-                
                   />
                 </div>
                 <div className="lg:w-[50%] w-[100%]">
                   <p className="mb-1 font-medium">Phone Number</p>
+
                   <input
                     type="text"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
+                    className="p-3 w-full rounded-lg border shadow-sm"
                     placeholder="Phone Number"
-                    className="w-full py-3 px-4 rounded-xl border shadow-sm"
-                    
+                    inputMode="text"
+                    pattern="[0-9!@#$%^&()_+=-\s]*"
+                    required
+                    value={phone}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (/^[0-9!@#$%^&()_+=-\s]*$/.test(value)) {
+                        setPhone(value);
+                      }
+                    }}
                   />
                 </div>
               </div>
@@ -219,19 +221,17 @@ function AddInspectorModal() {
                     type="date"
                     placeholder="License Date"
                     className="w-full py-3 px-4 rounded-xl border shadow-sm"
-                    
                   />
                 </div>
                 <div className="lg:w-[50%] w-[100%]">
                   <p className="mb-1 font-medium">Expire Date</p>
                   <input
                     value={expireDate}
-                    min={new Date().toISOString().split("T")[0]} 
+                    min={new Date().toISOString().split("T")[0]}
                     onChange={(e) => setExpireDate(e.target.value)}
                     type="date"
                     placeholder="License Expire Date"
                     className="w-full py-3 px-4 rounded-xl border shadow-sm"
-                    
                   />
                 </div>
               </div>
