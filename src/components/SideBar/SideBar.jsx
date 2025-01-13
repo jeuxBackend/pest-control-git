@@ -10,10 +10,11 @@ import Users from "./assets/users.png";
 import Chat from "./assets/chat.png";
 import Orders from "./assets/order.png";
 import Logout from "./assets/logout.png";
+import BackArrow from "./assets/back-arrow.png";
 import { useMyContext } from "../../Context/Context";
 
 function SideBar() {
-  const { pageHeading, setPageHeading,setDelTechnician } = useMyContext();
+  const { pageHeading, setPageHeading, setDelTechnician } = useMyContext();
   const { openLogout, setOpenLogout } = useMyContext();
   const activeNave = useLocation();
   const [isActive, setActive] = useState();
@@ -34,7 +35,7 @@ function SideBar() {
   const handleLinkClick = (heading) => {
     setPageHeading(heading);
     toggleSidebar();
-    setDelTechnician(false)
+    setDelTechnician(false);
   };
   return (
     <>
@@ -42,7 +43,21 @@ function SideBar() {
         fluid
         className="border-b border-[#0a0a0a1c] bg-[#ffff] lg:ps-[272px]"
       >
-        <Navbar.Brand className="text-2xl font-semibold py-5 text-black">
+        <Navbar.Brand className="text-2xl font-semibold py-5 text-black flex items-center gap-x-2">
+        {isActive === "/Orders-Detail" && (
+          <ul className="flex flex-wrap gap-3">
+            <div className="">
+              <li>
+                <Link
+                  onClick={() => setPageHeading("Completed")}
+                  to={"/Orders-History"}
+                  className="cursor-pointer"
+                >
+                  <img src={BackArrow} className="w-[28px] mt-1" alt="" />
+                </Link>
+              </li>
+            </div>
+          </ul> )}
           {pageHeading}
         </Navbar.Brand>
 
@@ -132,7 +147,8 @@ function SideBar() {
                   className={`flex items-center cursor-pointer ${
                     isActive === "/All-Clients" ||
                     isActive === "/Active-Clients" ||
-                    isActive == "/Inactive-Clients" || isActive == "/Delete-Clients" 
+                    isActive == "/Inactive-Clients" ||
+                    isActive == "/Delete-Clients"
                       ? "bg-[#c90000]"
                       : ""
                   } py-3 ps-5 text-white rounded group w-[215px]`}
@@ -153,7 +169,10 @@ function SideBar() {
                   className={`flex items-center cursor-pointer ${
                     isActive === "/Technician" ||
                     isActive === "/Active-Technician" ||
-                    isActive == "/Inactive-Technician" || isActive == "/DeleteTechnician"  ? "bg-[#c90000]" : ""
+                    isActive == "/Inactive-Technician" ||
+                    isActive == "/DeleteTechnician"
+                      ? "bg-[#c90000]"
+                      : ""
                   } py-3 ps-5 text-white rounded group w-[215px]`}
                 >
                   <img src={Inspector} alt="" className="w-[18px]" />
@@ -217,7 +236,7 @@ function SideBar() {
                     &nbsp;
                   </span>
                 )}
-                 {isActive === "/Active-Orders" && (
+                {isActive === "/Active-Orders" && (
                   <span className="inline rounded-r h-full text-5xl w-1 me-3 bg-[#c90000]">
                     &nbsp;
                   </span>
@@ -245,7 +264,7 @@ function SideBar() {
                     isActive === "/Orders-History" ||
                     isActive == "/Orders-Detail" ||
                     isActive == "/Gallery" ||
-                    isActive == "/Active-Orders" 
+                    isActive == "/Active-Orders"
                       ? "bg-[#c90000]"
                       : ""
                   } py-3 ps-5 text-white rounded group w-[215px]`}

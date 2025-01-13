@@ -235,19 +235,37 @@ const DeleteUsers = () => {
                                          </p>
                                        </th>
                     <th className="px-0">
-                      <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 shadow-md mx-6">
-                        Email
-                      </p>
+                       <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md flex justify-center items-center gap-x-2">
+                                              <button
+                                                onClick={handleSort}
+                                                className="flex justify-center items-center"
+                                              >
+                                                <RiArrowUpDownFill className="text-[#8a8e9c] text-[30px] font-bold" />
+                                              </button>
+                                              <span className="">Email</span>
+                                            </p>
                     </th>
                     <th className="px-0">
-                      <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md">
-                        Location
-                      </p>
+                      <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md flex justify-center items-center gap-x-2">
+                                             <button
+                                               onClick={handleSort}
+                                               className="flex justify-center items-center"
+                                             >
+                                               <RiArrowUpDownFill className="text-[#8a8e9c] text-[30px] font-bold" />
+                                             </button>
+                                             <span className="">Location</span>
+                                           </p>
                     </th>
                     <th className="px-0">
-                      <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md">
-                        Delete Date
-                      </p>
+                    <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md flex justify-center items-center gap-x-2">
+                                           <button
+                                             onClick={handleSort}
+                                             className="flex justify-center items-center"
+                                           >
+                                             <RiArrowUpDownFill className="text-[#8a8e9c] text-[30px] font-bold" />
+                                           </button>
+                                           <span className="">Delete Date</span>
+                                         </p>
                     </th>
                     {/* <th className="px-0">
                       <p className="py-3 bg-[#f7f8f8] text-[#8b8e9c] border-b border-r mb-5 mx-6 shadow-md">
